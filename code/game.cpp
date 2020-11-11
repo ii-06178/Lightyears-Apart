@@ -1,5 +1,4 @@
 #include "game.hpp"
-#include "DrawSS.hpp"
 bool Game::init()
 {
 	//Initialization flag
