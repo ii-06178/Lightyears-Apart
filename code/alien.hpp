@@ -1,5 +1,6 @@
 #include "location.hpp"
 #include "sprite.hpp"
+#pragma once
 
 class Alien:public Sprite
 {
@@ -10,7 +11,7 @@ class Alien:public Sprite
     Alien();
     ~Alien();
     void shoot(); 
-    void kill(); //display animation of alien dying?? - not a priority rn!
+    virtual void kill(); //display animation of alien dying?? - not a priority rn!
     void setStrength(int s);
     void setDifficulty(int d);
     int getStrength();

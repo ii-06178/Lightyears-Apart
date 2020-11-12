@@ -5,7 +5,7 @@ using namespace std;
 PlayerSpaceship::PlayerSpaceship()
 {
     score = 0;
-    life = 3;
+    lives = 3;
     fuel = 100; //percent
 }
 

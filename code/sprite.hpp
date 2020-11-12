@@ -1,5 +1,6 @@
 #include "location.hpp"
 #include "SDL.h"
+#pragma once
 
 class Sprite
 {//spaceship, alien, obstacle. Where will the rest of the assets aka fuel guage/ lives be displayed?
