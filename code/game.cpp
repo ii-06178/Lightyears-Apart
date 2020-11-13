@@ -64,7 +64,9 @@ bool Game::loadMedia()
 	bool success = true;
 	
 	assets = loadTexture("assets.png");
-    gTexture = loadTexture("stars.png");
+    // gTexture = loadTexture("stars.png");
+	gTexture = loadTexture("Welcome Screen.png");
+	// gTexture = loadTexture("Instructions Screen.png");
 	if(gTexture==NULL)
     {
         printf("Unable to run due to error: %s\n",SDL_GetError());
