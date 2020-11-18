@@ -6,12 +6,6 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
-//New included files
-#include "player_spaceship.hpp"
-#include "alien.hpp"
-#include "alienTypes.hpp"
-#include "obstacleTypes.hpp"
-#include "BGTexture.hpp"
 #pragma once
 
 class Game{
@@ -31,8 +25,6 @@ class Game{
     SDL_Texture* assets=NULL;
     
     // Mix_Music *bgMusic = NULL;
-
-    BGTexture texture;  //For animating the background texture
 
 public:
 

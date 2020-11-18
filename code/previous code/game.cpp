@@ -63,15 +63,16 @@ bool Game::loadMedia()
 	//Loading success flag
 	bool success = true;
 	
-	assets = loadTexture("sprite.png");
-    gTexture = loadTexture("stars.png");
+	assets = loadTexture("assets.png");
+    // gTexture = loadTexture("stars.png");
 	// gTexture = loadTexture("Welcome Screen.png");
-	// gTexture = loadTexture("Instructions Screen.png");
-	if(assets==NULL || gTexture == NULL)
+	gTexture = loadTexture("Instructions Screen.png");
+	if(gTexture==NULL)
     {
         printf("Unable to run due to error: %s\n",SDL_GetError());
         success =false;
     }
+
 	// if(bgMusic == NULL){
 	// 	printf("Unable to load music: %s \n", Mix_GetError());
 	// 	success = false;
@@ -81,7 +82,6 @@ bool Game::loadMedia()
 
 void Game::close()
 {
-	texture.~BGTexture();
 	//Free loaded images
 	SDL_DestroyTexture(assets);
 	assets=NULL;
@@ -120,21 +120,17 @@ SDL_Texture* Game::loadTexture( std::string path )
 			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
 		}
 
-		//storing dimensions of the bg
-		texture.bgWidth = loadedSurface->w;
-		texture.bgHeight = loadedSurface->h;
-
 		//Get rid of old loaded surface
 		SDL_FreeSurface( loadedSurface );
 	}
-	texture.assets = newTexture;
+
 	return newTexture;
 }
 void Game::run( )
 {
-	bool quit = false;
+	bool quit;
 	SDL_Event e;
-	PlayerSpaceship p = {assets};
+
 	while( !quit )
 	{
 		//Handle events on queue
@@ -145,34 +141,18 @@ void Game::run( )
 			{
 				quit = true;
 			}
-			p.EventHandler(e);	//handles ship events
 		}
-		p.moveShip();
+
 		// if( Mix_PlayingMusic() == 0 )
 		// {
 		// 	//Play the music
 		// 	Mix_PlayMusic( bgMusic, 2 );
 		// }
 		SDL_RenderClear(gRenderer); //removes everything from renderer
-		
-		texture.drawBG(gRenderer);	//moving background
-
+		SDL_RenderCopy(gRenderer, gTexture, NULL, NULL);//Draws background to renderer
 		//***********************draw the objects here********************
 
-		
-		ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
-		Meteor m = {assets}; Fireball fb = {assets};
-		
-		p.drawSprite(gRenderer);
-		g.drawSprite(gRenderer);
-		t.drawSprite(gRenderer);
-		s.drawSprite(gRenderer);
-		f.drawSprite(gRenderer);
-		m.drawSprite(gRenderer);
-		fb.drawSprite(gRenderer);
-		//tb.drawSprite(gRenderer);
 		//****************************************************************
-
     	SDL_RenderPresent(gRenderer); //displays the updated renderer
 
 	    SDL_Delay(200);	//causes sdl engine to delay for specified miliseconds
