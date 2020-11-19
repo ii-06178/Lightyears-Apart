@@ -1,8 +1,11 @@
 #include "obstacle.hpp"
 
-Obstacle::Obstacle()
+Obstacle::Obstacle(SDL_Texture* img):Sprite(img)
 {
     
+}
+void Obstacle::drawSprite(SDL_Renderer* gRenderer){
+    SDL_RenderCopy(gRenderer, asset, &src, &mover);
 }
 
 void Obstacle::setStrength(int s)

@@ -1,4 +1,4 @@
-#include "location.hpp"
+//#include "location.hpp"
 #include "sprite.hpp"
 #pragma once
 
@@ -8,8 +8,10 @@ class Obstacle:public Sprite
     //can't think of what attributes obstacles would need other than those already in sprite
 
     public:
-    Obstacle();
+    Obstacle(SDL_Texture*);
     ~Obstacle();
     void setStrength(int s);
     int getStrength();
+
+    void drawSprite(SDL_Renderer*);
 };
