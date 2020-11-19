@@ -1,0 +1,3 @@
+Tasmiya: 17/Nov/2020
+Made the draw functions. Polymorphism on draw function and constructors of Aliens and Obstacles.
+Commented all the extra functions and atts in Sprite class.
