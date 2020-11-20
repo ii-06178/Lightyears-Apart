@@ -29,8 +29,13 @@ class Game{
     SDL_Texture* gTexture = NULL;
     //global reference to png image sheets
     SDL_Texture* assets=NULL;
+    SDL_Texture* iScreen=NULL;
+    SDL_Texture* wScreen=NULL;
+    bool menu=true;
+	bool game=false;
+	bool ins=false;
     
-    // Mix_Music *bgMusic = NULL;
+    Mix_Music *bgMusic = NULL;
 
     BGTexture texture;  //For animating the background texture
 
