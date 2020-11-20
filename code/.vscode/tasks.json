@@ -1,19 +1,32 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "build project",
-            "type": "shell",
-            "command": "g++",
-            "args": [
-                "*.cpp", 
-                "-I/usr/include/SDL2", 
-                "-lSDL2", 
-                "-lSDL2_image"
-            ], 
-            "group": {"kind": "build","isDefault": true}
+      {
+        "type": "shell",
+        "label": "g++.exe build active file",
+        "command": "C:\\mingw\\mingw64\\bin\\g++.exe",
+        "args": ["-g", 
+          "${workspaceFolder}/*.cpp",
+           "-o", "a.exe",
+          "-I", "C:\\mingw\\SDL2-devel-2.0.12-mingw.tar\\SDL2-devel-2.0.12-mingw\\SDL2-2.0.12\\x86_64-w64-mingw32\\include\\SDL2",
+           "-L", "C:\\mingw\\SDL2-devel-2.0.12-mingw.tar\\SDL2-devel-2.0.12-mingw\\SDL2-2.0.12\\x86_64-w64-mingw32\\lib",
+           "-I" , "C:\\mingw\\SDL2_image-devel-2.0.5-mingw.tar\\SDL2_image-devel-2.0.5-mingw\\SDL2_image-2.0.5\\x86_64-w64-mingw32\\include\\SDL2",
+            "-L" , "C:\\mingw\\SDL2_image-devel-2.0.5-mingw.tar\\SDL2_image-devel-2.0.5-mingw\\SDL2_image-2.0.5\\x86_64-w64-mingw32\\lib",
+            "-I" , "C:\\mingw\\SDL2_ttf-devel-2.0.15-mingw.tar\\SDL2_ttf-devel-2.0.15-mingw\\SDL2_ttf-2.0.15\\x86_64-w64-mingw32\\include\\SDL2",
+             "-L" , "C:\\mingw\\SDL2_ttf-devel-2.0.15-mingw.tar\\SDL2_ttf-devel-2.0.15-mingw\\SDL2_ttf-2.0.15\\x86_64-w64-mingw32\\lib",
+             "-I","C:\\mingw\\SDL2_mixer-devel-2.0.4-mingw.tar\\SDL2_mixer-devel-2.0.4-mingw\\SDL2_mixer-2.0.4\\x86_64-w64-mingw32\\include\\SDL2", 
+             "-L","C:\\mingw\\SDL2_mixer-devel-2.0.4-mingw.tar\\SDL2_mixer-devel-2.0.4-mingw\\SDL2_mixer-2.0.4\\x86_64-w64-mingw32\\lib", 
+             "-lmingw32", "-lSDL2main" ,"-lSDL2" , "-lSDL2_image", "-lSDL2_ttf", 
+             "-lSDL2_mixer"
+        ],
+        "options": {
+          "cwd": "${workspaceFolder}"
+        },
+        "problemMatcher": ["$gcc"],
+        "group": {
+          "kind": "build",
+          "isDefault": true
         }
+      }
     ]
-}
+  }

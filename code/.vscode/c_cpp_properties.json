@@ -1,17 +1,17 @@
 {
     "configurations": [
-        {
-            "name": "Linux",
-            "includePath": [
-                "${workspaceFolder}/**",
-                "c:/mingw_dev_lib/include/SDL2"
-            ],
-            "defines": [],
-            "compilerPath": "/usr/bin/gcc",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "clang-x64"
-        }
+      {
+        "name": "Win32",
+        "includePath": ["${workspaceFolder}/**", "C:\\mingw\\SDL2-devel-2.0.12-mingw.tar\\SDL2-devel-2.0.12-mingw\\SDL2-2.0.12\\x86_64-w64-mingw32\\include\\SDL2","C:\\mingw\\SDL2_image-devel-2.0.5-mingw.tar\\SDL2_image-devel-2.0.5-mingw\\SDL2_image-2.0.5\\x86_64-w64-mingw32\\include\\SDL2", "C:\\mingw\\SDL2_ttf-devel-2.0.15-mingw.tar\\SDL2_ttf-devel-2.0.15-mingw\\SDL2_ttf-2.0.15\\x86_64-w64-mingw32\\include\\SDL2","C:\\mingw\\SDL2_mixer-devel-2.0.4-mingw.tar\\SDL2_mixer-devel-2.0.4-mingw\\SDL2_mixer-2.0.4\\x86_64-w64-mingw32\\include\\SDL2" 
+       
+          
+        ],
+        "defines": ["_DEBUG", "UNICODE", "_UNICODE"],
+        "compilerPath": "C:\\mingw\\mingw64\\bin\\gcc.exe",
+        "cStandard": "c11",
+        "cppStandard": "c++17",
+        "intelliSenseMode": "clang-x86"
+      }
     ],
     "version": 4
-}
+  }
