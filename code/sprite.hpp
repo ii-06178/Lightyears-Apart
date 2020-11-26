@@ -15,7 +15,7 @@ protected:
     int hitCount; //stores how many times the sprite has been hit - will be used to determine when it'll be destroyed
     int x_speed, y_speed; //speed of the sprite
     int lives[3];
-    SDL_RendererFlip turn;
+    SDL_RendererFlip turn_h;
 
 public:
     Sprite(SDL_Texture*);
