@@ -11,7 +11,7 @@ Meteor::Meteor(SDL_Texture* img):Obstacle(img){
     mover.w = 160;
     mover.h = 160;
 }
-Fireball::Fireball(SDL_Texture* img):Obstacle(img){//Need to find a sprite for this
+Fireball::Fireball(SDL_Texture* img):Obstacle(img){
     src.x = 306;
     src.y = 138;
     src.w = 155;

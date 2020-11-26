@@ -6,13 +6,13 @@ PlayerSpaceship::PlayerSpaceship(SDL_Texture* img):Sprite(img) {
     //setting ships position; I am using just first one right, will include the other four colors with conditions once the buttons are set up
     src.x = 10;
     src.y = 0;
-    src.w = 92;
-    src.h = 132;
+    src.w = 90;
+    src.h = 120;
 
     mover.x = pos_x;
     mover.y = pos_y;
-    mover.w = 72;
-    mover.h = 112;
+    mover.w = 70;
+    mover.h = 100;
 
     score = 0;
     lives = 3;
@@ -20,7 +20,7 @@ PlayerSpaceship::PlayerSpaceship(SDL_Texture* img):Sprite(img) {
     //speed of the ship
     x_speed = 0;    y_speed = 0;
     //position of the ship
-    pos_x = 0;  pos_y = (600 - src.h)/2;    //center of screen
+    pos_x = (800 - mover.w)/2;  pos_y = 600 - mover.h;    //center of screen
 }
 
 void PlayerSpaceship::EventHandler(SDL_Event event){
@@ -59,6 +59,6 @@ void PlayerSpaceship::moveShip(){
 
 void PlayerSpaceship::drawSprite(SDL_Renderer* gRenderer){
     //flipping horizontally because the sprite has vertical ship
-    general_render(pos_x, pos_y, asset, gRenderer, 90.0);
+    general_render(pos_x, pos_y, asset, gRenderer, 0.0,SDL_FLIP_NONE);
 }
 

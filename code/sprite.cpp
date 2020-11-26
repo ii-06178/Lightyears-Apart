@@ -8,6 +8,7 @@ Sprite::Sprite(SDL_Texture* img){   //kinda default constructor for all sprites.
     hitCount = 0;
     x_speed = 0;
     y_speed = 0;
+    //turn = SDL_FLIP_NONE;
 
     if(asset == NULL) printf("Unable to load sprite\n");//To detect the error IF the sprite is not loaded through the constructors.
 }
@@ -19,9 +20,10 @@ int Sprite::getHeight(){
     return(mover.h);
 }
 
-void Sprite::general_render(int x, int y, SDL_Texture* img, SDL_Renderer* gRenderer, double angle){
+void Sprite::general_render(int x, int y, SDL_Texture* img, SDL_Renderer* gRenderer, double angle, SDL_RendererFlip turn){
     SDL_Rect dstrect = {x , y, mover.w, mover.h};
-    SDL_RenderCopyEx(gRenderer, img, &src, &dstrect,angle,NULL,SDL_FLIP_NONE);//included the angle because of the ship
+    SDL_RenderCopyEx(gRenderer, img, &src, &dstrect,angle,NULL,turn);//included the angle because of the ship
+    SDL_RenderPresent(gRenderer);
 }
 // SDL_Rect Sprite::spriteSource()
 // {//returns the source for next frame needed for animation
