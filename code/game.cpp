@@ -137,12 +137,18 @@ SDL_Texture *Game::loadTexture(std::string path)
 	//texture.assets = newTexture;
 	return newTexture;
 }
+//list<Alien *>::iterator A;//list for aliens
+
+void Game::drawObj(){
+}
+
 void Game::run()
 {
 	bool quit = false;
 	SDL_Event e;
 	PlayerSpaceship p = {assets};
-	ThunderBearers th = {assets};
+	//ThunderBearers th = {assets};
+	ThunderBearers t = {assets}; GeoYielders g = {assets}; StormCarriers s = {assets}; FireBreathers f = {assets};
 	while( !quit )
 	{
 		//Handle events on queue
@@ -231,26 +237,24 @@ void Game::run()
 		{	
 			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
 			Meteor m = {assets}; Fireball fb = {assets};
-		
-			//SDL_RenderCopy(gRenderer, gTexture, NULL, NULL); //Draws background to renderer
-			//texture.drawBG(gRenderer);
+
 			p.drawSprite(gRenderer);
-			//g.drawSprite(gRenderer);
-			//t.drawSprite(gRenderer);
-			//s.drawSprite(gRenderer);
-			//f.drawSprite(gRenderer);
 			m.drawSprite(gRenderer);
 			fb.drawSprite(gRenderer);
 			//tb.drawSprite(gRenderer);
 
-			th.drawSprite(gRenderer);
+			//th.drawSprite(gRenderer);
+			t.drawSprite(gRenderer);
+			g.drawSprite(gRenderer);
+			f.drawSprite(gRenderer);
+			s.drawSprite(gRenderer);
 		}
 
 		//***********************draw the objects here********************
 
 		
 		
-	
+
 		//****************************************************************
 
     	SDL_RenderPresent(gRenderer); //displays the updated renderer

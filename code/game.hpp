@@ -6,6 +6,7 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
+#include <list>
 //New included files
 #include "player_spaceship.hpp"
 #include "alien.hpp"
@@ -35,6 +36,8 @@ class Game{
 	bool game=false;
 	bool ins=false;
     
+    int random = 0;
+
     Mix_Music *bgMusic = NULL;
 
     BGTexture texture;  //For animating the background texture
@@ -46,5 +49,6 @@ public:
     void close();
     SDL_Texture* loadTexture( std::string path );
     void run();
+    void drawObj();
 };
 

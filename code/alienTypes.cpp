@@ -7,10 +7,10 @@ GeoYielders::GeoYielders(SDL_Texture* img):Alien(img){
     src.w = 130;
     src.h = 120;
 
-    mover.x = (800 - src.w)/2;
-    mover.y = 0;
-    mover.w = 90;
-    mover.h = 80;
+    mover.x = random_x();
+    mover.y = 0 + mover.h;
+    mover.w = 70;
+    mover.h = 60;
 }
 ThunderBearers::ThunderBearers(SDL_Texture* img):Alien(img){
     src.x = 141;
@@ -18,21 +18,23 @@ ThunderBearers::ThunderBearers(SDL_Texture* img):Alien(img){
     src.w = 130;
     src.h = 145;
 
-    mover.x = loc_x;
-    mover.y = loc_y;
-    mover.w = 90;
-    mover.h = 105;
+    mover.x = random_x();
+    mover.y = 0 + mover.h;
+    mover.w = 70;
+    mover.h = 85;
+    printf("First Constructor Functional");
 }
+
 StormCarriers::StormCarriers(SDL_Texture* img):Alien(img){
     src.x = 282;
     src.y = 605;
     src.w = 130;
     src.h = 120;
 
-    mover.x = (800 - src.w)/2;
-    mover.y = 200;
-    mover.w = 90;
-    mover.h = 80;
+    mover.x = random_x();
+    mover.y = 0 + mover.h;
+    mover.w = 70;
+    mover.h = 60;
 }
 FireBreathers::FireBreathers(SDL_Texture* img):Alien(img){
     src.x = 423;
@@ -40,10 +42,10 @@ FireBreathers::FireBreathers(SDL_Texture* img):Alien(img){
     src.w = 130;
     src.h = 125;
 
-    mover.x = (800 - src.w)/2;
-    mover.y = 290;
-    mover.w = 90;
-    mover.h = 85;
+    mover.x = random_x();
+    mover.y = 0 + mover.h;
+    mover.w = 70;
+    mover.h = 65;
 }
 
 //using polymorphism by having the kill method work differently for each type of alien 
