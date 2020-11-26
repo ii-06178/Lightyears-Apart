@@ -1,11 +1,13 @@
 //#include "location.hpp"
 #include "sprite.hpp"
+#include <SDL.h>
 #pragma once
 
 class Alien:public Sprite
 {
     int strength; //stores either how many hits an alien needs to die OR how much damage they do to player with their hit. We need to choose one
     int difficultyLevel; //stores at which difficulty level i.e. above what score will this alien be displayed
+    //SDL_RendererFlip turn;
     
     public:
     Alien(SDL_Texture*);
@@ -18,4 +20,6 @@ class Alien:public Sprite
     int getDifficulty();
     
     void drawSprite(SDL_Renderer*);
+    protected:
+    int loc_x, loc_y;
 };

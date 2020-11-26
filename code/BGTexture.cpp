@@ -23,12 +23,12 @@ void BGTexture::render( int x, int y, SDL_Renderer* gRenderer)
 }
 void BGTexture::drawBG(SDL_Renderer* gRenderer){
 
-    scrollingOffSet -= 5;
-    if(scrollingOffSet < -bgWidth){//condition for resetting
+    scrollingOffSet += 5;
+    if(scrollingOffSet < -bgHeight){//condition for resetting
         scrollingOffSet = 0;
     }
 
     //rendering background
-    render(scrollingOffSet, 0, gRenderer);
-    render(scrollingOffSet+bgWidth, 0, gRenderer);
+    render(0, scrollingOffSet, gRenderer);
+    render(0, scrollingOffSet-bgHeight, gRenderer);
 }

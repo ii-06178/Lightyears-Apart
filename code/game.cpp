@@ -70,6 +70,7 @@ bool Game::loadMedia()
 	wScreen = loadTexture("Welcome Screen.png");
 	iScreen = loadTexture("Instructions Screen.png");
 	bgMusic = Mix_LoadMUS("opening.wav");
+	texture.assets = gTexture;
 
 	if (gTexture == NULL)
 	{
@@ -133,7 +134,7 @@ SDL_Texture *Game::loadTexture(std::string path)
 		//Get rid of old loaded surface
 		SDL_FreeSurface(loadedSurface);
 	}
-	texture.assets = newTexture;
+	//texture.assets = newTexture;
 	return newTexture;
 }
 void Game::run()
@@ -141,6 +142,7 @@ void Game::run()
 	bool quit = false;
 	SDL_Event e;
 	PlayerSpaceship p = {assets};
+	ThunderBearers th = {assets};
 	while( !quit )
 	{
 		//Handle events on queue
@@ -154,7 +156,7 @@ void Game::run()
 			p.EventHandler(e);	//handles ship events
 		
 		
-		texture.drawBG(gRenderer);	//moving background
+		//texture.drawBG(gRenderer);	//moving background
 
 			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
 			{
@@ -200,17 +202,17 @@ void Game::run()
 			if (game == true)
 			{
 				p.moveShip();
-		
 			}
 		}
 
 		SDL_RenderClear(gRenderer); //removes everything from renderer
+		//for screens
 		if (menu == true)
 		{
 			if (Mix_PlayingMusic() == 0)
 			{
 				//Play the music
-				Mix_PlayMusic(bgMusic, 2);
+				//Mix_PlayMusic(bgMusic, 2);
 			}
 			if (ins == false)
 			{
@@ -221,19 +223,27 @@ void Game::run()
 				SDL_RenderCopy(gRenderer, iScreen, NULL, NULL);
 			}
 		}
+		else{
+			texture.drawBG(gRenderer);
+		}
+		//for game
 		if (game == true)
-		{	ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
-		Meteor m = {assets}; Fireball fb = {assets};
-	
-			SDL_RenderCopy(gRenderer, gTexture, NULL, NULL); //Draws background to renderer
-				p.drawSprite(gRenderer);
-		g.drawSprite(gRenderer);
-		t.drawSprite(gRenderer);
-		s.drawSprite(gRenderer);
-		f.drawSprite(gRenderer);
-		m.drawSprite(gRenderer);
-		fb.drawSprite(gRenderer);
-		//tb.drawSprite(gRenderer);
+		{	
+			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
+			Meteor m = {assets}; Fireball fb = {assets};
+		
+			//SDL_RenderCopy(gRenderer, gTexture, NULL, NULL); //Draws background to renderer
+			//texture.drawBG(gRenderer);
+			p.drawSprite(gRenderer);
+			//g.drawSprite(gRenderer);
+			//t.drawSprite(gRenderer);
+			//s.drawSprite(gRenderer);
+			//f.drawSprite(gRenderer);
+			m.drawSprite(gRenderer);
+			fb.drawSprite(gRenderer);
+			//tb.drawSprite(gRenderer);
+
+			th.drawSprite(gRenderer);
 		}
 
 		//***********************draw the objects here********************

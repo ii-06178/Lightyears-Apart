@@ -18,8 +18,8 @@ ThunderBearers::ThunderBearers(SDL_Texture* img):Alien(img){
     src.w = 130;
     src.h = 145;
 
-    mover.x = (800 - src.w)/2;
-    mover.y = 90;
+    mover.x = loc_x;
+    mover.y = loc_y;
     mover.w = 90;
     mover.h = 105;
 }
