@@ -1,4 +1,5 @@
 #include "obstacle.hpp"
+
 #pragma once
 
 class Meteor:public Obstacle

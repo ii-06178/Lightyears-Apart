@@ -19,7 +19,6 @@ class Alien:public Sprite
     void setDifficulty(int d);
     int getStrength();
     int getDifficulty();
-    
-    int random_x();
+
     void drawSprite(SDL_Renderer*);
 };

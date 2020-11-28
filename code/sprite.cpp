@@ -3,8 +3,7 @@
 Sprite::Sprite(SDL_Texture* img){   //kinda default constructor for all sprites. 
 
     asset = img;
-    //src = {0,0,0,0};
-    //mover = {0,0,0,0};
+    
     hitCount = 0;
     x_speed = 0;
     y_speed = 0;
