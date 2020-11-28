@@ -6,6 +6,13 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
+#include <list>
+//New included files
+#include "player_spaceship.hpp"
+#include "alien.hpp"
+#include "alienTypes.hpp"
+#include "obstacleTypes.hpp"
+#include "BGTexture.hpp"
 #pragma once
 
 class Game{
@@ -23,8 +30,17 @@ class Game{
     SDL_Texture* gTexture = NULL;
     //global reference to png image sheets
     SDL_Texture* assets=NULL;
+    SDL_Texture* iScreen=NULL;
+    SDL_Texture* wScreen=NULL;
+    bool menu=true;
+	bool game=false;
+	bool ins=false;
     
-    // Mix_Music *bgMusic = NULL;
+    int random = 0;
+
+    Mix_Music *bgMusic = NULL;
+
+    BGTexture texture;  //For animating the background texture
 
 public:
 
@@ -33,5 +49,6 @@ public:
     void close();
     SDL_Texture* loadTexture( std::string path );
     void run();
+    void drawObj();
 };
 
