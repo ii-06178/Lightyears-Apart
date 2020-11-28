@@ -1,5 +1,6 @@
 //#include "location.hpp"
 #include "sprite.hpp"
+#include <SDL.h>
 #pragma once
 
 class Obstacle:public Sprite
@@ -14,4 +15,6 @@ class Obstacle:public Sprite
     int getStrength();
 
     void drawSprite(SDL_Renderer*);
+    void drawM();
+    void drawF();
 };

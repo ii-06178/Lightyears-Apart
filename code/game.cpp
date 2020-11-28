@@ -149,6 +149,7 @@ void Game::run()
 	PlayerSpaceship p = {assets};
 	//ThunderBearers th = {assets};
 	ThunderBearers t = {assets}; GeoYielders g = {assets}; StormCarriers s = {assets}; FireBreathers f = {assets};
+	Meteor m = {assets}; Fireball fb = {assets};
 	while( !quit )
 	{
 		//Handle events on queue
@@ -236,7 +237,7 @@ void Game::run()
 		if (game == true)
 		{	
 			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
-			Meteor m = {assets}; Fireball fb = {assets};
+			
 
 			p.drawSprite(gRenderer);
 			m.drawSprite(gRenderer);
