@@ -35,12 +35,12 @@ class Game{
     bool menu=true;
 	bool game=false;
 	bool ins=false;
-    
-    int random = 0;
 
     Mix_Music *bgMusic = NULL;
 
     BGTexture texture;  //For animating the background texture
+
+    //list<Lives*> lives;
 
 public:
 
@@ -50,5 +50,7 @@ public:
     SDL_Texture* loadTexture( std::string path );
     void run();
     void drawObj();
+
+    void updateLives();
 };
 

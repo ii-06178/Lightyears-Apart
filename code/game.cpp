@@ -138,10 +138,14 @@ SDL_Texture *Game::loadTexture(std::string path)
 	return newTexture;
 }
 //list<Alien *>::iterator A;//list for aliens
-
+//list<Lives*> :: iterator L;
 void Game::drawObj(){
+	
 }
 
+void Game::updateLives(){
+	
+}
 void Game::run()
 {
 	bool quit = false;
@@ -150,6 +154,7 @@ void Game::run()
 	//ThunderBearers th = {assets};
 	ThunderBearers t = {assets}; GeoYielders g = {assets}; StormCarriers s = {assets}; FireBreathers f = {assets};
 	Meteor m = {assets}; Fireball fb = {assets};
+	Lives l = {assets};
 	while( !quit )
 	{
 		//Handle events on queue
@@ -249,14 +254,8 @@ void Game::run()
 			g.drawSprite(gRenderer);
 			f.drawSprite(gRenderer);
 			s.drawSprite(gRenderer);
+			l.drawSprite(gRenderer);
 		}
-
-		//***********************draw the objects here********************
-
-		
-		
-
-		//****************************************************************
 
     	SDL_RenderPresent(gRenderer); //displays the updated renderer
 
