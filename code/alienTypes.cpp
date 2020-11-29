@@ -22,7 +22,7 @@ ThunderBearers::ThunderBearers(SDL_Texture* img):Alien(img){
     mover.w = 70;
     mover.h = 85;
     mover.y = 0 - mover.h;
-    printf("First Constructor Functional");
+    //printf("First Constructor Functional");
 }
 
 StormCarriers::StormCarriers(SDL_Texture* img):Alien(img){
@@ -67,4 +67,58 @@ void StormCarriers::kill()
 void FireBreathers::kill()
 {
     
+}
+void GeoYielders::hasdestroyed()
+{
+    destroyed=true;
+}
+
+void ThunderBearers::hasdestroyed()
+{
+        destroyed=true;
+}
+
+void StormCarriers::hasdestroyed()
+{
+    destroyed=true;    
+}
+
+void FireBreathers::hasdestroyed()
+{
+    destroyed=true;
+}
+bool GeoYielders::getdestroyed()
+{
+    return destroyed;
+}
+
+bool ThunderBearers::getdestroyed()
+{
+    return destroyed;
+}
+
+bool StormCarriers::getdestroyed()
+{
+    return destroyed;   
+}
+
+bool FireBreathers::getdestroyed()
+{
+    return destroyed;
+}
+SDL_Rect GeoYielders::getmover()
+{
+return mover;
+}
+SDL_Rect ThunderBearers::getmover()
+{
+return mover;
+}
+SDL_Rect StormCarriers::getmover()
+{
+return mover;
+}
+SDL_Rect FireBreathers::getmover()
+{
+return mover;
 }
