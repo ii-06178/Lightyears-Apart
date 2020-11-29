@@ -160,19 +160,19 @@ void Game::drawObj()
 {
 }
 
+void Game::updateLives(){
+	
+}
 void Game::run()
 {
 	bool quit = false;
 	SDL_Event e;
 	PlayerSpaceship p = {assets};
 	//ThunderBearers th = {assets};
-	ThunderBearers t = {assets};
-	GeoYielders g = {assets};
-	StormCarriers s = {assets};
-	FireBreathers f = {assets};
-	Meteor m = {assets};
-	Fireball fb = {assets};
-	while (!quit)
+	ThunderBearers t = {assets}; GeoYielders g = {assets}; StormCarriers s = {assets}; FireBreathers f = {assets};
+	Meteor m = {assets}; Fireball fb = {assets};
+	Lives l = {assets};
+	while( !quit )
 	{
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
@@ -289,13 +289,10 @@ void Game::run()
 			g.drawSprite(gRenderer);
 			f.drawSprite(gRenderer);
 			s.drawSprite(gRenderer);
+			l.drawSprite(gRenderer);
 		}
 
-		//***********************draw the objects here********************
-
-		//****************************************************************
-
-		SDL_RenderPresent(gRenderer); //displays the updated renderer
+    	SDL_RenderPresent(gRenderer); //displays the updated renderer
 
 		SDL_Delay(200); //causes sdl engine to delay for specified miliseconds
 	}

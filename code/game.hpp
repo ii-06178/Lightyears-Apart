@@ -35,14 +35,14 @@ class Game{
     bool menu=true;
 	bool game=false;
 	bool ins=false;
-    
-    int random = 0;
 
     Mix_Music *bgMusic = NULL;
     Mix_Music *bgMusic2 = NULL;
     Mix_Chunk *shooting= NULL;
     Mix_Chunk *hit=NULL;
     BGTexture texture;  //For animating the background texture
+
+    //list<Lives*> lives;
 
 public:
 
@@ -55,5 +55,7 @@ public:
     void updatealien();
     void updateplayer();
     void updateobstacles();
+
+    void updateLives();
 };
 
