@@ -3,6 +3,7 @@
 #include<string>
 #include "SDL.h"
 #include "sprite.hpp"
+#include "player_spaceship.hpp"
 #include "alien.hpp"
 #include "alienTypes.hpp"
 #include "Laser.hpp"

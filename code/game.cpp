@@ -155,6 +155,7 @@ void Game::updatealien()
 void Game::updateplayer()
 {
 	listofobjects.check_collision_with_shooter();
+	listofobjects.deletelaser(assets);
 }
 void Game::updateobstacles()
 {
@@ -173,6 +174,7 @@ void Game::updateLives(){
 void Game::run()
 {
 	bool quit = false;
+	int count_aliens=0;
 	SDL_Event e;
 	PlayerSpaceship *p =new PlayerSpaceship (assets);
 	//ThunderBearers th = {assets};
@@ -294,8 +296,9 @@ void Game::run()
 		//for game
 		if (game == true)
 		{	texture.drawBG(gRenderer);
-			int count_aliens=0;
+			
 			p->drawSprite(gRenderer);
+			listofobjects.check_collision_with_enemyshooter(p);
 			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
 			while (count_aliens<20)
 			{	count_aliens++;
@@ -346,12 +349,12 @@ void Game::run()
 			// g.drawSprite(gRenderer);
 			// f.drawSprite(gRenderer);
 			// s.drawSprite(gRenderer);
-			// l.drawSprite(gRenderer);
+			l.drawSprite(gRenderer);
 			drawObj();
+		
+		}
 			updateplayer();
 			updatealien();
-		}
-
     	SDL_RenderPresent(gRenderer); //displays the updated renderer
 
 		SDL_Delay(200); //causes sdl engine to delay for specified miliseconds

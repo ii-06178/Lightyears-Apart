@@ -23,12 +23,14 @@ void addUnit(StormCarriers *aa);
 void addUnit(FireBreathers *pa);
 
 void deleteobstacle();
+void deletelaser(SDL_Texture*);
 void deletealien(SDL_Texture*);
 void drawAllaliens(SDL_Renderer*,SDL_Texture*);
 void drawAllobstacles(SDL_Renderer*);
 void drawAlllasers(SDL_Renderer*);
 // void laying(SDL_Texture*);
 void check_collision_with_shooter();
+void check_collision_with_enemyshooter(PlayerSpaceship* pl);
 void check_collision_with_aliens();
 void check_collisions_with_obstacles();
 // void makeNestMove();

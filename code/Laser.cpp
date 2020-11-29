@@ -21,7 +21,16 @@ Laser::Laser(SDL_Texture* img):Sprite(img)
 void Laser::setPos(SDL_Rect s)
 {
     mover.x=s.x;
-    mover.y=s.y-70;
+    if (type=="hero")
+    {
+          mover.y=s.y-70;
+    }
+    if (type=="alien")
+    {
+        mover.y=s.y+70;
+    }
+    
+  
    
 }
 void Laser::setType(std::string t)
@@ -44,4 +53,12 @@ if (type=="alien")
 SDL_RenderCopy(gRenderer,asset,&src[1],&mover);
     mover.y=mover.y+30;
 }         
+}
+void Laser::setcontact()
+{
+    contact=true;
+}
+bool Laser::getcontact()
+{
+    return contact;
 }
