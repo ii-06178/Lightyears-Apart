@@ -1,5 +1,7 @@
+#include<iostream>
 #include "player_spaceship.hpp"
 #include <SDL.h>
+
 using namespace std;
 
 PlayerSpaceship::PlayerSpaceship(SDL_Texture* img):Sprite(img) {
@@ -46,13 +48,14 @@ void PlayerSpaceship::EventHandler(SDL_Event event){
 }
 void PlayerSpaceship::moveShip(){
     //the ship moves forward/backward until it hits either wall
+    cout<<pos_y<<endl;
     pos_x += x_speed;
     if(pos_x + mover.w > 800 || pos_x < 0){
         pos_x -= x_speed;
     }
     //the ship moves up/down until it hits roof/bottom
     pos_y += y_speed;
-    if(pos_y + mover.h > 600 || pos_y < 0){
+    if(pos_y + mover.h > 600 || pos_y < 400){
         pos_y -= y_speed;
     }
 }

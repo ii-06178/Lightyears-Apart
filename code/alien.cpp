@@ -19,7 +19,8 @@ void Alien::drawSprite(SDL_Renderer* gRenderer){//the draw function
     else if (mover.x <= 0) turn_h = SDL_FLIP_NONE;//turns when hit the left wall
 
     //movement for y axis
-    if(mover.y < 600-mover.h && up == false){//moving down
+    if(mover.y < 600-mover.h && up == false)
+    {//moving down
         mover.y += 10;
     }
     else if(mover.y >= 600-mover.h) up = true;//strikes bottom

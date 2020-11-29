@@ -69,7 +69,10 @@ bool Game::loadMedia()
 	gTexture = loadTexture("stars.png");
 	wScreen = loadTexture("Welcome Screen.png");
 	iScreen = loadTexture("Instructions Screen.png");
-	bgMusic = Mix_LoadMUS("opening.wav");
+	bgMusic = Mix_LoadMUS("SkyFire (Title Screen).wav");
+	bgMusic2 = Mix_LoadMUS("Space Heroes.wav");
+	shooting = Mix_LoadWAV("laser4.wav");
+	// hit=Mix_LoadWAV();
 	texture.assets = gTexture;
 
 	if (gTexture == NULL)
@@ -78,7 +81,7 @@ bool Game::loadMedia()
 		success = false;
 	}
 
-	if (bgMusic == NULL)
+	if (bgMusic == NULL || bgMusic2 == NULL || shooting== NULL)
 	{
 		printf("Unable to load music: %s \n", Mix_GetError());
 		success = false;
@@ -99,8 +102,14 @@ void Game::close()
 	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
 	gRenderer = NULL;
-	// Mix_FreeMusic(bgMusic);
-	// bgMusic = NULL;
+	Mix_FreeMusic(bgMusic);
+	bgMusic = NULL;
+	Mix_FreeMusic(bgMusic2);
+	bgMusic2 = NULL;
+	Mix_FreeChunk(shooting);
+	shooting = NULL;
+	// Mix_FreeChunk(hit);
+	// hit=NULL;
 	//Quit SDL subsystems
 	IMG_Quit();
 	Mix_Quit();
@@ -138,8 +147,17 @@ SDL_Texture *Game::loadTexture(std::string path)
 	return newTexture;
 }
 //list<Alien *>::iterator A;//list for aliens
-
-void Game::drawObj(){
+void Game::updatealien()
+{
+}
+void Game::updateplayer()
+{
+}
+void Game::updateobstacles()
+{
+}
+void Game::drawObj()
+{
 }
 
 void Game::run()
@@ -148,9 +166,13 @@ void Game::run()
 	SDL_Event e;
 	PlayerSpaceship p = {assets};
 	//ThunderBearers th = {assets};
-	ThunderBearers t = {assets}; GeoYielders g = {assets}; StormCarriers s = {assets}; FireBreathers f = {assets};
-	Meteor m = {assets}; Fireball fb = {assets};
-	while( !quit )
+	ThunderBearers t = {assets};
+	GeoYielders g = {assets};
+	StormCarriers s = {assets};
+	FireBreathers f = {assets};
+	Meteor m = {assets};
+	Fireball fb = {assets};
+	while (!quit)
 	{
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
@@ -160,34 +182,34 @@ void Game::run()
 			{
 				quit = true;
 			}
-			p.EventHandler(e);	//handles ship events
-		
-		
-		//texture.drawBG(gRenderer);	//moving background
+			p.EventHandler(e); //handles ship events
+
+			//texture.drawBG(gRenderer);	//moving background
 
 			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
 			{
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
-				//cout << xMouse << ", " << yMouse << endl;
+				cout << xMouse << ", " << yMouse << endl;
+
 				if (menu == true)
-				{
+				{ 
 
 					if (ins == false)
 					{
-						if (xMouse >= 330 and xMouse <= 470 and yMouse >= 325 and yMouse <= 360)
+						if (xMouse >= 330 and xMouse <= 470 and yMouse >= 370 and yMouse <= 400)
 						{
 							menu = false;
 							ins = false;
 							game = true;
 						}
-						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 380 and yMouse <= 417)
+						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 420 and yMouse <= 450)
 						{
 							menu = true;
 							ins = true;
 							game = false;
 						}
-						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 440 and yMouse <= 475)
+						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 475 and yMouse <= 505)
 						{
 							menu = false;
 							ins = false;
@@ -209,6 +231,13 @@ void Game::run()
 			if (game == true)
 			{
 				p.moveShip();
+				if (e.type == SDL_KEYDOWN)
+					{
+						if (e.key.keysym.sym == SDLK_SPACE)
+						{
+							Mix_PlayChannel(-1, shooting, 0);
+						}
+					}
 			}
 		}
 
@@ -219,25 +248,36 @@ void Game::run()
 			if (Mix_PlayingMusic() == 0)
 			{
 				//Play the music
-				//Mix_PlayMusic(bgMusic, 2);
+				Mix_PlayMusic(bgMusic, -1);
 			}
+			// else
+			// {
+			// 	Mix_PauseMusic();
+			// }
+			texture.drawBG(gRenderer);
 			if (ins == false)
 			{
+				
 				SDL_RenderCopy(gRenderer, wScreen, NULL, NULL);
 			}
 			if (ins == true)
-			{
+			{	
 				SDL_RenderCopy(gRenderer, iScreen, NULL, NULL);
 			}
 		}
-		else{
-			texture.drawBG(gRenderer);
-		}
+		// else
+		// {
+		// 	texture.drawBG(gRenderer);
+		// }
 		//for game
 		if (game == true)
-		{	
+		{	texture.drawBG(gRenderer);
+			Mix_HaltMusic();
+			// if (Mix_PlayingMusic() == 0)
+			// 	{
+			// 	Mix_PlayMusic(bgMusic2, 2);
+			// 	}
 			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
-			
 
 			p.drawSprite(gRenderer);
 			m.drawSprite(gRenderer);
@@ -253,12 +293,9 @@ void Game::run()
 
 		//***********************draw the objects here********************
 
-		
-		
-
 		//****************************************************************
 
-    	SDL_RenderPresent(gRenderer); //displays the updated renderer
+		SDL_RenderPresent(gRenderer); //displays the updated renderer
 
 		SDL_Delay(200); //causes sdl engine to delay for specified miliseconds
 	}

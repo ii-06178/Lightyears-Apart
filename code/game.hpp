@@ -39,7 +39,9 @@ class Game{
     int random = 0;
 
     Mix_Music *bgMusic = NULL;
-
+    Mix_Music *bgMusic2 = NULL;
+    Mix_Chunk *shooting= NULL;
+    Mix_Chunk *hit=NULL;
     BGTexture texture;  //For animating the background texture
 
 public:
@@ -50,5 +52,8 @@ public:
     SDL_Texture* loadTexture( std::string path );
     void run();
     void drawObj();
+    void updatealien();
+    void updateplayer();
+    void updateobstacles();
 };
 
