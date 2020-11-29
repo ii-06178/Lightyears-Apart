@@ -1,5 +1,4 @@
 #include "sprite.hpp"
-#include "Laser.hpp"
 #include <SDL.h>
 #pragma once
 
@@ -25,7 +24,7 @@ class PlayerSpaceship:public Sprite
     int getFuel();
 
     SDL_Rect getmover();
-
+    int  getPos();
     void EventHandler(SDL_Event);
     void moveShip();
     void drawSprite(SDL_Renderer*);
@@ -39,8 +38,8 @@ class Lives:public Sprite{
     Lives(SDL_Texture*);
     void drawSprite(SDL_Renderer*);
 };
-class P_Laser:public Laser{
-    public:
-    P_Laser(SDL_Texture*);
-    void shoot(SDL_Renderer*);
-};
+// class P_Laser:public Laser{
+//     public:
+//     P_Laser(SDL_Texture*);
+//     void shoot(SDL_Renderer*);
+// };

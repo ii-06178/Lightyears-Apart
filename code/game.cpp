@@ -1,5 +1,6 @@
 #include <iostream>
 #include "game.hpp"
+#include "LinkedList.hpp"
 using namespace std;
 bool Game::init()
 {
@@ -149,15 +150,21 @@ SDL_Texture *Game::loadTexture(std::string path)
 //list<Alien *>::iterator A;//list for aliens
 void Game::updatealien()
 {
+	listofobjects.deletealien(assets);
 }
 void Game::updateplayer()
 {
+	listofobjects.check_collision_with_shooter();
 }
 void Game::updateobstacles()
 {
+
 }
 void Game::drawObj()
 {
+	listofobjects.drawAllaliens(gRenderer,assets);
+	listofobjects.drawAllobstacles(gRenderer);
+	listofobjects.drawAlllasers(gRenderer);
 }
 
 void Game::updateLives(){
@@ -167,9 +174,10 @@ void Game::run()
 {
 	bool quit = false;
 	SDL_Event e;
-	PlayerSpaceship p = {assets};
+	PlayerSpaceship *p =new PlayerSpaceship (assets);
 	//ThunderBearers th = {assets};
-	ThunderBearers t = {assets}; GeoYielders g = {assets}; StormCarriers s = {assets}; FireBreathers f = {assets};
+  
+
 	Meteor m = {assets}; Fireball fb = {assets};
 	Lives l = {assets};
 	while( !quit )
@@ -182,7 +190,7 @@ void Game::run()
 			{
 				quit = true;
 			}
-			p.EventHandler(e); //handles ship events
+			p->EventHandler(e); //handles ship events
 
 			//texture.drawBG(gRenderer);	//moving background
 
@@ -202,6 +210,7 @@ void Game::run()
 							menu = false;
 							ins = false;
 							game = true;
+							Mix_HaltMusic();
 						}
 						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 420 and yMouse <= 450)
 						{
@@ -230,14 +239,26 @@ void Game::run()
 			}
 			if (game == true)
 			{
-				p.moveShip();
+			if (Mix_PlayingMusic() == 0)
+				{
+				Mix_PlayMusic(bgMusic2, -1);
+				Mix_VolumeMusic(128/4);
+				
+				}
+				p->moveShip();
 				if (e.type == SDL_KEYDOWN)
 					{
 						if (e.key.keysym.sym == SDLK_SPACE)
-						{
+						{Laser *hlaser=new Laser(assets);
+				SDL_Rect mo=p->getmover();
+				//std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
+				hlaser->setPos(mo);
+				listofobjects.addUnit(hlaser,"hero");
+				
 							Mix_PlayChannel(-1, shooting, 0);
 						}
 					}
+				
 			}
 		}
 
@@ -249,6 +270,7 @@ void Game::run()
 			{
 				//Play the music
 				Mix_PlayMusic(bgMusic, -1);
+
 			}
 			// else
 			// {
@@ -265,31 +287,69 @@ void Game::run()
 				SDL_RenderCopy(gRenderer, iScreen, NULL, NULL);
 			}
 		}
-		// else
-		// {
-		// 	texture.drawBG(gRenderer);
-		// }
+		else
+		{
+			
+		}
 		//for game
 		if (game == true)
 		{	texture.drawBG(gRenderer);
-			Mix_HaltMusic();
-			// if (Mix_PlayingMusic() == 0)
-			// 	{
-			// 	Mix_PlayMusic(bgMusic2, 2);
-			// 	}
+			int count_aliens=0;
+			p->drawSprite(gRenderer);
 			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
+			while (count_aliens<20)
+			{	count_aliens++;
+				// int prob;
+				// prob = rand() % 10000000;
+                // if (prob <= 1)
+				// {
+				FireBreathers* f =new FireBreathers (assets);
+				count_fb++;
+				listofobjects.addUnit(f);
 
-			p.drawSprite(gRenderer);
+				
+				// }
+				
+				// if (count_fb>24)
+				// { if (prob<=4)
+				// {
+				// 	ThunderBearers *t =new ThunderBearers(assets);
+				// 	count_tb++;
+				// 	listofobjects.addUnit(t);
+				// }
+					
+				// }
+				// if (count_tb>24)
+				// {
+				// 	StormCarriers* s = new StormCarriers(assets);
+				// 	count_sc++;
+				// 	listofobjects.addUnit(s);
+
+				// }
+				// if (count_sc>24)
+				// {
+				// 	 GeoYielders* g =new GeoYielders (assets);
+				// 	 count_gy++;
+				// 	 listofobjects.addUnit(g);
+				// }
+				//count_aliens=count_tb+count_fb+count_sc+count_gy;
+			}
+			
+			
 			m.drawSprite(gRenderer);
-			fb.drawSprite(gRenderer);
+			
+			
 			//tb.drawSprite(gRenderer);
 
 			//th.drawSprite(gRenderer);
-			t.drawSprite(gRenderer);
-			g.drawSprite(gRenderer);
-			f.drawSprite(gRenderer);
-			s.drawSprite(gRenderer);
-			l.drawSprite(gRenderer);
+			// t.drawSprite(gRenderer);
+			// g.drawSprite(gRenderer);
+			// f.drawSprite(gRenderer);
+			// s.drawSprite(gRenderer);
+			// l.drawSprite(gRenderer);
+			drawObj();
+			updateplayer();
+			updatealien();
 		}
 
     	SDL_RenderPresent(gRenderer); //displays the updated renderer
