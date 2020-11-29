@@ -24,7 +24,7 @@ void BGTexture::render( int x, int y, SDL_Renderer* gRenderer)
 void BGTexture::drawBG(SDL_Renderer* gRenderer){
 
     scrollingOffSet += 5;
-    if(scrollingOffSet < -bgHeight){//condition for resetting
+    if(scrollingOffSet >= bgHeight){//condition for resetting
         scrollingOffSet = 0;
     }
 
