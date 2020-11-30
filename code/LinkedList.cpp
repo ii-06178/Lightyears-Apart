@@ -52,7 +52,7 @@ void LinkedList::addUnit(FireBreathers *pa) //adds nest to nest lst
 {
     pyroalien.push_front(pa);
 }
-void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst)
+void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s)
 { //This function from the Drawallobjects from the game file
     std::list<GeoYielders *>::iterator itr;
 
@@ -67,7 +67,19 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst)
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
+            a->setstate(s);
             a->drawSprite(renderer); //calls the object's draw function
+            int prob;
+            prob = rand() % 100;
+            if (prob <= 2)
+            {
+                Laser *alaser = new Laser(asst);
+                SDL_Rect mof = a->getmover();
+                //std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
+                alaser->setPos(mof);
+                alaser->setType("alien");
+                addUnit(alaser, "alien");
+            }
         }
     std::list<ThunderBearers *>::iterator jtr;
 
@@ -82,7 +94,19 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
+            a->setstate(s);
             a->drawSprite(renderer); //calls the object's draw function
+            int prob;
+            prob = rand() % 100;
+            if (prob <= 2)
+            {
+                Laser *alaser = new Laser(asst);
+                SDL_Rect mof = a->getmover();
+                //std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
+                alaser->setPos(mof);
+                alaser->setType("alien");
+                addUnit(alaser, "alien");
+            }
         }
     std::list<StormCarriers *>::iterator ktr;
 
@@ -97,7 +121,19 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst)
         {
             // 'ptr' points to N-th element of list
             auto a = *ktr;
+            a->setstate(s);
             a->drawSprite(renderer); //calls the object's draw function
+            int prob;
+            prob = rand() % 100;
+            if (prob <= 2)
+            {
+                Laser *alaser = new Laser(asst);
+                SDL_Rect mof = a->getmover();
+                //std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
+                alaser->setPos(mof);
+                alaser->setType("alien");
+                addUnit(alaser, "alien");
+            }
         }
     std::list<FireBreathers *>::iterator ltr;
 
@@ -112,6 +148,7 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst)
         {
             // 'ptr' points to N-th element of list
             auto a = *ltr;
+            a->setstate(s);
             a->drawSprite(renderer); //calls the object's draw function
             int prob;
             prob = rand() % 100;
@@ -126,7 +163,7 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst)
             }
         }
 }
-void LinkedList::drawAllobstacles(SDL_Renderer *renderer)
+void LinkedList::drawAllobstacles(SDL_Renderer *renderer, bool s)
 { //This function from the Drawallobjects from the game file
     std::list<Meteor *>::iterator itr;
 
@@ -141,6 +178,7 @@ void LinkedList::drawAllobstacles(SDL_Renderer *renderer)
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
+            a->setstate(s);
             a->drawSprite(renderer); //calls the object's draw function
         }
     std::list<Thunderbolt *>::iterator jtr;
@@ -156,6 +194,7 @@ void LinkedList::drawAllobstacles(SDL_Renderer *renderer)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
+            a->setstate(s);
             a->drawSprite(renderer); //calls the object's draw function
         }
     std::list<Fireball *>::iterator ktr;
@@ -171,10 +210,11 @@ void LinkedList::drawAllobstacles(SDL_Renderer *renderer)
         {
             // 'ptr' points to N-th element of list
             auto a = *ktr;
+            a->setstate(s);
             a->drawSprite(renderer); //calls the object's draw function
         }
 }
-void LinkedList::drawAlllasers(SDL_Renderer *renderer)
+void LinkedList::drawAlllasers(SDL_Renderer *renderer, bool s)
 { //This function from the Drawallobjects from the game file
     std::list<Laser *>::iterator itr;
 
@@ -190,6 +230,7 @@ void LinkedList::drawAlllasers(SDL_Renderer *renderer)
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
+            a->setcstate(s);
             a->drawSprite(renderer); //calls the object's draw function
         }
     std::list<Laser *>::iterator jtr;
@@ -205,6 +246,7 @@ void LinkedList::drawAlllasers(SDL_Renderer *renderer)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
+            a->setcstate(s);
             a->drawSprite(renderer); //calls the object's draw function
         }
 }
@@ -288,8 +330,10 @@ void LinkedList::deletealien(SDL_Texture *)
         }
 }
 void LinkedList::deleteobstacle(SDL_Texture*)
-{   std::list<Meteor *>::iterator itr;
-  int i;
+{
+      std::list<Meteor *>::iterator itr;
+
+    int i;
     for (i = 0, itr = meteors.begin(); i < meteors.size() && itr != meteors.end(); i++, itr++)
         if (meteors.size() == 0)
         {
@@ -300,6 +344,7 @@ void LinkedList::deleteobstacle(SDL_Texture*)
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
+            
             if (a->getdestroyed() == true)
             {
                 meteors.erase(itr);
@@ -318,6 +363,7 @@ void LinkedList::deleteobstacle(SDL_Texture*)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
+            
             if (a->getdestroyed() == true)
             {
                 thunderbolts.erase(jtr);
@@ -336,6 +382,7 @@ void LinkedList::deleteobstacle(SDL_Texture*)
         {
             // 'ptr' points to N-th element of list
             auto a = *ktr;
+            
             if (a->getdestroyed() == true)
             {
                 fireballs.erase(ktr);
@@ -475,6 +522,7 @@ void LinkedList::check_collision_with_shooter()
                 }
                 else
                 {
+                    // 'ptr' points to N-th element of list
                     auto b = *mtr;
                     SDL_Rect ma = a->getmover();
                     SDL_Rect mb = b->getmover();
@@ -482,11 +530,93 @@ void LinkedList::check_collision_with_shooter()
                     {
                         b->hasdestroyed();
                         a->setcontact();
-                    } //calls the object's draw function
+                    }
+                    //calls the object's draw function
                 }
         }
 }
+void LinkedList::check_collisions_with_obstacles()
+{
+    std::list<Laser *>::iterator itr;
 
+    int i;
+    for (i = 0, itr = herolasers.begin(); i < herolasers.size() && itr != herolasers.end(); i++, itr++)
+
+        if (herolasers.size() == 0)
+        {
+            // list too short
+            // std::cout<<0;
+        }
+        else
+        {    auto a = *itr;
+            std::list<Thunderbolt *>::iterator jtr;
+
+            int j;
+            for (j = 0, jtr = thunderbolts.begin(); j < thunderbolts.size() && jtr != thunderbolts.end(); j++, jtr++)
+                if (thunderbolts.size() == 0)
+                {
+                    // list too short
+                    // std::cout<<0;
+                }
+                else
+                {
+                    // 'ptr' points to N-th element of list
+                    auto b = *jtr;
+                    SDL_Rect ma = a->getmover();
+                    SDL_Rect mb = b->getmover();
+                    if (SDL_HasIntersection(&ma, &mb) == true)
+                    {
+                        b->hasdestroyed();
+                        a->setcontact();
+                    }
+                    //calls the object's draw function
+                }
+            std::list<Fireball *>::iterator ktr;
+
+            int k;
+            for (k = 0, ktr = fireballs.begin(); k < fireballs.size() && ktr != fireballs.end(); k++, ktr++)
+                if (fireballs.size() == 0)
+                {
+                    // list too short
+                    // std::cout<<0;
+                }
+                else
+                {
+                    // 'ptr' points to N-th element of list
+                   auto b = *ktr;
+                    SDL_Rect ma = a->getmover();
+                    SDL_Rect mb = b->getmover();
+                    if (SDL_HasIntersection(&ma, &mb) == true)
+                    {
+                        b->hasdestroyed();
+                        a->setcontact();
+                    }
+
+                    //calls the object's draw function
+                }
+            std::list<Meteor *>::iterator ltr;
+
+            int l;
+            for (l = 0, ltr = meteors.begin(); l < meteors.size() && ltr != meteors.end(); l++, ltr++)
+                if (meteors.size() == 0)
+                {
+                    // list too short
+                    // std::cout<<0;
+                }
+                else
+                {
+                    // 'ptr' points to N-th element of list
+                    auto b = *ltr;
+                    SDL_Rect ma = a->getmover();
+                    SDL_Rect mb = b->getmover();
+                    if (SDL_HasIntersection(&ma, &mb) == true)
+                    {
+                        b->hasdestroyed();
+                        a->setcontact();
+                    }
+                }
+        }
+}
 void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl)
 {
     std::list<Laser *>::iterator itr;
@@ -513,83 +643,40 @@ void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl)
             //calls the object's draw function
         }
 }
-void LinkedList::check_collisions_with_shooter_and_obstacles()
+bool LinkedList::check_empty_aliens()
 {
-    std::list<Laser *>::iterator itr;
-
-    int i;
-    for (i = 0, itr = herolasers.begin(); i < herolasers.size() && itr != herolasers.end(); i++, itr++)
-
-        if (herolasers.size() == 0)
+    if (pyroalien.empty() == true)
+    {
+        if (anemoalien.empty() == true)
         {
-            // list too short
-            // std::cout<<0;
+            if (geoalien.empty() == true)
+            {
+                if (electroalien.empty() == true)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
         else
         {
-            auto a = *itr;
-            std::list<Thunderbolt *>::iterator jtr;
-
-            int j;
-            for (j = 0, jtr = thunderbolts.begin(); j < thunderbolts.size() && jtr != thunderbolts.end(); j++, jtr++)
-                if (thunderbolts.size() == 0)
-                {
-                    // list too short
-                    // std::cout<<0;
-                }
-                else
-                {
-                    // 'ptr' points to N-th element of list
-                    auto b = *jtr;
-                    SDL_Rect ma = a->getmover();
-                    SDL_Rect mb = b->getmover();
-                    if (SDL_HasIntersection(&ma, &mb) == true)
-                    {
-                        b->hasdestroyed();
-                        a->setcontact();
-                    }
-                }
-            std::list<Fireball *>::iterator ktr;
-
-            int k;
-            for (k = 0, ktr = fireballs.begin(); k < fireballs.size() && ktr != fireballs.end(); k++, ktr++)
-                if (fireballs.size() == 0)
-                {
-                    // list too short
-                    // std::cout<<0;
-                }
-                else
-                {
-                    // 'ptr' points to N-th element of list
-                    auto b = *ktr;
-                    SDL_Rect ma = a->getmover();
-                    SDL_Rect mb = b->getmover();
-                    if (SDL_HasIntersection(&ma, &mb) == true)
-                    {
-                        b->hasdestroyed();
-                        a->setcontact();
-                    }
-                }
-            std::list<Meteor *>::iterator ltr;
-
-            int l;
-            for (l = 0, ltr = meteors.begin(); l < meteors.size() && ltr != meteors.end(); l++, ltr++)
-                if (meteors.size() == 0)
-                {
-                    // list too short
-                    // std::cout<<0;
-                }
-                else
-                {
-                    // 'ptr' points to N-th element of list
-                    auto b = *ltr;
-                    SDL_Rect ma = a->getmover();
-                    SDL_Rect mb = b->getmover();
-                    if (SDL_HasIntersection(&ma, &mb) == true)
-                    {
-                        b->hasdestroyed();
-                        a->setcontact();
-                    }
-                }
+            return false;
         }
+    }
+    else
+    {
+        return false;
+    }
 }
+
+// void LinkedList::check_collision_with_aliens()
+// {
+
+           

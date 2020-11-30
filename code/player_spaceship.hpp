@@ -12,7 +12,6 @@ class PlayerSpaceship:public Sprite
     const int S_VELOCITY = 15;  //setting it as constant right now, will change this with conditions as we progress and calculate the milestones of the player
     int pos_x, pos_y;
     bool alive;
-
     public: 
     PlayerSpaceship(SDL_Texture*);
     //~PlayerSpaceship();
@@ -26,7 +25,7 @@ class PlayerSpaceship:public Sprite
     SDL_Rect getmover();
     int  getPos();
     void EventHandler(SDL_Event);
-    void moveShip();
+    void moveShip(bool s);
     void drawSprite(SDL_Renderer*);
 
     void shoot();

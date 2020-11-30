@@ -70,9 +70,12 @@ bool Game::loadMedia()
 	gTexture = loadTexture("stars.png");
 	wScreen = loadTexture("Welcome Screen.png");
 	iScreen = loadTexture("Instructions Screen.png");
+	gwScreen = loadTexture("win screen 2.png");
+	glScreen = loadTexture("game over screen 1.png");
 	bgMusic = Mix_LoadMUS("SkyFire (Title Screen).wav");
 	bgMusic2 = Mix_LoadMUS("Space Heroes.wav");
 	shooting = Mix_LoadWAV("laser4.wav");
+
 	// hit=Mix_LoadWAV();
 	texture.assets = gTexture;
 
@@ -97,7 +100,15 @@ void Game::close()
 	SDL_DestroyTexture(assets);
 	assets = NULL;
 	SDL_DestroyTexture(gTexture);
-
+	gTexture = NULL;
+	SDL_DestroyTexture(iScreen);
+	iScreen = NULL;
+	SDL_DestroyTexture(wScreen);
+	wScreen = NULL;
+	SDL_DestroyTexture(gwScreen);
+	gwScreen = NULL;
+	SDL_DestroyTexture(glScreen);
+	glScreen = NULL;
 	//Destroy window
 	SDL_DestroyRenderer(gRenderer);
 	SDL_DestroyWindow(gWindow);
@@ -155,18 +166,18 @@ void Game::updatealien()
 void Game::updateplayer()
 {
 	listofobjects.check_collision_with_shooter();
+	listofobjects.check_collisions_with_obstacles();
 	listofobjects.deletelaser(assets);
 }
 void Game::updateobstacles()
 {
-	listofobjects.check_collisions_with_shooter_and_obstacles();
 	listofobjects.deleteobstacle(assets);
 }
 void Game::drawObj()
 {
-	listofobjects.drawAllaliens(gRenderer, assets);
-	listofobjects.drawAllobstacles(gRenderer);
-	listofobjects.drawAlllasers(gRenderer);
+	listofobjects.drawAllaliens(gRenderer, assets,state);
+	listofobjects.drawAllobstacles(gRenderer,state);
+	listofobjects.drawAlllasers(gRenderer,state);
 }
 
 void Game::updateLives()
@@ -180,8 +191,8 @@ void Game::run()
 	PlayerSpaceship *p = new PlayerSpaceship(assets);
 	//ThunderBearers th = {assets};
 
-	Meteor m = {assets};
-	Fireball fb = {assets};
+	// Meteor m = {assets};
+	// Fireball fb = {assets};
 	Lives l = {assets};
 	while (!quit)
 	{
@@ -196,7 +207,20 @@ void Game::run()
 			p->EventHandler(e); //handles ship events
 
 			//texture.drawBG(gRenderer);	//moving background
-
+			if (e.type == SDL_KEYDOWN) //when it is pressed once
+			{
+				if (e.key.keysym.sym == SDLK_p && game == true) //if it is the key k
+				{
+					if (state == false) //resume the game if it is already paused
+					{
+						state = true;
+					}
+					else
+					{
+						state = false; //pause the game
+					}
+				}
+			}
 			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
 			{
 				int xMouse, yMouse;
@@ -214,6 +238,7 @@ void Game::run()
 							ins = false;
 							game = true;
 							Mix_HaltMusic();
+							start = SDL_GetTicks();
 						}
 						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 420 and yMouse <= 450)
 						{
@@ -247,7 +272,7 @@ void Game::run()
 					Mix_PlayMusic(bgMusic2, -1);
 					Mix_VolumeMusic(128 / 4);
 				}
-				p->moveShip();
+				p->moveShip(state);
 				if (e.type == SDL_KEYDOWN)
 				{
 					if (e.key.keysym.sym == SDLK_SPACE)
@@ -288,58 +313,98 @@ void Game::run()
 				SDL_RenderCopy(gRenderer, iScreen, NULL, NULL);
 			}
 		}
-		else
+		if (game_is_won == true)
 		{
+			texture.drawBG(gRenderer);
+			SDL_RenderCopy(gRenderer, gwScreen, NULL, NULL);
+		}
+		if (game_is_lost == true)
+		{
+			texture.drawBG(gRenderer);
+			SDL_RenderCopy(gRenderer, glScreen, NULL, NULL);
 		}
 		//for game
 		if (game == true)
 		{
+			Uint32 current_time = SDL_GetTicks() - start;
+			Uint32 m_time=(SDL_GetTicks() - start)%15000;
+			Uint32 f_time=(SDL_GetTicks() - start)%45000;
+			cout << "current time" << current_time << endl;
 			texture.drawBG(gRenderer);
 
 			p->drawSprite(gRenderer);
 			listofobjects.check_collision_with_enemyshooter(p);
 			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
-			while (count_aliens < 20)
+			if (count_aliens < 100 && state==true)
 			{
-				count_aliens++;
+
 				// int prob;
 				// prob = rand() % 10000000;
 				// if (prob <= 1)
 				// {
-				FireBreathers *f = new FireBreathers(assets);
-				count_fb++;
-				listofobjects.addUnit(f);
-				Fireball *fire =new Fireball(assets);
-				listofobjects.addUnit(fire);
+				if ((current_time > (4000 * count_fb)) && count_fb <= 24)
+				{
+					FireBreathers *f = new FireBreathers(assets);
+					count_fb++;
+					listofobjects.addUnit(f);
+					count_aliens++;
+				}
+				if (m_time==0)
+				{	Meteor *m=new Meteor(assets);
+					listofobjects.addUnit(m);
+				}
+				if (f_time==0)
+				{	Fireball *fi=new Fireball(assets);
+					listofobjects.addUnit(fi);
+				}
 				// }
 
-				// if (count_fb>24)
-				// { if (prob<=4)
-				// {
-				// 	ThunderBearers *t =new ThunderBearers(assets);
-				// 	count_tb++;
-				// 	listofobjects.addUnit(t);
-				// }
-
-				// }
-				// if (count_tb>24)
-				// {
-				// 	StormCarriers* s = new StormCarriers(assets);
-				// 	count_sc++;
-				// 	listofobjects.addUnit(s);
-
-				// }
-				// if (count_sc>24)
-				// {
-				// 	 GeoYielders* g =new GeoYielders (assets);
-				// 	 count_gy++;
-				// 	 listofobjects.addUnit(g);
-				// }
+				if (count_fb > 24)
+				{
+					if ((current_time > ((4000 * 24) + (3500 * (count_tb)))) && count_tb <= 24)
+					{
+						ThunderBearers *t = new ThunderBearers(assets);
+						count_tb++;
+						listofobjects.addUnit(t);
+						count_aliens++;
+					}
+				}
+				if (count_tb > 24)
+				{
+					if ((current_time > ((4000 * 24) + (3500 * 24) + (2500 * count_sc))) && count_sc <= 24)
+					{
+						StormCarriers *s = new StormCarriers(assets);
+						count_sc++;
+						listofobjects.addUnit(s);
+						count_aliens++;
+					}
+				}
+				if (count_sc > 24)
+				{
+					if ((current_time > ((4000 * 24) + (3500 * 24) + (2500 * 24) + (1000 * count_gy))) && count_gy <= 24)
+					{
+						GeoYielders *g = new GeoYielders(assets);
+						count_gy++;
+						listofobjects.addUnit(g);
+						count_aliens++;
+					}
+				}
 				//count_aliens=count_tb+count_fb+count_sc+count_gy;
 			}
-
-			m.drawSprite(gRenderer);
-
+			
+			if (count_aliens >= 50)
+			{
+				//cout << listofobjects.check_empty_aliens() << endl;
+				if (listofobjects.check_empty_aliens() == true)
+				{
+					game_is_won = true;
+				}
+			}
+			if (game_is_won == true or game_is_lost == true)
+			{
+				game = false;
+				Mix_HaltMusic();
+			}
 			//tb.drawSprite(gRenderer);
 
 			//th.drawSprite(gRenderer);
@@ -350,9 +415,14 @@ void Game::run()
 			l.drawSprite(gRenderer);
 			drawObj();
 		}
-		updateplayer();
-		updatealien();
-		updateobstacles();
+
+		if (state == true)
+		{
+			updateplayer();
+			updatealien();
+			updateobstacles();
+		}
+
 		SDL_RenderPresent(gRenderer); //displays the updated renderer
 
 		SDL_Delay(200); //causes sdl engine to delay for specified miliseconds

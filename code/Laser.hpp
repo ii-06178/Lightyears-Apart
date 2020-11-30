@@ -10,7 +10,9 @@ class Laser:public Sprite
     SDL_Rect src[2], mover;
     static int frame;
     std::string type="hero";
+    bool cstate;
     public:
+    void setcstate(bool s);
     bool getcontact();
     void setcontact();
     Laser(SDL_Texture*);

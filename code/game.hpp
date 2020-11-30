@@ -36,9 +36,14 @@ class Game{
     SDL_Texture* assets=NULL;
     SDL_Texture* iScreen=NULL;
     SDL_Texture* wScreen=NULL;
+    SDL_Texture* gwScreen=NULL;
+    SDL_Texture* glScreen=NULL;
     bool menu=true;
 	bool game=false;
 	bool ins=false;
+    bool state=true;
+    bool game_is_won=false;
+    bool game_is_lost=false;
     int count_tb,count_fb,count_sc,count_gy;
     Mix_Music *bgMusic = NULL;
     Mix_Music *bgMusic2 = NULL;
@@ -47,6 +52,7 @@ class Game{
     BGTexture texture;  //For animating the background texture
     LinkedList listofobjects;
     //list<Lives*> lives;
+     Uint32 start = 0;
 
 public:
 
