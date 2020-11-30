@@ -47,10 +47,12 @@ void PlayerSpaceship::EventHandler(SDL_Event event){
         }
     }
 }
-void PlayerSpaceship::moveShip(){
+void PlayerSpaceship::moveShip(bool s){
     //the ship moves forward/backward until it hits either wall
     //cout<<pos_y<<endl;
-    pos_x += x_speed;
+    if (s==true)
+    {
+        pos_x += x_speed;
     if(pos_x + mover.w > 800 || pos_x < 0){
         pos_x -= x_speed;
     }
@@ -59,6 +61,8 @@ void PlayerSpaceship::moveShip(){
     if(pos_y + mover.h > 600 || pos_y < 400){
         pos_y -= y_speed;
     }
+    }
+    
 }
 
 void PlayerSpaceship::drawSprite(SDL_Renderer* gRenderer){

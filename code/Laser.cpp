@@ -17,6 +17,7 @@ Laser::Laser(SDL_Texture* img):Sprite(img)
     mover.w = 20;
     mover.h = 70;
     asset=img;
+    cstate=true;
 }
 void Laser::setPos(SDL_Rect s)
 {
@@ -46,12 +47,20 @@ void Laser::drawSprite(SDL_Renderer* gRenderer)
 if (type=="hero")
 {//std::cout<<"pew pew"<<std::endl;
 SDL_RenderCopy(gRenderer,asset,&src[0],&mover);
+if (cstate==true)
+{
     mover.y=mover.y-30;
+}
+
 }       
 if (type=="alien")
 {
 SDL_RenderCopy(gRenderer,asset,&src[1],&mover);
+if (cstate==true)
+{
     mover.y=mover.y+30;
+}
+
 }         
 }
 void Laser::setcontact()
@@ -62,3 +71,7 @@ bool Laser::getcontact()
 {
     return contact;
 }
+void Laser::setcstate(bool s)
+    {
+        cstate=s;
+    }
