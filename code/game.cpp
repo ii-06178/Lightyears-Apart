@@ -82,7 +82,7 @@ bool Game::loadMedia()
 		success = false;
 	}
 
-	if (bgMusic == NULL || bgMusic2 == NULL || shooting== NULL)
+	if (bgMusic == NULL || bgMusic2 == NULL || shooting == NULL)
 	{
 		printf("Unable to load music: %s \n", Mix_GetError());
 		success = false;
@@ -159,30 +159,31 @@ void Game::updateplayer()
 }
 void Game::updateobstacles()
 {
-
+	listofobjects.check_collisions_with_shooter_and_obstacles();
+	listofobjects.deleteobstacle(assets);
 }
 void Game::drawObj()
 {
-	listofobjects.drawAllaliens(gRenderer,assets);
+	listofobjects.drawAllaliens(gRenderer, assets);
 	listofobjects.drawAllobstacles(gRenderer);
 	listofobjects.drawAlllasers(gRenderer);
 }
 
-void Game::updateLives(){
-	
+void Game::updateLives()
+{
 }
 void Game::run()
 {
 	bool quit = false;
-	int count_aliens=0;
+	int count_aliens = 0;
 	SDL_Event e;
-	PlayerSpaceship *p =new PlayerSpaceship (assets);
+	PlayerSpaceship *p = new PlayerSpaceship(assets);
 	//ThunderBearers th = {assets};
-  
 
-	Meteor m = {assets}; Fireball fb = {assets};
+	Meteor m = {assets};
+	Fireball fb = {assets};
 	Lives l = {assets};
-	while( !quit )
+	while (!quit)
 	{
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
@@ -203,7 +204,7 @@ void Game::run()
 				cout << xMouse << ", " << yMouse << endl;
 
 				if (menu == true)
-				{ 
+				{
 
 					if (ins == false)
 					{
@@ -241,26 +242,25 @@ void Game::run()
 			}
 			if (game == true)
 			{
-			if (Mix_PlayingMusic() == 0)
+				if (Mix_PlayingMusic() == 0)
 				{
-				Mix_PlayMusic(bgMusic2, -1);
-				Mix_VolumeMusic(128/4);
-				
+					Mix_PlayMusic(bgMusic2, -1);
+					Mix_VolumeMusic(128 / 4);
 				}
 				p->moveShip();
 				if (e.type == SDL_KEYDOWN)
+				{
+					if (e.key.keysym.sym == SDLK_SPACE)
 					{
-						if (e.key.keysym.sym == SDLK_SPACE)
-						{Laser *hlaser=new Laser(assets);
-				SDL_Rect mo=p->getmover();
-				//std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
-				hlaser->setPos(mo);
-				listofobjects.addUnit(hlaser,"hero");
-				
-							Mix_PlayChannel(-1, shooting, 0);
-						}
+						Laser *hlaser = new Laser(assets);
+						SDL_Rect mo = p->getmover();
+						//std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
+						hlaser->setPos(mo);
+						listofobjects.addUnit(hlaser, "hero");
+
+						Mix_PlayChannel(-1, shooting, 0);
 					}
-				
+				}
 			}
 		}
 
@@ -272,7 +272,6 @@ void Game::run()
 			{
 				//Play the music
 				Mix_PlayMusic(bgMusic, -1);
-
 			}
 			// else
 			// {
@@ -281,38 +280,39 @@ void Game::run()
 			texture.drawBG(gRenderer);
 			if (ins == false)
 			{
-				
+
 				SDL_RenderCopy(gRenderer, wScreen, NULL, NULL);
 			}
 			if (ins == true)
-			{	
+			{
 				SDL_RenderCopy(gRenderer, iScreen, NULL, NULL);
 			}
 		}
 		else
 		{
-			
 		}
 		//for game
 		if (game == true)
-		{	texture.drawBG(gRenderer);
-			
+		{
+			texture.drawBG(gRenderer);
+
 			p->drawSprite(gRenderer);
 			listofobjects.check_collision_with_enemyshooter(p);
 			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
-			while (count_aliens<20)
-			{	count_aliens++;
+			while (count_aliens < 20)
+			{
+				count_aliens++;
 				// int prob;
 				// prob = rand() % 10000000;
-                // if (prob <= 1)
+				// if (prob <= 1)
 				// {
-				FireBreathers* f =new FireBreathers (assets);
+				FireBreathers *f = new FireBreathers(assets);
 				count_fb++;
 				listofobjects.addUnit(f);
-
-				
+				Fireball *fire =new Fireball(assets);
+				listofobjects.addUnit(fire);
 				// }
-				
+
 				// if (count_fb>24)
 				// { if (prob<=4)
 				// {
@@ -320,7 +320,7 @@ void Game::run()
 				// 	count_tb++;
 				// 	listofobjects.addUnit(t);
 				// }
-					
+
 				// }
 				// if (count_tb>24)
 				// {
@@ -337,11 +337,9 @@ void Game::run()
 				// }
 				//count_aliens=count_tb+count_fb+count_sc+count_gy;
 			}
-			
-			
+
 			m.drawSprite(gRenderer);
-			
-			
+
 			//tb.drawSprite(gRenderer);
 
 			//th.drawSprite(gRenderer);
@@ -351,11 +349,11 @@ void Game::run()
 			// s.drawSprite(gRenderer);
 			l.drawSprite(gRenderer);
 			drawObj();
-		
 		}
-			updateplayer();
-			updatealien();
-    	SDL_RenderPresent(gRenderer); //displays the updated renderer
+		updateplayer();
+		updatealien();
+		updateobstacles();
+		SDL_RenderPresent(gRenderer); //displays the updated renderer
 
 		SDL_Delay(200); //causes sdl engine to delay for specified miliseconds
 	}

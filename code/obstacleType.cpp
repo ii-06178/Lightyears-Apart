@@ -52,3 +52,45 @@ void Thunderbolt::destroy()
 {
     
 }
+void Meteor::hasdestroyed()
+{
+    destroyed=true;
+}
+
+void Fireball::hasdestroyed()
+{
+    destroyed=true;
+}
+
+void Thunderbolt::hasdestroyed()
+{
+    destroyed=true;
+}
+bool Meteor::getdestroyed()
+{
+    return destroyed;
+}
+
+bool Fireball::getdestroyed()
+{
+        return destroyed;
+}
+
+bool Thunderbolt::getdestroyed()
+{
+        return destroyed;
+}
+SDL_Rect Meteor::getmover()
+{
+    return mover;
+}
+
+SDL_Rect Fireball::getmover()
+{
+        return mover;
+}
+
+SDL_Rect Thunderbolt::getmover()
+{
+        return mover;
+}

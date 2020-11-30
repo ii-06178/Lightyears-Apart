@@ -22,7 +22,7 @@ void addUnit(ThunderBearers *ea);
 void addUnit(StormCarriers *aa);
 void addUnit(FireBreathers *pa);
 
-void deleteobstacle();
+void deleteobstacle(SDL_Texture*);
 void deletelaser(SDL_Texture*);
 void deletealien(SDL_Texture*);
 void drawAllaliens(SDL_Renderer*,SDL_Texture*);
@@ -32,7 +32,7 @@ void drawAlllasers(SDL_Renderer*);
 void check_collision_with_shooter();
 void check_collision_with_enemyshooter(PlayerSpaceship* pl);
 void check_collision_with_aliens();
-void check_collisions_with_obstacles();
+void check_collisions_with_shooter_and_obstacles();
 // void makeNestMove();
 //~LinkedList();
 };
