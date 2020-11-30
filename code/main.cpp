@@ -1,3 +1,15 @@
+#include <iostream>
+#include <list>
+#include<string>
+#include "SDL.h"
+#include "sprite.hpp"
+#include "player_spaceship.hpp"
+#include "alien.hpp"
+#include "alienTypes.hpp"
+#include "Laser.hpp"
+#include "obstacle.hpp"
+#include "obstacleTypes.hpp"
+#include "LinkedList.hpp"
 #include "game.hpp"
 
 int main(int argc, char *argv[]){

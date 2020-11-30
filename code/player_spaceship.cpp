@@ -1,5 +1,7 @@
+#include<iostream>
 #include "player_spaceship.hpp"
 #include <SDL.h>
+
 using namespace std;
 
 PlayerSpaceship::PlayerSpaceship(SDL_Texture* img):Sprite(img) {
@@ -8,7 +10,7 @@ PlayerSpaceship::PlayerSpaceship(SDL_Texture* img):Sprite(img) {
     src.y = 0;
     src.w = 90;
     src.h = 120;
-
+ 
     mover.x = pos_x;
     mover.y = pos_y;
     mover.w = 70;
@@ -47,13 +49,14 @@ void PlayerSpaceship::EventHandler(SDL_Event event){
 }
 void PlayerSpaceship::moveShip(){
     //the ship moves forward/backward until it hits either wall
+    //cout<<pos_y<<endl;
     pos_x += x_speed;
     if(pos_x + mover.w > 800 || pos_x < 0){
         pos_x -= x_speed;
     }
     //the ship moves up/down until it hits roof/bottom
     pos_y += y_speed;
-    if(pos_y + mover.h > 600 || pos_y < 0){
+    if(pos_y + mover.h > 600 || pos_y < 400){
         pos_y -= y_speed;
     }
 }
@@ -64,8 +67,11 @@ void PlayerSpaceship::drawSprite(SDL_Renderer* gRenderer){
 }
 
 SDL_Rect PlayerSpaceship::getmover(){
-    return mover;
+    // return mover;
+    SDL_Rect sre ={pos_x,pos_y,mover.w,mover.h};
+    return sre;
 }
+
 
 //Lives class Functions
 
@@ -88,23 +94,23 @@ void Lives::drawSprite(SDL_Renderer* gRenderer){
 }
 
 //Laser Functions
-P_Laser::P_Laser(SDL_Texture* img):Laser(img){
-    src[0].x = 200;
-    src[0].y = 290;
-    src[0].w = 30;
-    src[0].h = 105;
+// P_Laser::P_Laser(SDL_Texture* img):Laser(img){
+//     src[0].x = 200;
+//     src[0].y = 290;
+//     src[0].w = 30;
+//     src[0].h = 105;
 
-    src[1].x = 0;
-    src[1].y = 290;
-    src[1].w = 30;
-    src[1].h = 105;
+//     src[1].x = 0;
+//     src[1].y = 290;
+//     src[1].w = 30;
+//     src[1].h = 105;
 
-    mover.w = 20;
-    mover.h = 70;
-}
-void P_Laser::shoot(SDL_Renderer* gRenderer){//drawing laser
-    SDL_Rect* currentframe = &src[frame/2];
-    SDL_RenderCopy(gRenderer, asset, currentframe, &mover);
-    SDL_RenderPresent(gRenderer);
-    ++frame;
-}
+//     mover.w = 20;
+//     mover.h = 70;
+// }
+// void P_Laser::shoot(SDL_Renderer* gRenderer){//drawing laser
+//     SDL_Rect* currentframe = &src[frame/2];
+//     SDL_RenderCopy(gRenderer, asset, currentframe, &mover);
+//     SDL_RenderPresent(gRenderer);
+//     ++frame;
+// }
