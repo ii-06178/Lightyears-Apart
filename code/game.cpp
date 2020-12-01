@@ -2,6 +2,7 @@
 #include "game.hpp"
 #include "LinkedList.hpp"
 using namespace std;
+
 bool Game::init()
 {
 	//Initialization flag
@@ -193,7 +194,6 @@ void Game::run()
 	SDL_Event e;
 	PlayerSpaceship *p = new PlayerSpaceship(assets);
 	//ThunderBearers th = {assets};
-
 	// Meteor m = {assets};
 	// Fireball fb = {assets};
 	Lives l = {assets};
@@ -208,7 +208,7 @@ void Game::run()
 				quit = true;
 			}
 			p->EventHandler(e); //handles ship events
-
+			
 			//texture.drawBG(gRenderer);	//moving background
 			if (e.type == SDL_KEYDOWN) //when it is pressed once
 			{
@@ -334,7 +334,7 @@ void Game::run()
 			Uint32 f_time=(SDL_GetTicks() - start)%45000;
 			cout << "current time" << current_time << endl;
 			texture.drawBG(gRenderer);
-
+			
 			p->drawSprite(gRenderer);
 			listofobjects.check_collision_with_enemyshooter(p,hit);
 			listofobjects.check_hit_with_obstacle(p,hit);

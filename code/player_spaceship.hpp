@@ -4,15 +4,15 @@
 
 class PlayerSpaceship:public Sprite
 {
-    SDL_Rect l_src, l_mover;
-    //int speed;
     int score; 
     int lives; //stores number of player lives left
-    int fuel; //stores amount of fuel left 
+    int fuel; //stores amount of fuel left
+    int x_speed, y_speed; //speed of the sprite 
     const int S_VELOCITY = 15;  //setting it as constant right now, will change this with conditions as we progress and calculate the milestones of the player
     int pos_x, pos_y;
     bool alive;
-    public: 
+
+public: 
     PlayerSpaceship(SDL_Texture*);
     //~PlayerSpaceship();
     void updateScore(int s);

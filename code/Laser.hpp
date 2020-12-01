@@ -4,9 +4,10 @@
 #include <SDL.h>
 
 class Laser:public Sprite 
-{bool contact=false;
+{
+    bool contact=false;
     protected:
-    SDL_Texture* asset;
+    //SDL_Texture* asset;
     SDL_Rect src[2], mover;
     static int frame;
     std::string type="hero";

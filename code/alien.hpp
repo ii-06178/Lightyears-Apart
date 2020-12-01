@@ -1,5 +1,6 @@
 //#include "location.hpp"
 #include "sprite.hpp"
+//#include "alienTypes.hpp"
 #include <SDL.h>
 #include <iostream>
 #pragma once
@@ -12,6 +13,7 @@ class Alien:public Sprite
     bool cstate;
     public:
     Alien(SDL_Texture*);
+    Sprite *createAlien(int);//creating a concrete object
     //~Alien();
     void shoot(); 
     virtual void kill(); //display animation of alien dying?? - not a priority rn!
@@ -20,5 +22,6 @@ class Alien:public Sprite
     int getStrength();
     int getDifficulty();
     void setstate(bool s);
-    void drawSprite(SDL_Renderer*);
+
+    void drawSprite(SDL_Renderer*) override;
 };

@@ -3,12 +3,13 @@
 Sprite::Sprite(SDL_Texture* img){   //kinda default constructor for all sprites. 
 
     asset = img;
-    
-    hitCount = 0;
-    x_speed = 0;
-    y_speed = 0;
-
     if(asset == NULL) printf("Unable to load sprite\n");//To detect the error IF the sprite is not loaded through the constructors.
+}
+Sprite::~Sprite(){//Destructor
+    SDL_DestroyTexture(asset);
+    asset = NULL;
+    src = {0,0,0,0};
+    mover = {0,0,0,0};
 }
 
 int Sprite::getWidth(){

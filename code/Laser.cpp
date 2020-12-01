@@ -3,25 +3,32 @@
 
 Laser::Laser(SDL_Texture* img):Sprite(img) 
 {
-    src[0].x = 0;
-    src[0].y = 290;
-    src[0].w = 50;
-    src[0].h = 110;
-
     src[1].x = 0;
+    src[1].y = 310;
+    src[1].w = 50;
+    src[1].h = 90;
+
+    src[0].x = 150;
+    src[0].y = 310;
+    src[0].w = 50;
+    src[0].h = 90;
+
+    /*src[1].x = 0;
     src[1].y = 410;
     src[1].w = 50;
-    src[1].h = 110;
-    mover.x=0;
-    mover.y=0;
+    src[1].h = 110;*/
+
     mover.w = 20;
-    mover.h = 70;
-    asset=img;
+    mover.h = 60;
+    
     cstate=true;
 }
+int Laser::frame = 0;
+
 void Laser::setPos(SDL_Rect s)
 {
-    mover.x=s.x;
+    //mover.x= s.x;
+    mover.x = s.x + (s.w - mover.w)/2;
     if (type=="hero")
     {
           mover.y=s.y-70;
@@ -29,14 +36,11 @@ void Laser::setPos(SDL_Rect s)
     if (type=="alien")
     {
         mover.y=s.y+70;
-    }
-    
-  
-   
+    } 
 }
 void Laser::setType(std::string t)
 {
-type=t;
+    type=t;
 }
 SDL_Rect Laser::getmover()
 {
@@ -44,24 +48,27 @@ SDL_Rect Laser::getmover()
 }
 void Laser::drawSprite(SDL_Renderer* gRenderer)
 {
-if (type=="hero")
-{//std::cout<<"pew pew"<<std::endl;
-SDL_RenderCopy(gRenderer,asset,&src[0],&mover);
-if (cstate==true)
-{
-    mover.y=mover.y-30;
-}
+    SDL_Rect c_frame = src[frame/1];
+    if (type=="hero")
+    {//std::cout<<"pew pew"<<std::endl;
+        SDL_RenderCopy(gRenderer,asset,&c_frame,&mover);
+        ++frame;
+        if(frame >= 1) frame = 1;
+        if (cstate==true)
+        {
+            mover.y -= 30;
+        }
 
-}       
-if (type=="alien")
-{
-SDL_RenderCopy(gRenderer,asset,&src[1],&mover);
-if (cstate==true)
-{
-    mover.y=mover.y+30;
-}
+    }       
+    if (type=="alien")
+    {
+        SDL_RenderCopy(gRenderer,asset,&src[1],&mover);
+        if (cstate==true)
+        {
+            mover.y=mover.y+30;
+        }
 
-}         
+    }         
 }
 void Laser::setcontact()
 {

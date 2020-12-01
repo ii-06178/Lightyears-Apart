@@ -6,12 +6,14 @@ Alien::Alien(SDL_Texture *img) : Sprite(img)
     up = false;
     cstate = true;
 }
+
 void Alien::drawSprite(SDL_Renderer *gRenderer)
 { //the draw function
 
     general_render(mover.x, mover.y, asset, gRenderer, 0.0, turn_h); //renders the alien
     if (cstate == true)
     {
+        //movement for x axis
         if (mover.x < 800 - mover.w && turn_h == SDL_FLIP_NONE)
         { //moving towards right wallssswaarrrrra
             mover.x += 20;
@@ -40,7 +42,6 @@ void Alien::drawSprite(SDL_Renderer *gRenderer)
         else if (mover.y <= 0)
             up = false; //stikes roof
     }
-    //movement for x axis
 }
 void Alien::shoot()
 {
