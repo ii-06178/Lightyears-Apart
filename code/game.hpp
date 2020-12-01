@@ -2,12 +2,14 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
+#include <SDL_ttf.h>
 #include <stdio.h>
 #include <iostream>
 #include <string>
 #include <stdlib.h>
 #include <time.h>
 #include <list>
+#include <fstream>
 //New included files
 #include "sprite.hpp"
 #include "Laser.hpp"
@@ -17,6 +19,7 @@
 #include "obstacleTypes.hpp"
 #include "LinkedList.hpp"
 #include "BGTexture.hpp"
+
 #pragma once
 
 class Game{
@@ -38,17 +41,24 @@ class Game{
     SDL_Texture* wScreen=NULL;
     SDL_Texture* gwScreen=NULL;
     SDL_Texture* glScreen=NULL;
+    SDL_Texture* score_display=NULL;
     bool menu=true;
 	bool game=false;
 	bool ins=false;
     bool state=true;
     bool game_is_won=false;
     bool game_is_lost=false;
-    int count_tb,count_fb,count_sc,count_gy;
+    int count_tb=0;
+    int count_fb=0;
+    int count_sc=0;
+    int count_gy=0;
     Mix_Music *bgMusic = NULL;
     Mix_Music *bgMusic2 = NULL;
+    Mix_Music *bgMusicW = NULL;
+    Mix_Music *bgMusicL = NULL;
     Mix_Chunk *shooting= NULL;
     Mix_Chunk *hit=NULL;
+    TTF_Font *font=NULL;
     BGTexture texture;  //For animating the background texture
     LinkedList listofobjects;
     //list<Lives*> lives;
