@@ -39,6 +39,10 @@ bool Game::init()
 			}
 			else
 			{
+				if (TTF_Init() == -1)
+				{	printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n",TTF_GetError());
+					success = false;
+				}
 				//Initialize renderer color
 				SDL_SetRenderDrawColor(gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
@@ -72,14 +76,21 @@ bool Game::loadMedia()
 	iScreen = loadTexture("Instructions Screen.png");
 	gwScreen = loadTexture("win screen 2.png");
 	glScreen = loadTexture("game over screen 1.png");
+	font = TTF_OpenFont("Westmeath.ttf", 32);
 	bgMusic = Mix_LoadMUS("SkyFire (Title Screen).wav");
 	bgMusic2 = Mix_LoadMUS("Space Heroes.wav");
+	bgMusicW = Mix_LoadMUS("Victory Tune.wav");
+	bgMusicL = Mix_LoadMUS("Defeated.wav");
 	shooting = Mix_LoadWAV("laser4.wav");
-	hit= Mix_LoadWAV("twoTone2.wav");
+	hit = Mix_LoadWAV("twoTone2.wav");
 
 	// hit=Mix_LoadWAV();
 	texture.assets = gTexture;
-
+	if (font == NULL)
+	{
+		printf("Failed to load font! SDL_ttf Error: %s\n", TTF_GetError());
+		success = false;
+	}
 	if (gTexture == NULL)
 	{
 		printf("Unable to run due to error: %s\n", SDL_GetError());
@@ -100,6 +111,8 @@ void Game::close()
 	//Free loaded images
 	SDL_DestroyTexture(assets);
 	assets = NULL;
+	SDL_DestroyTexture(score_display);
+	score_display = NULL;
 	SDL_DestroyTexture(gTexture);
 	gTexture = NULL;
 	SDL_DestroyTexture(iScreen);
@@ -119,6 +132,10 @@ void Game::close()
 	bgMusic = NULL;
 	Mix_FreeMusic(bgMusic2);
 	bgMusic2 = NULL;
+	Mix_FreeMusic(bgMusicW);
+	bgMusicW = NULL;
+	Mix_FreeMusic(bgMusicL);
+	bgMusicL = NULL;
 	Mix_FreeChunk(shooting);
 	shooting = NULL;
 	Mix_FreeChunk(hit);
@@ -126,6 +143,8 @@ void Game::close()
 	// Mix_FreeChunk(hit);
 	// hit=NULL;
 	//Quit SDL subsystems
+	TTF_CloseFont(font);
+	TTF_Quit();
 	IMG_Quit();
 	Mix_Quit();
 	SDL_Quit();
@@ -178,9 +197,9 @@ void Game::updateobstacles()
 }
 void Game::drawObj()
 {
-	listofobjects.drawAllaliens(gRenderer, assets,state);
-	listofobjects.drawAllobstacles(gRenderer,state);
-	listofobjects.drawAlllasers(gRenderer,state);
+	listofobjects.drawAllaliens(gRenderer, assets, state);
+	listofobjects.drawAllobstacles(gRenderer, state);
+	listofobjects.drawAlllasers(gRenderer, state);
 }
 
 void Game::updateLives()
@@ -192,6 +211,7 @@ void Game::run()
 	int count_aliens = 0;
 	SDL_Event e;
 	PlayerSpaceship *p = new PlayerSpaceship(assets);
+	Score scoring;
 	//ThunderBearers th = {assets};
 
 	// Meteor m = {assets};
@@ -273,7 +293,7 @@ void Game::run()
 				if (Mix_PlayingMusic() == 0)
 				{
 					Mix_PlayMusic(bgMusic2, -1);
-					Mix_VolumeMusic(128 / 4);
+					Mix_VolumeMusic(128 / 8);
 				}
 				p->moveShip(state);
 				if (e.type == SDL_KEYDOWN)
@@ -318,11 +338,13 @@ void Game::run()
 		}
 		if (game_is_won == true)
 		{
+			Mix_PlayMusic(bgMusicW, -1);
 			texture.drawBG(gRenderer);
 			SDL_RenderCopy(gRenderer, gwScreen, NULL, NULL);
 		}
 		if (game_is_lost == true)
 		{
+			Mix_PlayMusic(bgMusicL, -1);
 			texture.drawBG(gRenderer);
 			SDL_RenderCopy(gRenderer, glScreen, NULL, NULL);
 		}
@@ -330,42 +352,47 @@ void Game::run()
 		if (game == true)
 		{
 			Uint32 current_time = SDL_GetTicks() - start;
-			Uint32 m_time=(SDL_GetTicks() - start)%15000;
-			Uint32 f_time=(SDL_GetTicks() - start)%45000;
-			cout << "current time" << current_time << endl;
+			Uint32 m_time = ((SDL_GetTicks() - start) % 10000);
+			Uint32 f_time = ((SDL_GetTicks() - start) % 30000);
+			//cout << "m_time " << m_time << endl;
 			texture.drawBG(gRenderer);
 
 			p->drawSprite(gRenderer);
-			listofobjects.check_collision_with_enemyshooter(p,hit);
-			listofobjects.check_hit_with_obstacle(p,hit);
+			listofobjects.check_collision_with_enemyshooter(p, hit);
+			listofobjects.check_hit_with_obstacle(p, hit);
 			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
-			if (count_aliens < 100 && state==true)
+			if (count_aliens < 100 && state == true)
 			{
 
 				// int prob;
 				// prob = rand() % 10000000;
 				// if (prob <= 1)
 				// {
-				if ((current_time > (4000 * count_fb)) && count_fb <= 24)
+				if ((current_time > (4000 * count_fb)) && count_fb < 25)
 				{
 					FireBreathers *f = new FireBreathers(assets);
 					count_fb++;
 					listofobjects.addUnit(f);
 					count_aliens++;
+					cout<<"count_fb "<<count_fb<<endl;
 				}
-				if (m_time==0)
-				{	Meteor *m=new Meteor(assets);
+				if (m_time <= 100)
+				{
+					Meteor *m = new Meteor(assets);
 					listofobjects.addUnit(m);
 				}
-				if (f_time==0)
-				{	Fireball *fi=new Fireball(assets);
+				if (f_time <= 100)
+				{
+					Fireball *fi = new Fireball(assets);
 					listofobjects.addUnit(fi);
 				}
 				// }
 
 				if (count_fb > 24)
 				{
-					if ((current_time > ((4000 * 24) + (3500 * (count_tb)))) && count_tb <= 24)
+				//cout<<"current_time should be 100000, but it is "<<current_time<<endl;
+				cout<<"count_tb"<<count_tb<<endl;
+					if ((current_time > ((4000 * 25) + (3500 * (count_tb)))) && count_tb < 25)
 					{
 						ThunderBearers *t = new ThunderBearers(assets);
 						count_tb++;
@@ -375,7 +402,7 @@ void Game::run()
 				}
 				if (count_tb > 24)
 				{
-					if ((current_time > ((4000 * 24) + (3500 * 24) + (2500 * count_sc))) && count_sc <= 24)
+					if ((current_time > ((4000 * 24) + (3500 * 24) + (2500 * count_sc))) && count_sc < 25)
 					{
 						StormCarriers *s = new StormCarriers(assets);
 						count_sc++;
@@ -385,7 +412,7 @@ void Game::run()
 				}
 				if (count_sc > 24)
 				{
-					if ((current_time > ((4000 * 24) + (3500 * 24) + (2500 * 24) + (1000 * count_gy))) && count_gy <= 24)
+					if ((current_time > ((4000 * 24) + (3500 * 24) + (2500 * 24) + (1000 * count_gy))) && count_gy < 25)
 					{
 						GeoYielders *g = new GeoYielders(assets);
 						count_gy++;
@@ -395,8 +422,8 @@ void Game::run()
 				}
 				//count_aliens=count_tb+count_fb+count_sc+count_gy;
 			}
-			
-			if (count_aliens >= 50)
+
+			if (count_aliens >= 100)
 			{
 				//cout << listofobjects.check_empty_aliens() << endl;
 				if (listofobjects.check_empty_aliens() == true)
@@ -416,8 +443,10 @@ void Game::run()
 			// g.drawSprite(gRenderer);
 			// f.drawSprite(gRenderer);
 			// s.drawSprite(gRenderer);
-			l.drawSprite(gRenderer);
 			drawObj();
+			l.drawSprite(gRenderer);
+			scoring.display(font, score_display, gRenderer);
+			
 		}
 
 		if (state == true)

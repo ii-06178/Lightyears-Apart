@@ -3,6 +3,8 @@
 
 class GeoYielders:public Alien
 {   bool destroyed=false;
+    int shoots=4;
+    int attacked=1;
     public:
     void hasdestroyed();
     bool getdestroyed();
@@ -13,6 +15,8 @@ class GeoYielders:public Alien
 
 class ThunderBearers:public Alien
 {bool destroyed=false;
+int shoots=2;
+    int attacked=1;
     public:
     void hasdestroyed();
     bool getdestroyed();
@@ -23,6 +27,8 @@ class ThunderBearers:public Alien
 
 class StormCarriers:public Alien
 {bool destroyed=false;
+int shoots=3;
+    int attacked=1;
     public:
     void hasdestroyed();
     bool getdestroyed();
@@ -33,6 +39,8 @@ class StormCarriers:public Alien
 
 class FireBreathers:public Alien
 {bool destroyed=false;
+int shoots=1;
+    int attacked=1;
     public:
     void hasdestroyed();
     bool getdestroyed();

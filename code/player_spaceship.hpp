@@ -1,5 +1,6 @@
 #include "sprite.hpp"
 #include <SDL.h>
+#include <SDL_ttf.h>
 #pragma once
 
 class PlayerSpaceship:public Sprite
@@ -36,6 +37,15 @@ class Lives:public Sprite{
     public:
     Lives(SDL_Texture*);
     void drawSprite(SDL_Renderer*);
+};
+class Score
+{ 
+int scored;
+public:
+Score();
+int getScore();
+void setScore(int s);
+void display(TTF_Font*,SDL_Texture*,SDL_Renderer*);
 };
 // class P_Laser:public Laser{
 //     public:

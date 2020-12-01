@@ -2,6 +2,7 @@
 #include <list>
 #include<string>
 #include<SDL_mixer.h>
+#include <SDL_ttf.h>
 #include "SDL.h"
 #include "sprite.hpp"
 #include "player_spaceship.hpp"

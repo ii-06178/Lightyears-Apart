@@ -69,23 +69,51 @@ void FireBreathers::kill()
     
 }
 void GeoYielders::hasdestroyed()
+{ if (attacked==shoots)
 {
-    destroyed=true;
+        destroyed=true;
+}
+else
+{
+    attacked++;
+}
+
 }
 
 void ThunderBearers::hasdestroyed()
 {
+if (attacked==shoots)
+{
         destroyed=true;
+}
+else
+{
+    attacked++;
+}
 }
 
 void StormCarriers::hasdestroyed()
 {
-    destroyed=true;    
+if (attacked==shoots)
+{
+        destroyed=true;
+}
+else
+{
+    attacked++;
+}   
 }
 
 void FireBreathers::hasdestroyed()
 {
-    destroyed=true;
+if (attacked==shoots)
+{
+        destroyed=true;
+}
+else
+{
+    attacked++;
+}
 }
 bool GeoYielders::getdestroyed()
 {
