@@ -1,6 +1,7 @@
 #include <iostream>
 #include <list>
 #include<string>
+#include<SDL_mixer.h>
 #include "SDL.h"
 #include "sprite.hpp"
 #include "player_spaceship.hpp"

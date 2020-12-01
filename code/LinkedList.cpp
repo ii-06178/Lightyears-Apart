@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL.h>
+#include<SDL_mixer.h>
 #include <list>
 #include "sprite.hpp"
 #include "alien.hpp"
@@ -345,7 +346,7 @@ void LinkedList::deleteobstacle(SDL_Texture*)
             // 'ptr' points to N-th element of list
             auto a = *itr;
             
-            if (a->getdestroyed() == true)
+            if (a->getdestroyed() == true || a->getcontact()==true)
             {
                 meteors.erase(itr);
             }
@@ -364,7 +365,7 @@ void LinkedList::deleteobstacle(SDL_Texture*)
             // 'ptr' points to N-th element of list
             auto a = *jtr;
             
-            if (a->getdestroyed() == true)
+            if (a->getdestroyed() == true || a->getcontact()==true)
             {
                 thunderbolts.erase(jtr);
             }
@@ -383,7 +384,7 @@ void LinkedList::deleteobstacle(SDL_Texture*)
             // 'ptr' points to N-th element of list
             auto a = *ktr;
             
-            if (a->getdestroyed() == true)
+            if (a->getdestroyed() == true || a->getcontact()==true)
             {
                 fireballs.erase(ktr);
             }
@@ -617,7 +618,7 @@ void LinkedList::check_collisions_with_obstacles()
                 }
         }
 }
-void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl)
+void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl,Mix_Chunk* mc)
 {
     std::list<Laser *>::iterator itr;
 
@@ -637,7 +638,7 @@ void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl)
             SDL_Rect ma = a->getmover();
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)
-            {
+            {   Mix_PlayChannel(0,mc,0);
                 a->setcontact();
             }
             //calls the object's draw function
@@ -679,4 +680,71 @@ bool LinkedList::check_empty_aliens()
 // void LinkedList::check_collision_with_aliens()
 // {
 
-// }
+void LinkedList::check_hit_with_obstacle(PlayerSpaceship* pl,Mix_Chunk* mc)
+{
+ std::list<Meteor *>::iterator itr;
+
+    int i;
+    for (i = 0, itr = meteors.begin(); i < meteors.size() && itr != meteors.end(); i++, itr++)
+        if (meteors.size() == 0)
+        {
+            // list too short
+            // std::cout<<0;
+        }
+        else
+        {
+            // 'ptr' points to N-th element of list
+            auto a = *itr;
+            SDL_Rect ma = a->getmover();
+            SDL_Rect mb = pl->getmover();
+            if (SDL_HasIntersection(&ma, &mb) == true)
+            {
+                a->setcontact();
+                Mix_PlayChannel(0,mc,0);
+            } 
+        }
+    std::list<Thunderbolt *>::iterator jtr;
+
+    int j;
+    for (j = 0, jtr = thunderbolts.begin(); j < thunderbolts.size() && jtr != thunderbolts.end(); j++, jtr++)
+        if (thunderbolts.size() == 0)
+        {
+            // list too short
+            // std::cout<<0;
+        }
+        else
+        {
+            // 'ptr' points to N-th element of list
+            auto a = *jtr;
+            SDL_Rect ma = a->getmover();
+            SDL_Rect mb = pl->getmover();
+            if (SDL_HasIntersection(&ma, &mb) == true)
+            {
+                a->setcontact();
+                Mix_PlayChannel(0,mc,0);
+            }
+ //calls the object's draw function
+        }
+    std::list<Fireball *>::iterator ktr;
+
+    int k;
+    for (k = 0, ktr = fireballs.begin(); k < fireballs.size() && ktr != fireballs.end(); k++, ktr++)
+        if (fireballs.size() == 0)
+        {
+            // list too short
+            // std::cout<<0;
+        }
+        else
+        {
+            // 'ptr' points to N-th element of list
+            auto a = *ktr;
+            SDL_Rect ma = a->getmover();
+            SDL_Rect mb = pl->getmover();
+            if (SDL_HasIntersection(&ma, &mb) == true)
+            {
+                a->setcontact();
+                Mix_PlayChannel(0,mc,0);
+            }
+ //calls the object's draw function
+        }   
+}        
