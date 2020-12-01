@@ -53,3 +53,11 @@ bool Obstacle::getdestroyed()
 {
     return destroyed;
 }
+void Obstacle::setcontact()
+{
+    contact=true;
+}
+bool Obstacle::getcontact()
+{
+    return contact;
+}

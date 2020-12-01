@@ -75,6 +75,7 @@ bool Game::loadMedia()
 	bgMusic = Mix_LoadMUS("SkyFire (Title Screen).wav");
 	bgMusic2 = Mix_LoadMUS("Space Heroes.wav");
 	shooting = Mix_LoadWAV("laser4.wav");
+	hit= Mix_LoadWAV("twoTone2.wav");
 
 	// hit=Mix_LoadWAV();
 	texture.assets = gTexture;
@@ -120,6 +121,8 @@ void Game::close()
 	bgMusic2 = NULL;
 	Mix_FreeChunk(shooting);
 	shooting = NULL;
+	Mix_FreeChunk(hit);
+	hit = NULL;
 	// Mix_FreeChunk(hit);
 	// hit=NULL;
 	//Quit SDL subsystems
@@ -333,7 +336,8 @@ void Game::run()
 			texture.drawBG(gRenderer);
 
 			p->drawSprite(gRenderer);
-			listofobjects.check_collision_with_enemyshooter(p);
+			listofobjects.check_collision_with_enemyshooter(p,hit);
+			listofobjects.check_hit_with_obstacle(p,hit);
 			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
 			if (count_aliens < 100 && state==true)
 			{
