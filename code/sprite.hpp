@@ -1,5 +1,5 @@
 //#include "location.hpp"
-#include "SDL.h"
+#include <SDL.h>
 #include <string>
 #pragma once
 
@@ -33,6 +33,7 @@ public:
 
     //SDL_Rect spriteSource(); //returns the sprite source needed
     virtual void drawSprite(SDL_Renderer*) = 0;
+    //virtual SDL_Rect getmover()=0;
     //SDL_Rect moveSprite();
     void general_render(int, int, SDL_Texture*, SDL_Renderer*, double, SDL_RendererFlip); //I modified the SDL_RenderCopy/Ex for my ease, I'll explain it if needed
 };

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "game.hpp"
+#include "LinkedList.hpp"
 using namespace std;
 bool Game::init()
 {
@@ -69,7 +70,13 @@ bool Game::loadMedia()
 	gTexture = loadTexture("stars.png");
 	wScreen = loadTexture("Welcome Screen.png");
 	iScreen = loadTexture("Instructions Screen.png");
-	bgMusic = Mix_LoadMUS("opening.wav");
+	gwScreen = loadTexture("win screen 2.png");
+	glScreen = loadTexture("game over screen 1.png");
+	bgMusic = Mix_LoadMUS("SkyFire (Title Screen).wav");
+	bgMusic2 = Mix_LoadMUS("Space Heroes.wav");
+	shooting = Mix_LoadWAV("laser4.wav");
+
+	// hit=Mix_LoadWAV();
 	texture.assets = gTexture;
 
 	if (gTexture == NULL)
@@ -78,7 +85,7 @@ bool Game::loadMedia()
 		success = false;
 	}
 
-	if (bgMusic == NULL)
+	if (bgMusic == NULL || bgMusic2 == NULL || shooting == NULL)
 	{
 		printf("Unable to load music: %s \n", Mix_GetError());
 		success = false;
@@ -93,14 +100,28 @@ void Game::close()
 	SDL_DestroyTexture(assets);
 	assets = NULL;
 	SDL_DestroyTexture(gTexture);
-
+	gTexture = NULL;
+	SDL_DestroyTexture(iScreen);
+	iScreen = NULL;
+	SDL_DestroyTexture(wScreen);
+	wScreen = NULL;
+	SDL_DestroyTexture(gwScreen);
+	gwScreen = NULL;
+	SDL_DestroyTexture(glScreen);
+	glScreen = NULL;
 	//Destroy window
 	SDL_DestroyRenderer(gRenderer);
 	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
 	gRenderer = NULL;
-	// Mix_FreeMusic(bgMusic);
-	// bgMusic = NULL;
+	Mix_FreeMusic(bgMusic);
+	bgMusic = NULL;
+	Mix_FreeMusic(bgMusic2);
+	bgMusic2 = NULL;
+	Mix_FreeChunk(shooting);
+	shooting = NULL;
+	// Mix_FreeChunk(hit);
+	// hit=NULL;
 	//Quit SDL subsystems
 	IMG_Quit();
 	Mix_Quit();
@@ -138,18 +159,42 @@ SDL_Texture *Game::loadTexture(std::string path)
 	return newTexture;
 }
 //list<Alien *>::iterator A;//list for aliens
-
-void Game::drawObj(){
+void Game::updatealien()
+{
+	listofobjects.deletealien(assets);
+}
+void Game::updateplayer()
+{
+	listofobjects.check_collision_with_shooter();
+	listofobjects.check_collisions_with_obstacles();
+	listofobjects.deletelaser(assets);
+}
+void Game::updateobstacles()
+{
+	listofobjects.deleteobstacle(assets);
+}
+void Game::drawObj()
+{
+	listofobjects.drawAllaliens(gRenderer, assets,state);
+	listofobjects.drawAllobstacles(gRenderer,state);
+	listofobjects.drawAlllasers(gRenderer,state);
 }
 
+void Game::updateLives()
+{
+}
 void Game::run()
 {
 	bool quit = false;
+	int count_aliens = 0;
 	SDL_Event e;
-	PlayerSpaceship p = {assets};
+	PlayerSpaceship *p = new PlayerSpaceship(assets);
 	//ThunderBearers th = {assets};
-	ThunderBearers t = {assets}; GeoYielders g = {assets}; StormCarriers s = {assets}; FireBreathers f = {assets};
-	while( !quit )
+
+	// Meteor m = {assets};
+	// Fireball fb = {assets};
+	Lives l = {assets};
+	while (!quit)
 	{
 		//Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
@@ -159,34 +204,49 @@ void Game::run()
 			{
 				quit = true;
 			}
-			p.EventHandler(e);	//handles ship events
-		
-		
-		//texture.drawBG(gRenderer);	//moving background
+			p->EventHandler(e); //handles ship events
 
+			//texture.drawBG(gRenderer);	//moving background
+			if (e.type == SDL_KEYDOWN) //when it is pressed once
+			{
+				if (e.key.keysym.sym == SDLK_p && game == true) //if it is the key k
+				{
+					if (state == false) //resume the game if it is already paused
+					{
+						state = true;
+					}
+					else
+					{
+						state = false; //pause the game
+					}
+				}
+			}
 			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
 			{
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
-				//cout << xMouse << ", " << yMouse << endl;
+				cout << xMouse << ", " << yMouse << endl;
+
 				if (menu == true)
 				{
 
 					if (ins == false)
 					{
-						if (xMouse >= 330 and xMouse <= 470 and yMouse >= 325 and yMouse <= 360)
+						if (xMouse >= 330 and xMouse <= 470 and yMouse >= 370 and yMouse <= 400)
 						{
 							menu = false;
 							ins = false;
 							game = true;
+							Mix_HaltMusic();
+							start = SDL_GetTicks();
 						}
-						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 380 and yMouse <= 417)
+						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 420 and yMouse <= 450)
 						{
 							menu = true;
 							ins = true;
 							game = false;
 						}
-						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 440 and yMouse <= 475)
+						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 475 and yMouse <= 505)
 						{
 							menu = false;
 							ins = false;
@@ -207,7 +267,25 @@ void Game::run()
 			}
 			if (game == true)
 			{
-				p.moveShip();
+				if (Mix_PlayingMusic() == 0)
+				{
+					Mix_PlayMusic(bgMusic2, -1);
+					Mix_VolumeMusic(128 / 4);
+				}
+				p->moveShip(state);
+				if (e.type == SDL_KEYDOWN)
+				{
+					if (e.key.keysym.sym == SDLK_SPACE)
+					{
+						Laser *hlaser = new Laser(assets);
+						SDL_Rect mo = p->getmover();
+						//std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
+						hlaser->setPos(mo);
+						listofobjects.addUnit(hlaser, "hero");
+
+						Mix_PlayChannel(-1, shooting, 0);
+					}
+				}
 			}
 		}
 
@@ -218,10 +296,16 @@ void Game::run()
 			if (Mix_PlayingMusic() == 0)
 			{
 				//Play the music
-				//Mix_PlayMusic(bgMusic, 2);
+				Mix_PlayMusic(bgMusic, -1);
 			}
+			// else
+			// {
+			// 	Mix_PauseMusic();
+			// }
+			texture.drawBG(gRenderer);
 			if (ins == false)
 			{
+
 				SDL_RenderCopy(gRenderer, wScreen, NULL, NULL);
 			}
 			if (ins == true)
@@ -229,35 +313,117 @@ void Game::run()
 				SDL_RenderCopy(gRenderer, iScreen, NULL, NULL);
 			}
 		}
-		else{
+		if (game_is_won == true)
+		{
 			texture.drawBG(gRenderer);
+			SDL_RenderCopy(gRenderer, gwScreen, NULL, NULL);
+		}
+		if (game_is_lost == true)
+		{
+			texture.drawBG(gRenderer);
+			SDL_RenderCopy(gRenderer, glScreen, NULL, NULL);
 		}
 		//for game
 		if (game == true)
-		{	
-			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
-			Meteor m = {assets}; Fireball fb = {assets};
+		{
+			Uint32 current_time = SDL_GetTicks() - start;
+			Uint32 m_time=(SDL_GetTicks() - start)%15000;
+			Uint32 f_time=(SDL_GetTicks() - start)%45000;
+			cout << "current time" << current_time << endl;
+			texture.drawBG(gRenderer);
 
-			p.drawSprite(gRenderer);
-			m.drawSprite(gRenderer);
-			fb.drawSprite(gRenderer);
+			p->drawSprite(gRenderer);
+			listofobjects.check_collision_with_enemyshooter(p);
+			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
+			if (count_aliens < 100 && state==true)
+			{
+
+				// int prob;
+				// prob = rand() % 10000000;
+				// if (prob <= 1)
+				// {
+				if ((current_time > (4000 * count_fb)) && count_fb <= 24)
+				{
+					FireBreathers *f = new FireBreathers(assets);
+					count_fb++;
+					listofobjects.addUnit(f);
+					count_aliens++;
+				}
+				if (m_time==0)
+				{	Meteor *m=new Meteor(assets);
+					listofobjects.addUnit(m);
+				}
+				if (f_time==0)
+				{	Fireball *fi=new Fireball(assets);
+					listofobjects.addUnit(fi);
+				}
+				// }
+
+				if (count_fb > 24)
+				{
+					if ((current_time > ((4000 * 24) + (3500 * (count_tb)))) && count_tb <= 24)
+					{
+						ThunderBearers *t = new ThunderBearers(assets);
+						count_tb++;
+						listofobjects.addUnit(t);
+						count_aliens++;
+					}
+				}
+				if (count_tb > 24)
+				{
+					if ((current_time > ((4000 * 24) + (3500 * 24) + (2500 * count_sc))) && count_sc <= 24)
+					{
+						StormCarriers *s = new StormCarriers(assets);
+						count_sc++;
+						listofobjects.addUnit(s);
+						count_aliens++;
+					}
+				}
+				if (count_sc > 24)
+				{
+					if ((current_time > ((4000 * 24) + (3500 * 24) + (2500 * 24) + (1000 * count_gy))) && count_gy <= 24)
+					{
+						GeoYielders *g = new GeoYielders(assets);
+						count_gy++;
+						listofobjects.addUnit(g);
+						count_aliens++;
+					}
+				}
+				//count_aliens=count_tb+count_fb+count_sc+count_gy;
+			}
+			
+			if (count_aliens >= 50)
+			{
+				//cout << listofobjects.check_empty_aliens() << endl;
+				if (listofobjects.check_empty_aliens() == true)
+				{
+					game_is_won = true;
+				}
+			}
+			if (game_is_won == true or game_is_lost == true)
+			{
+				game = false;
+				Mix_HaltMusic();
+			}
 			//tb.drawSprite(gRenderer);
 
 			//th.drawSprite(gRenderer);
-			t.drawSprite(gRenderer);
-			g.drawSprite(gRenderer);
-			f.drawSprite(gRenderer);
-			s.drawSprite(gRenderer);
+			// t.drawSprite(gRenderer);
+			// g.drawSprite(gRenderer);
+			// f.drawSprite(gRenderer);
+			// s.drawSprite(gRenderer);
+			l.drawSprite(gRenderer);
+			drawObj();
 		}
 
-		//***********************draw the objects here********************
+		if (state == true)
+		{
+			updateplayer();
+			updatealien();
+			updateobstacles();
+		}
 
-		
-		
-
-		//****************************************************************
-
-    	SDL_RenderPresent(gRenderer); //displays the updated renderer
+		SDL_RenderPresent(gRenderer); //displays the updated renderer
 
 		SDL_Delay(200); //causes sdl engine to delay for specified miliseconds
 	}
