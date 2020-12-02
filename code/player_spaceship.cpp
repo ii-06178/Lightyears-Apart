@@ -105,7 +105,30 @@ SDL_Rect PlayerSpaceship::getmover()
     SDL_Rect sre = {pos_x, pos_y, mover.w, mover.h};
     return sre;
 }
-
+int PlayerSpaceship::getScore()
+{
+    return score;
+}
+int PlayerSpaceship::getLives()
+{
+    return lives;
+}
+int PlayerSpaceship::getFuel()
+{
+    return fuel;
+}
+void PlayerSpaceship::setScore(int s)
+{
+    score=s;
+}
+void PlayerSpaceship::setLives(int l)
+{
+    lives=l;
+}
+void PlayerSpaceship::setFuel(int f)
+{
+    fuel=f;
+}
 //Lives class Functions
 
 Lives::Lives(SDL_Texture *img) : Sprite(img)
@@ -120,10 +143,17 @@ Lives::Lives(SDL_Texture *img) : Sprite(img)
     mover.w = 46;
     mover.h = 70;
 }
-
+void Lives::setLives(int l)
+{
+    life=l;
+}
+int Lives::getLives()
+{
+    return life;
+}
 void Lives::drawSprite(SDL_Renderer *gRenderer)
 {
-    for (int x = 0; x < 3; x++)
+    for (int x = 0; x < life; x++)
     {
         general_render(0, y[x], asset, gRenderer, 0.0, SDL_FLIP_NONE);
     }

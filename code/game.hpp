@@ -19,6 +19,7 @@
 #include "obstacleTypes.hpp"
 #include "LinkedList.hpp"
 #include "BGTexture.hpp"
+#include "gameSave.hpp"
 
 #pragma once
 
@@ -61,6 +62,7 @@ class Game{
     TTF_Font *font=NULL;
     BGTexture texture;  //For animating the background texture
     LinkedList listofobjects;
+    gameSave gS;
     //list<Lives*> lives;
      Uint32 start = 0;
 
@@ -72,9 +74,9 @@ public:
     SDL_Texture* loadTexture( std::string path );
     void run();
     void drawObj();
-    void updatealien();
-    void updateplayer();
-    void updateobstacles();
+    void updatealien(PlayerSpaceship*);
+    void updateplayer(PlayerSpaceship*);
+    void updateobstacles(PlayerSpaceship*);
 
     void updateLives();
 };

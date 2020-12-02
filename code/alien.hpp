@@ -5,7 +5,7 @@
 #pragma once
 
 class Alien:public Sprite
-{
+{   int points=0;
     int strength; //stores either how many hits an alien needs to die OR how much damage they do to player with their hit. We need to choose one
     int difficultyLevel; //stores at which difficulty level i.e. above what score will this alien be displayed
     bool up;//flag for vertical movement
@@ -19,6 +19,7 @@ class Alien:public Sprite
     void setDifficulty(int d);
     int getStrength();
     int getDifficulty();
+    
     void setstate(bool s);
     void drawSprite(SDL_Renderer*);
 };

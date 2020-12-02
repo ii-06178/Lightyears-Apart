@@ -1,6 +1,6 @@
 #include <iostream>
 #include <SDL.h>
-#include<SDL_mixer.h>
+#include <SDL_mixer.h>
 #include <list>
 #include "sprite.hpp"
 #include "alien.hpp"
@@ -252,7 +252,7 @@ void LinkedList::drawAlllasers(SDL_Renderer *renderer, bool s)
         }
 }
 
-void LinkedList::deletealien(SDL_Texture *)
+void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
 {
     std::list<GeoYielders *>::iterator itr;
 
@@ -269,6 +269,9 @@ void LinkedList::deletealien(SDL_Texture *)
             auto a = *itr;
             if (a->getdestroyed() == true)
             {
+                std::cout << "points " << a->getPoints() << std::endl;
+                int scoreinc = pl->getScore() + a->getPoints();
+                pl->setScore(scoreinc);
                 geoalien.erase(itr);
             }
             //calls the object's draw function
@@ -287,7 +290,9 @@ void LinkedList::deletealien(SDL_Texture *)
             // 'ptr' points to N-th element of list
             auto a = *jtr;
             if (a->getdestroyed() == true)
-            {
+            {   std::cout << "points " << a->getPoints() << std::endl;
+                int scoreinc = pl->getScore() + a->getPoints();
+                pl->setScore(scoreinc);
                 electroalien.erase(jtr);
             }
         }
@@ -306,7 +311,9 @@ void LinkedList::deletealien(SDL_Texture *)
             auto a = *ktr;
 
             if (a->getdestroyed() == true)
-            {
+            {   std::cout << "points " << a->getPoints() << std::endl;
+                int scoreinc = pl->getScore() + a->getPoints();
+                pl->setScore(scoreinc);
                 anemoalien.erase(ktr);
             }
         }
@@ -325,14 +332,16 @@ void LinkedList::deletealien(SDL_Texture *)
             auto a = *ltr;
 
             if (a->getdestroyed() == true)
-            {
+            {   std::cout << "points " << a->getPoints() << std::endl;
+                int scoreinc = pl->getScore() + a->getPoints();
+                pl->setScore(scoreinc);
                 pyroalien.erase(ltr);
             }
         }
 }
-void LinkedList::deleteobstacle(SDL_Texture*)
+void LinkedList::deleteobstacle(SDL_Texture *)
 {
-      std::list<Meteor *>::iterator itr;
+    std::list<Meteor *>::iterator itr;
 
     int i;
     for (i = 0, itr = meteors.begin(); i < meteors.size() && itr != meteors.end(); i++, itr++)
@@ -345,8 +354,8 @@ void LinkedList::deleteobstacle(SDL_Texture*)
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
-            
-            if (a->getdestroyed() == true || a->getcontact()==true)
+
+            if (a->getdestroyed() == true || a->getcontact() == true)
             {
                 meteors.erase(itr);
             }
@@ -364,8 +373,8 @@ void LinkedList::deleteobstacle(SDL_Texture*)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
-            
-            if (a->getdestroyed() == true || a->getcontact()==true)
+
+            if (a->getdestroyed() == true || a->getcontact() == true)
             {
                 thunderbolts.erase(jtr);
             }
@@ -383,8 +392,8 @@ void LinkedList::deleteobstacle(SDL_Texture*)
         {
             // 'ptr' points to N-th element of list
             auto a = *ktr;
-            
-            if (a->getdestroyed() == true || a->getcontact()==true)
+
+            if (a->getdestroyed() == true || a->getcontact() == true)
             {
                 fireballs.erase(ktr);
             }
@@ -432,7 +441,7 @@ void LinkedList::deletelaser(SDL_Texture *)
             //calls the object's draw function
         }
 }
-void LinkedList::check_collision_with_shooter()
+void LinkedList::check_collision_with_shooter(PlayerSpaceship *pl)
 {
     std::list<Laser *>::iterator itr;
 
@@ -549,7 +558,8 @@ void LinkedList::check_collisions_with_obstacles()
             // std::cout<<0;
         }
         else
-        {    auto a = *itr;
+        {
+            auto a = *itr;
             std::list<Thunderbolt *>::iterator jtr;
 
             int j;
@@ -584,7 +594,7 @@ void LinkedList::check_collisions_with_obstacles()
                 else
                 {
                     // 'ptr' points to N-th element of list
-                   auto b = *ktr;
+                    auto b = *ktr;
                     SDL_Rect ma = a->getmover();
                     SDL_Rect mb = b->getmover();
                     if (SDL_HasIntersection(&ma, &mb) == true)
@@ -618,7 +628,7 @@ void LinkedList::check_collisions_with_obstacles()
                 }
         }
 }
-void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl,Mix_Chunk* mc)
+void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl, Mix_Chunk *mc)
 {
     std::list<Laser *>::iterator itr;
 
@@ -638,8 +648,14 @@ void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl,Mix_Chunk
             SDL_Rect ma = a->getmover();
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)
-            {   Mix_PlayChannel(0,mc,0);
+            {
+                Mix_PlayChannel(0, mc, 0);
                 a->setcontact();
+                pl->setFuel(0);
+                if (pl->getFuel()==0)
+                {   int clife=pl->getLives()-1;
+                    pl->setLives(clife);
+                }
             }
             //calls the object's draw function
         }
@@ -680,9 +696,9 @@ bool LinkedList::check_empty_aliens()
 // void LinkedList::check_collision_with_aliens()
 // {
 
-void LinkedList::check_hit_with_obstacle(PlayerSpaceship* pl,Mix_Chunk* mc)
+void LinkedList::check_hit_with_obstacle(PlayerSpaceship *pl, Mix_Chunk *mc)
 {
- std::list<Meteor *>::iterator itr;
+    std::list<Meteor *>::iterator itr;
 
     int i;
     for (i = 0, itr = meteors.begin(); i < meteors.size() && itr != meteors.end(); i++, itr++)
@@ -700,8 +716,8 @@ void LinkedList::check_hit_with_obstacle(PlayerSpaceship* pl,Mix_Chunk* mc)
             if (SDL_HasIntersection(&ma, &mb) == true)
             {
                 a->setcontact();
-                Mix_PlayChannel(0,mc,0);
-            } 
+                Mix_PlayChannel(0, mc, 0);
+            }
         }
     std::list<Thunderbolt *>::iterator jtr;
 
@@ -721,9 +737,9 @@ void LinkedList::check_hit_with_obstacle(PlayerSpaceship* pl,Mix_Chunk* mc)
             if (SDL_HasIntersection(&ma, &mb) == true)
             {
                 a->setcontact();
-                Mix_PlayChannel(0,mc,0);
+                Mix_PlayChannel(0, mc, 0);
             }
- //calls the object's draw function
+            //calls the object's draw function
         }
     std::list<Fireball *>::iterator ktr;
 
@@ -743,8 +759,8 @@ void LinkedList::check_hit_with_obstacle(PlayerSpaceship* pl,Mix_Chunk* mc)
             if (SDL_HasIntersection(&ma, &mb) == true)
             {
                 a->setcontact();
-                Mix_PlayChannel(0,mc,0);
+                Mix_PlayChannel(0, mc, 0);
             }
- //calls the object's draw function
-        }   
-}        
+            //calls the object's draw function
+        }
+}
