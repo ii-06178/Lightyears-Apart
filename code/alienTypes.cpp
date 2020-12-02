@@ -150,3 +150,19 @@ SDL_Rect FireBreathers::getmover()
 {
 return mover;
 }
+int GeoYielders::getPoints()
+{
+    return points;
+}
+int ThunderBearers::getPoints()
+{
+    return points;
+}
+int StormCarriers::getPoints()
+{
+    return points;
+}
+int FireBreathers::getPoints()
+{
+    return points;
+}

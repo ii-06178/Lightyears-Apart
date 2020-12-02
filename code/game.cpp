@@ -1,6 +1,7 @@
 #include <iostream>
 #include "game.hpp"
 #include "LinkedList.hpp"
+// #include "gameSave.hpp"
 using namespace std;
 bool Game::init()
 {
@@ -181,17 +182,17 @@ SDL_Texture *Game::loadTexture(std::string path)
 	return newTexture;
 }
 //list<Alien *>::iterator A;//list for aliens
-void Game::updatealien()
+void Game::updatealien(PlayerSpaceship* pl)
 {
-	listofobjects.deletealien(assets);
+	listofobjects.deletealien(assets,pl);
 }
-void Game::updateplayer()
+void Game::updateplayer(PlayerSpaceship* pl)
 {
-	listofobjects.check_collision_with_shooter();
+	listofobjects.check_collision_with_shooter(pl);
 	listofobjects.check_collisions_with_obstacles();
 	listofobjects.deletelaser(assets);
 }
-void Game::updateobstacles()
+void Game::updateobstacles(PlayerSpaceship* pl)
 {
 	listofobjects.deleteobstacle(assets);
 }
@@ -423,13 +424,17 @@ void Game::run()
 				//count_aliens=count_tb+count_fb+count_sc+count_gy;
 			}
 
-			if (count_aliens >= 100)
+			if (count_aliens >= 100 && p->getLives()!=0)
 			{
 				//cout << listofobjects.check_empty_aliens() << endl;
 				if (listofobjects.check_empty_aliens() == true)
 				{
 					game_is_won = true;
 				}
+			}
+			if (p->getLives()==0)
+			{
+				game_is_lost=true;
 			}
 			if (game_is_won == true or game_is_lost == true)
 			{
@@ -444,16 +449,18 @@ void Game::run()
 			// f.drawSprite(gRenderer);
 			// s.drawSprite(gRenderer);
 			drawObj();
+			l.setLives(p->getLives());
 			l.drawSprite(gRenderer);
+			scoring.setScore(p->getScore());
 			scoring.display(font, score_display, gRenderer);
-			
+			gS.gameUnload();
 		}
 
 		if (state == true)
 		{
-			updateplayer();
-			updatealien();
-			updateobstacles();
+			updateplayer(p);
+			updatealien(p);
+			updateobstacles(p);
 		}
 
 		SDL_RenderPresent(gRenderer); //displays the updated renderer
