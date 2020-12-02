@@ -42,6 +42,7 @@ void Alien::drawSprite(SDL_Renderer *gRenderer)
     }
     //movement for x axis
 }
+
 void Alien::shoot()
 {
 }

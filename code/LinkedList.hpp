@@ -24,12 +24,12 @@ void addUnit(FireBreathers *pa);
 
 void deleteobstacle(SDL_Texture*);
 void deletelaser(SDL_Texture*);
-void deletealien(SDL_Texture*);
+void deletealien(SDL_Texture*,PlayerSpaceship*);
 void drawAllaliens(SDL_Renderer*,SDL_Texture*,bool s);
 void drawAllobstacles(SDL_Renderer*,bool s);
 void drawAlllasers(SDL_Renderer*,bool s);
 // void laying(SDL_Texture*);
-void check_collision_with_shooter();
+void check_collision_with_shooter(PlayerSpaceship*);
 void check_collision_with_enemyshooter(PlayerSpaceship* pl,Mix_Chunk*);
 void check_collision_with_aliens();
 void check_collisions_with_obstacles();
