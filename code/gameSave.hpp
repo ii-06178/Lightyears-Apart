@@ -1,7 +1,7 @@
 
 class gameSave
 {
-    public:
+public:
     gameSave();
     void gameLoad();
     void gameUnload();

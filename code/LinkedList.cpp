@@ -79,6 +79,8 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
                 //std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
                 alaser->setPos(mof);
                 alaser->setType("alien");
+                std::cout << a->getStrength() << std::endl;
+                alaser->setstrength(a->getStrength());
                 addUnit(alaser, "alien");
             }
         }
@@ -106,6 +108,8 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
                 //std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
                 alaser->setPos(mof);
                 alaser->setType("alien");
+                std::cout << a->getStrength() << std::endl;
+                alaser->setstrength(a->getStrength());
                 addUnit(alaser, "alien");
             }
         }
@@ -133,6 +137,8 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
                 //std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
                 alaser->setPos(mof);
                 alaser->setType("alien");
+                std::cout << a->getStrength() << std::endl;
+                alaser->setstrength(a->getStrength());
                 addUnit(alaser, "alien");
             }
         }
@@ -160,6 +166,8 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
                 //std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
                 alaser->setPos(mof);
                 alaser->setType("alien");
+                std::cout << a->getStrength() << std::endl;
+                alaser->setstrength(a->getStrength());
                 addUnit(alaser, "alien");
             }
         }
@@ -196,7 +204,7 @@ void LinkedList::drawAllobstacles(SDL_Renderer *renderer, bool s)
             // 'ptr' points to N-th element of list
             auto a = *jtr;
             a->setstate(s);
-            a->drawSprite(renderer); //calls the object's draw function
+            a->drawBolt(renderer); //calls the object's draw function
         }
     std::list<Fireball *>::iterator ktr;
 
@@ -290,7 +298,8 @@ void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
             // 'ptr' points to N-th element of list
             auto a = *jtr;
             if (a->getdestroyed() == true)
-            {   std::cout << "points " << a->getPoints() << std::endl;
+            {
+                std::cout << "points " << a->getPoints() << std::endl;
                 int scoreinc = pl->getScore() + a->getPoints();
                 pl->setScore(scoreinc);
                 electroalien.erase(jtr);
@@ -311,7 +320,8 @@ void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
             auto a = *ktr;
 
             if (a->getdestroyed() == true)
-            {   std::cout << "points " << a->getPoints() << std::endl;
+            {
+                std::cout << "points " << a->getPoints() << std::endl;
                 int scoreinc = pl->getScore() + a->getPoints();
                 pl->setScore(scoreinc);
                 anemoalien.erase(ktr);
@@ -332,7 +342,8 @@ void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
             auto a = *ltr;
 
             if (a->getdestroyed() == true)
-            {   std::cout << "points " << a->getPoints() << std::endl;
+            {
+                std::cout << "points " << a->getPoints() << std::endl;
                 int scoreinc = pl->getScore() + a->getPoints();
                 pl->setScore(scoreinc);
                 pyroalien.erase(ltr);
@@ -545,7 +556,7 @@ void LinkedList::check_collision_with_shooter(PlayerSpaceship *pl)
                 }
         }
 }
-void LinkedList::check_collisions_with_obstacles()
+void LinkedList::check_collisions_with_obstacles(PlayerSpaceship *pl)
 {
     std::list<Laser *>::iterator itr;
 
@@ -575,8 +586,10 @@ void LinkedList::check_collisions_with_obstacles()
                     auto b = *jtr;
                     SDL_Rect ma = a->getmover();
                     SDL_Rect mb = b->getmover();
+
                     if (SDL_HasIntersection(&ma, &mb) == true)
                     {
+
                         b->hasdestroyed();
                         a->setcontact();
                     }
@@ -593,6 +606,7 @@ void LinkedList::check_collisions_with_obstacles()
                 }
                 else
                 {
+                    std::cout << "im here" << std::endl;
                     // 'ptr' points to N-th element of list
                     auto b = *ktr;
                     SDL_Rect ma = a->getmover();
@@ -601,6 +615,14 @@ void LinkedList::check_collisions_with_obstacles()
                     {
                         b->hasdestroyed();
                         a->setcontact();
+                        //int fueLeft = pl->getFuel() - a->getstrength();
+                        //pl->setFuel(fueLeft);
+                        // if (pl->getFuel() <= 0)
+                        // {
+                        //     int clife = pl->getLives() - 1;
+                        //     pl->setLives(clife);
+                        //     pl->setFuel();
+                        // }
                     }
 
                     //calls the object's draw function
@@ -620,10 +642,22 @@ void LinkedList::check_collisions_with_obstacles()
                     auto b = *ltr;
                     SDL_Rect ma = a->getmover();
                     SDL_Rect mb = b->getmover();
+                    std::cout << "im here" << std::endl;
                     if (SDL_HasIntersection(&ma, &mb) == true)
                     {
+
+                        //int fueLeft = pl->getFuel() - a->getstrength();
+                        //std::cout<<"fuel we giving "<<fueLeft<<std::endl;
+                        //std::cout<<"fuel it got "<<std::endl;
+                        //pl->setFuel(fueLeft);
                         b->hasdestroyed();
                         a->setcontact();
+                        // if (pl->getFuel() <= 0)
+                        // {
+                        //     int clife = pl->getLives() - 1;
+                        //     pl->setLives(clife);
+                        //     pl->setFuel();
+                        // }
                     }
                 }
         }
@@ -644,17 +678,20 @@ void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl, Mix_Chun
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
-
+            std::cout << "im here" << std::endl;
             SDL_Rect ma = a->getmover();
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)
             {
                 Mix_PlayChannel(0, mc, 0);
                 a->setcontact();
-                pl->setFuel(0);
-                if (pl->getFuel()==0)
-                {   int clife=pl->getLives()-1;
+                int fueLeft = pl->getFuel() - a->getstrength();
+                pl->setFuel(fueLeft);
+                if (pl->getFuel() <= 0)
+                {
+                    int clife = pl->getLives() - 1;
                     pl->setLives(clife);
+                    pl->setFuel();
                 }
             }
             //calls the object's draw function
@@ -715,6 +752,14 @@ void LinkedList::check_hit_with_obstacle(PlayerSpaceship *pl, Mix_Chunk *mc)
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)
             {
+                int fueLeft = pl->getFuel() - a->getStrength();
+                pl->setFuel(fueLeft);
+                if (pl->getFuel() <= 0)
+                {
+                    int clife = pl->getLives() - 1;
+                    pl->setLives(clife);
+                    pl->setFuel();
+                }
                 a->setcontact();
                 Mix_PlayChannel(0, mc, 0);
             }
@@ -736,6 +781,14 @@ void LinkedList::check_hit_with_obstacle(PlayerSpaceship *pl, Mix_Chunk *mc)
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)
             {
+                int fueLeft = pl->getFuel() - a->getStrength();
+                pl->setFuel(fueLeft);
+                if (pl->getFuel() <= 0)
+                {
+                    int clife = pl->getLives() - 1;
+                    pl->setLives(clife);
+                    pl->setFuel();
+                }
                 a->setcontact();
                 Mix_PlayChannel(0, mc, 0);
             }
@@ -758,6 +811,14 @@ void LinkedList::check_hit_with_obstacle(PlayerSpaceship *pl, Mix_Chunk *mc)
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)
             {
+                int fueLeft = pl->getFuel() - a->getStrength();
+                pl->setFuel(fueLeft);
+                if (pl->getFuel() <= 0)
+                {
+                    int clife = pl->getLives() - 1;
+                    pl->setLives(clife);
+                    pl->setFuel();
+                }
                 a->setcontact();
                 Mix_PlayChannel(0, mc, 0);
             }

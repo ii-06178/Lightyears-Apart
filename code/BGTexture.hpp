@@ -3,13 +3,14 @@
 #include <string>
 #pragma once
 
-class BGTexture{
+class BGTexture
+{
 public:
-    SDL_Texture* assets;
+    SDL_Texture *assets;
     int bgWidth, bgHeight, scrollingOffSet;
 
     BGTexture();
     ~BGTexture();
-    void render(int, int, SDL_Renderer*);
-    void drawBG(SDL_Renderer*);
+    void render(int, int, SDL_Renderer *);
+    void drawBG(SDL_Renderer *);
 };

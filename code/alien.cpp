@@ -1,7 +1,7 @@
 #include "alien.hpp"
 
 Alien::Alien(SDL_Texture *img) : Sprite(img)
-{ //constructor for all aliens, I was thinking of using the Sprite constructor, but didn't for now, might change it later.
+{ //constructor for all aliens
     turn_h = SDL_FLIP_NONE;
     up = false;
     cstate = true;
@@ -13,7 +13,7 @@ void Alien::drawSprite(SDL_Renderer *gRenderer)
     if (cstate == true)
     {
         if (mover.x < 800 - mover.w && turn_h == SDL_FLIP_NONE)
-        { //moving towards right wallssswaarrrrra
+        { //moving towards right walls
             mover.x += 20;
         }
         else if (mover.x >= 800 - mover.w)
@@ -47,27 +47,7 @@ void Alien::shoot()
 {
 }
 
-void Alien::kill()
-{
-}
-
-void Alien::setStrength(int s)
-{
-    strength = s;
-}
-void Alien::setDifficulty(int d)
-{
-    difficultyLevel = d;
-}
-int Alien::getStrength()
-{
-    return strength;
-}
-int Alien::getDifficulty()
-{
-    return difficultyLevel;
-}
 void Alien::setstate(bool s)
 {
-cstate=s;
+    cstate = s;
 }
