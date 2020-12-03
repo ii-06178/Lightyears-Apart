@@ -1,6 +1,7 @@
 #include "obstacleTypes.hpp"
 //Just made the constructors for the sprite objects with their respective srcs and movers(places where they'll be placed).
-Meteor::Meteor(SDL_Texture* img):Obstacle(img){
+Meteor::Meteor(SDL_Texture *img) : Obstacle(img)
+{
     src.x = 0;
     src.y = 140;
     src.w = 155;
@@ -13,7 +14,8 @@ Meteor::Meteor(SDL_Texture* img):Obstacle(img){
 
     turn_h = SDL_FLIP_NONE;
 }
-Fireball::Fireball(SDL_Texture* img):Obstacle(img){
+Fireball::Fireball(SDL_Texture *img) : Obstacle(img)
+{
     src.x = 306;
     src.y = 146;
     src.w = 150;
@@ -26,45 +28,59 @@ Fireball::Fireball(SDL_Texture* img):Obstacle(img){
 
     turn_h = SDL_FLIP_HORIZONTAL;
 }
-Thunderbolt::Thunderbolt(SDL_Texture* img):Obstacle(img){
-    /*src.x = 580;
-    src.y = 430;
-    src.w = 55;
-    src.h = 245;
+Thunderbolt::Thunderbolt(SDL_Texture *img) : Obstacle(img)
+{   
+    src[0].x = 300;
+    src[0].y = 300;
+    src[0].w = 70;
+    src[0].h = 250;
 
-    mover.x = 550;
-    mover.y = 200;
-    mover.w = 55;
-    mover.h = 250;*/
+    src[1].x = 370;
+    src[1].y = 300;
+    src[1].w = 70;
+    src[1].h = 250;
+
+    mover.w = 70;
+    mover.h = 250;
+    mover.x = rand() % 800;
+    mover.y = -5;
+   
+}
+
+void Thunderbolt::drawBolt(SDL_Renderer *gRenderer)
+{
+
+    // SDL_Rect* currentframe = &src[frame%1];
+    // general_render(mover.x, mover.y, asset, gRenderer, 0.0, SDL_FLIP_NONE);
+    // ++frame;
+    // if(frame > 1) frame = 0;
+    // mover.h++;
 }
 
 void Meteor::destroy()
 {
-
 }
 
 void Fireball::destroy()
 {
-    
 }
 
 void Thunderbolt::destroy()
 {
-    
 }
 void Meteor::hasdestroyed()
 {
-    destroyed=true;
+    destroyed = true;
 }
 
 void Fireball::hasdestroyed()
 {
-    destroyed=true;
+    destroyed = true;
 }
 
 void Thunderbolt::hasdestroyed()
 {
-    destroyed=true;
+    destroyed = true;
 }
 bool Meteor::getdestroyed()
 {
@@ -73,12 +89,12 @@ bool Meteor::getdestroyed()
 
 bool Fireball::getdestroyed()
 {
-        return destroyed;
+    return destroyed;
 }
 
 bool Thunderbolt::getdestroyed()
 {
-        return destroyed;
+    return destroyed;
 }
 SDL_Rect Meteor::getmover()
 {
@@ -87,10 +103,34 @@ SDL_Rect Meteor::getmover()
 
 SDL_Rect Fireball::getmover()
 {
-        return mover;
+    return mover;
 }
 
 SDL_Rect Thunderbolt::getmover()
 {
-        return mover;
+    return mover;
+}
+void Fireball::setStrength(int s)
+{
+    strength = s;
+}
+int Fireball::getStrength()
+{
+    return strength;
+}
+void Thunderbolt::setStrength(int s)
+{
+    strength = s;
+}
+int Thunderbolt::getStrength()
+{
+    return strength;
+}
+void Meteor::setStrength(int s)
+{
+    strength = s;
+}
+int Meteor::getStrength()
+{
+    return strength;
 }

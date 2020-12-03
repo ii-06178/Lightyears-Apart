@@ -41,7 +41,8 @@ bool Game::init()
 			else
 			{
 				if (TTF_Init() == -1)
-				{	printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n",TTF_GetError());
+				{
+					printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
 					success = false;
 				}
 				//Initialize renderer color
@@ -182,17 +183,17 @@ SDL_Texture *Game::loadTexture(std::string path)
 	return newTexture;
 }
 //list<Alien *>::iterator A;//list for aliens
-void Game::updatealien(PlayerSpaceship* pl)
+void Game::updatealien(PlayerSpaceship *pl)
 {
-	listofobjects.deletealien(assets,pl);
+	listofobjects.deletealien(assets, pl);
 }
-void Game::updateplayer(PlayerSpaceship* pl)
+void Game::updateplayer(PlayerSpaceship *pl)
 {
 	listofobjects.check_collision_with_shooter(pl);
-	listofobjects.check_collisions_with_obstacles();
+	listofobjects.check_collisions_with_obstacles(pl);
 	listofobjects.deletelaser(assets);
 }
-void Game::updateobstacles(PlayerSpaceship* pl)
+void Game::updateobstacles(PlayerSpaceship *pl)
 {
 	listofobjects.deleteobstacle(assets);
 }
@@ -211,13 +212,15 @@ void Game::run()
 	bool quit = false;
 	int count_aliens = 0;
 	SDL_Event e;
-	PlayerSpaceship *p = new PlayerSpaceship(assets);
+	//PlayerSpaceship *p = new PlayerSpaceship(assets);
+	PlayerSpaceship *p = PlayerSpaceship::getinstance(assets);
 	Score scoring;
 	//ThunderBearers th = {assets};
 
 	// Meteor m = {assets};
 	// Fireball fb = {assets};
 	Lives l = {assets};
+	Fuel f = {assets};
 	while (!quit)
 	{
 		//Handle events on queue
@@ -249,7 +252,7 @@ void Game::run()
 			{
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
-				cout << xMouse << ", " << yMouse << endl;
+				//cout << xMouse << ", " << yMouse << endl;
 
 				if (menu == true)
 				{
@@ -337,18 +340,7 @@ void Game::run()
 				SDL_RenderCopy(gRenderer, iScreen, NULL, NULL);
 			}
 		}
-		if (game_is_won == true)
-		{
-			Mix_PlayMusic(bgMusicW, -1);
-			texture.drawBG(gRenderer);
-			SDL_RenderCopy(gRenderer, gwScreen, NULL, NULL);
-		}
-		if (game_is_lost == true)
-		{
-			Mix_PlayMusic(bgMusicL, -1);
-			texture.drawBG(gRenderer);
-			SDL_RenderCopy(gRenderer, glScreen, NULL, NULL);
-		}
+
 		//for game
 		if (game == true)
 		{
@@ -375,7 +367,7 @@ void Game::run()
 					count_fb++;
 					listofobjects.addUnit(f);
 					count_aliens++;
-					cout<<"count_fb "<<count_fb<<endl;
+					//cout<<"count_fb "<<count_fb<<endl;
 				}
 				if (m_time <= 100)
 				{
@@ -391,8 +383,8 @@ void Game::run()
 
 				if (count_fb > 24)
 				{
-				//cout<<"current_time should be 100000, but it is "<<current_time<<endl;
-				cout<<"count_tb"<<count_tb<<endl;
+					//cout<<"current_time should be 100000, but it is "<<current_time<<endl;
+					//cout<<"count_tb"<<count_tb<<endl;
 					if ((current_time > ((4000 * 25) + (3500 * (count_tb)))) && count_tb < 25)
 					{
 						ThunderBearers *t = new ThunderBearers(assets);
@@ -424,7 +416,7 @@ void Game::run()
 				//count_aliens=count_tb+count_fb+count_sc+count_gy;
 			}
 
-			if (count_aliens >= 100 && p->getLives()!=0)
+			if (count_aliens >= 100 && p->getLives() != 0)
 			{
 				//cout << listofobjects.check_empty_aliens() << endl;
 				if (listofobjects.check_empty_aliens() == true)
@@ -432,9 +424,9 @@ void Game::run()
 					game_is_won = true;
 				}
 			}
-			if (p->getLives()==0)
+			if (p->getLives() == 0)
 			{
-				game_is_lost=true;
+				game_is_lost = true;
 			}
 			if (game_is_won == true or game_is_lost == true)
 			{
@@ -451,11 +443,31 @@ void Game::run()
 			drawObj();
 			l.setLives(p->getLives());
 			l.drawSprite(gRenderer);
+			f.drawSprite(gRenderer);
+			p->updateFuel(current_time);
+			f.setFuel(p->getFuel());
 			scoring.setScore(p->getScore());
 			scoring.display(font, score_display, gRenderer);
 			gS.gameUnload();
 		}
-
+		if (game_is_won == true)
+		{
+			if (Mix_PlayingMusic() == 0)
+			{
+				Mix_PlayMusic(bgMusicW, -1);
+			}
+			texture.drawBG(gRenderer);
+			SDL_RenderCopy(gRenderer, gwScreen, NULL, NULL);
+		}
+		if (game_is_lost == true)
+		{
+			if (Mix_PlayingMusic() == 0)
+			{
+				Mix_PlayMusic(bgMusicL, -1);
+			}
+			texture.drawBG(gRenderer);
+			SDL_RenderCopy(gRenderer, glScreen, NULL, NULL);
+		}
 		if (state == true)
 		{
 			updateplayer(p);

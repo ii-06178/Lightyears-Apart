@@ -1,26 +1,29 @@
 #include "obstacle.hpp"
 
-Obstacle::Obstacle(SDL_Texture* img):Sprite(img)
+Obstacle::Obstacle(SDL_Texture *img) : Sprite(img)
 {
-    
 }
-void Obstacle::drawSprite(SDL_Renderer* gRenderer){
+void Obstacle::drawSprite(SDL_Renderer *gRenderer)
+{
     general_render(mover.x, mover.y, asset, gRenderer, 0.0, turn_h);
     //mover.x += 15;
-    if (cstate==true)
+    if (cstate == true)
     {
-        if (mover.x < 800 - mover.w && turn_h == SDL_FLIP_NONE){
-        mover.x += 15;
-    }
-    else if (mover.x >= 800 - mover.w) turn_h = SDL_FLIP_HORIZONTAL;
+        if (mover.x < 800 - mover.w && turn_h == SDL_FLIP_NONE)
+        {
+            mover.x += 15;
+        }
+        else if (mover.x >= 800 - mover.w)
+            turn_h = SDL_FLIP_HORIZONTAL;
 
-    if (mover.x > 0 && turn_h == SDL_FLIP_HORIZONTAL){
-        mover.x -= 15;
-    }
-    else if (mover.x <= 0) turn_h = SDL_FLIP_NONE;
+        if (mover.x > 0 && turn_h == SDL_FLIP_HORIZONTAL)
+        {
+            mover.x -= 15;
+        }
+        else if (mover.x <= 0)
+            turn_h = SDL_FLIP_NONE;
     }
     mover.y += 10;
-    
 }
 
 void Obstacle::setStrength(int s)
@@ -35,11 +38,10 @@ int Obstacle::getStrength()
 
 Obstacle::~Obstacle()
 {
-    
 }
 void Obstacle::setstate(bool s)
 {
-    cstate=s;
+    cstate = s;
 }
 SDL_Rect Obstacle::getmover()
 {
@@ -47,7 +49,7 @@ SDL_Rect Obstacle::getmover()
 }
 void Obstacle::hasdestroyed()
 {
-    destroyed=true;
+    destroyed = true;
 }
 bool Obstacle::getdestroyed()
 {
@@ -55,7 +57,7 @@ bool Obstacle::getdestroyed()
 }
 void Obstacle::setcontact()
 {
-    contact=true;
+    contact = true;
 }
 bool Obstacle::getcontact()
 {
