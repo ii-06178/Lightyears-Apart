@@ -4,7 +4,6 @@
 using namespace std;
 gameSave::gameSave()
 {
-    
 }
 void gameSave::gameLoad()
 {
@@ -21,7 +20,7 @@ void gameSave::gameLoad()
 }
 void gameSave::gameUnload()
 {
-fstream savedFile("saveFile.txt",ios::out);
+    fstream savedFile("saveFile.txt", ios::out);
 
-savedFile.close();
+    savedFile.close();
 }
