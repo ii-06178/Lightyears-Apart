@@ -38,7 +38,10 @@ PlayerSpaceship::PlayerSpaceship(SDL_Texture *img) : Sprite(img)
     pos_x = (800 - mover.w) / 2;
     pos_y = 600 - mover.h; //ship is at center of screen by default.
 }
-
+int PlayerSpaceship::operator - (int laserStrength)
+{
+    return fuel - laserStrength; 
+}
 void PlayerSpaceship::EventHandler(SDL_Event event)
 {
 

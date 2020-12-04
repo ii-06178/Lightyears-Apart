@@ -23,6 +23,7 @@ public:
     void updateScore(int s);
     void updateLives(int l);
     void updateFuel(int f);
+    int operator - (int); 
     int getScore();
     int getLives();
     int getFuel();
