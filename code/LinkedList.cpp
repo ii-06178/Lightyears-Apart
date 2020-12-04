@@ -685,7 +685,7 @@ void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl, Mix_Chun
             {
                 Mix_PlayChannel(0, mc, 0);
                 a->setcontact();
-                int fueLeft = pl->getFuel() - a->getstrength();
+                int fueLeft = *pl - a->getstrength();  //operator "-" overloaded
                 pl->setFuel(fueLeft);
                 if (pl->getFuel() <= 0)
                 {
@@ -752,7 +752,7 @@ void LinkedList::check_hit_with_obstacle(PlayerSpaceship *pl, Mix_Chunk *mc)
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)
             {
-                int fueLeft = pl->getFuel() - a->getStrength();
+                int fueLeft = *pl - a->getStrength();  //operator "-" overloaded
                 pl->setFuel(fueLeft);
                 if (pl->getFuel() <= 0)
                 {
@@ -781,7 +781,7 @@ void LinkedList::check_hit_with_obstacle(PlayerSpaceship *pl, Mix_Chunk *mc)
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)
             {
-                int fueLeft = pl->getFuel() - a->getStrength();
+                int fueLeft = *pl - a->getStrength();  //operator "-" overloaded
                 pl->setFuel(fueLeft);
                 if (pl->getFuel() <= 0)
                 {
@@ -811,7 +811,7 @@ void LinkedList::check_hit_with_obstacle(PlayerSpaceship *pl, Mix_Chunk *mc)
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)
             {
-                int fueLeft = pl->getFuel() - a->getStrength();
+                int fueLeft = *pl - a->getStrength();  //operator "-" overloaded
                 pl->setFuel(fueLeft);
                 if (pl->getFuel() <= 0)
                 {
