@@ -29,7 +29,7 @@ int Laser::getstrength()
 }
 void Laser::setPos(SDL_Rect s)
 {
-    mover.x = s.x;
+    mover.x= s.x + (s.w-mover.w)/2;
     if (type == "hero")
     {
         mover.y = s.y - 70;

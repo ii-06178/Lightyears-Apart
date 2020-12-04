@@ -119,7 +119,7 @@ void PlayerSpaceship::updateFuel(Uint32 ct)
 
     if (fuel != 0 && t < 200)
     {
-        std::cout << t << std::endl;
+        //std::cout << t << std::endl;
         fuel = fuel - 5;
     }
 }

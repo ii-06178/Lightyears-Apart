@@ -86,7 +86,7 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
                 //std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
                 alaser->setPos(mof);
                 alaser->setType("alien");
-                std::cout << a->getStrength() << std::endl;
+               // std::cout << a->getStrength() << std::endl;
                 alaser->setstrength(a->getStrength());
                 addUnit(alaser, "alien");
             }
@@ -164,7 +164,7 @@ int i;
             auto a = *itr;
             if (a->getdestroyed() == true)
             {
-                std::cout << "points " << a->getPoints() << std::endl;
+               // std:: << "points " << a->getPoints() << std::endl;
                 int scoreinc = pl->getScore() + a->getPoints();
                 pl->setScore(scoreinc);
                 allaliens.erase(itr);
@@ -337,7 +337,6 @@ void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl, Mix_Chun
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
-            std::cout << "im here" << std::endl;
             SDL_Rect ma = a->getmover();
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)

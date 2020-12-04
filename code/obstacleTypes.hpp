@@ -4,8 +4,8 @@
 
 class Meteor : public Obstacle
 {
-    bool destroyed = false;
-    int strength = 20;
+    bool destroyed ;
+    int strength;
 
 public:
     Meteor(SDL_Texture *);
@@ -20,8 +20,8 @@ public:
 
 class Fireball : public Obstacle
 {
-    bool destroyed = false;
-    int strength = 40;
+    bool destroyed;
+    int strength;
 
 public:
     Fireball(SDL_Texture *);
@@ -35,10 +35,11 @@ public:
 
 class Thunderbolt : public Obstacle
 {
-    bool destroyed = false;
+    bool destroyed;
+    int strength;
     SDL_Rect src[2];
     static int frame;
-    int strength = 60;
+
 
 public:
     Thunderbolt(SDL_Texture *);
