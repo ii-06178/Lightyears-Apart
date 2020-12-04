@@ -14,8 +14,12 @@ public:
     Alien(SDL_Texture *);
     //~Alien();
     void shoot();
-
-    virtual int getPoints() = 0;
+virtual void hasdestroyed()=0;
+virtual bool getdestroyed()=0; //check
+virtual void setStrength(int s)=0;
+   virtual int getStrength()=0;
+ virtual   int getPoints()=0;
+ virtual   SDL_Rect getmover()=0;
     void setstate(bool s);
     void drawSprite(SDL_Renderer *);
 };

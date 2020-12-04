@@ -8,23 +8,26 @@ class Obstacle : public Sprite
     bool destroyed = false;
     bool contact = false;
     int strength; //how much life and/or fuel is effected when the obstacle hits the player's spaceship
-    //can't think of what attributes obstacles would need other than those already in sprite
     bool cstate = true;
-    
+    static int frame;
+
+    protected:
+    bool thunder;
+    SDL_Rect T_src[2];
 
 public:
     Obstacle(SDL_Texture *);
     ~Obstacle();
-    void setStrength(int s);
-    int getStrength();
+    virtual void setStrength(int s)=0;
+    virtual int getStrength();
 
-    void drawSprite(SDL_Renderer *);
     void setstate(bool s);
-    SDL_Rect getmover();
-    void hasdestroyed();
+    virtual SDL_Rect getmover();
+    virtual void hasdestroyed();
     void setcontact();
-    bool getdestroyed();
+    virtual bool getdestroyed();
     bool getcontact();
     void drawM();
     void drawF();
+    void drawSprite(SDL_Renderer *);
 };

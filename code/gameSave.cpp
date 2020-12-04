@@ -1,26 +1,20 @@
-#include <fstream>
-#include <iostream>
 #include "gameSave.hpp"
-using namespace std;
-gameSave::gameSave()
-{
-}
-void gameSave::gameLoad()
-{
-    string l;
-    ifstream savingfile("saveFile.txt"); //accessing the file Drivers.txt
-    if (savingfile.is_open())
-    {
-        while (!savingfile.eof()) //while the file does not end,
-        {
-        }
-        savingfile.clear();
-        savingfile.close();
-    }
-}
-void gameSave::gameUnload()
-{
-    fstream savedFile("saveFile.txt", ios::out);
 
-    savedFile.close();
+using namespace std;
+
+gameSave::gameSave(){}
+
+void gameSave::setVals(bool S, Lives L, Score sc){
+    
+    gamestate = S;
+    lives = L.getLives();
+    score = sc.getScore();
 }
+void gameSave::saveGame(){
+    ofstream file;
+    file.open("SaveGame.txt", ios::app);
+    file << gamestate << ", " << lives << ", " << score << endl;
+    file.close();
+}
+//do << operator overloading
+//make the save and load functions for the game
