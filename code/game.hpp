@@ -64,7 +64,6 @@ class Game
     BGTexture texture; //For animating the background texture
     LinkedList listofobjects;
     gameSave gS;
-    //list<Lives*> lives;
     Uint32 start = 0;
 
 public:
@@ -77,6 +76,5 @@ public:
     void updatealien(PlayerSpaceship *);
     void updateplayer(PlayerSpaceship *);
     void updateobstacles(PlayerSpaceship *);
-
-    void updateLives();
+    // void updateLives();
 };

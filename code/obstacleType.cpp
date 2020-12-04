@@ -1,4 +1,8 @@
 #include "obstacleTypes.hpp"
+#include <iostream>
+//using namespace std
+
+
 //Just made the constructors for the sprite objects with their respective srcs and movers(places where they'll be placed).
 Meteor::Meteor(SDL_Texture *img) : Obstacle(img)
 {
@@ -28,34 +32,41 @@ Fireball::Fireball(SDL_Texture *img) : Obstacle(img)
 
     turn_h = SDL_FLIP_HORIZONTAL;
 }
-Thunderbolt::Thunderbolt(SDL_Texture *img) : Obstacle(img)
-{   
-    src[0].x = 300;
-    src[0].y = 300;
-    src[0].w = 70;
-    src[0].h = 250;
+Thunderbolt::Thunderbolt(SDL_Texture* img):Obstacle(img){
+    T_src[0].x = 570;
+    T_src[0].y = 615;
+    T_src[0].w = 100;
+    T_src[0].h = 350;
 
-    src[1].x = 370;
-    src[1].y = 300;
-    src[1].w = 70;
-    src[1].h = 250;
+    T_src[1].x = 670;
+    T_src[1].y = 615;
+    T_src[1].w = T_src[0].w;
+    T_src[1].h = T_src[0].h;
 
-    mover.w = 70;
-    mover.h = 250;
+    T_src[2].x = 770;
+    T_src[2].y = 615;
+    T_src[2].w = T_src[0].w;
+    T_src[2].h = T_src[0].h;
+
+    mover.w = 100;
+    mover.h = 500;
     mover.x = rand() % 800;
-    mover.y = -5;
-   
+    mover.y = -10;
+
+    //turn_h = SDL_FLIP_NONE;
+    thunder = true;
+    std::cout << "Thunderbolt has been drawn " << mover.x << mover.y << mover.w << mover.h << '\n';
 }
 
-void Thunderbolt::drawBolt(SDL_Renderer *gRenderer)
-{
+// void Thunderbolt::drawBolt(SDL_Renderer *gRenderer)
+// {
 
-    // SDL_Rect* currentframe = &src[frame%1];
-    // general_render(mover.x, mover.y, asset, gRenderer, 0.0, SDL_FLIP_NONE);
-    // ++frame;
-    // if(frame > 1) frame = 0;
-    // mover.h++;
-}
+//     // SDL_Rect* currentframe = &src[frame%1];
+//     // general_render(mover.x, mover.y, asset, gRenderer, 0.0, SDL_FLIP_NONE);
+//     // ++frame;
+//     // if(frame > 1) frame = 0;
+//     // mover.h++;
+// }
 
 void Meteor::destroy()
 {

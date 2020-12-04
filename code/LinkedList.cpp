@@ -14,15 +14,15 @@
 LinkedList::LinkedList()
 {
 }
-void LinkedList::addUnit(Meteor *m) //adds pigeon to pigeon lst
+void LinkedList::addUnit(Meteor *m) //adds Meteor to Meteor lst
 {
     meteors.push_front(m);
 }
-void LinkedList::addUnit(Fireball *f) //adds nest to nest lst
+void LinkedList::addUnit(Fireball *f) //adds Fireball to Fireball lst
 {
     fireballs.push_front(f);
 }
-void LinkedList::addUnit(Laser *l, std::string type) //adds pigeon to pigeon lst
+void LinkedList::addUnit(Laser *l, std::string type) //adds Laser to Laser lst
 {
     if (type == "hero")
     {
@@ -33,23 +33,23 @@ void LinkedList::addUnit(Laser *l, std::string type) //adds pigeon to pigeon lst
         alienlasers.push_front(l);
     }
 }
-void LinkedList::addUnit(Thunderbolt *t) //adds nest to nest lst
+void LinkedList::addUnit(Thunderbolt *t) //adds Thunderbolt to Thunderbolt lst
 {
     thunderbolts.push_front(t);
 }
-void LinkedList::addUnit(GeoYielders *g) //adds pigeon to pigeon lst
+void LinkedList::addUnit(GeoYielders *g) //adds GeoYielders to GeoYielders lst
 {
     geoalien.push_front(g);
 }
-void LinkedList::addUnit(ThunderBearers *ea) //adds nest to nest lst
+void LinkedList::addUnit(ThunderBearers *ea) //adds ThunderBearers to ThunderBearers lst
 {
     electroalien.push_front(ea);
 }
-void LinkedList::addUnit(StormCarriers *aa) //adds pigeon to pigeon lst
+void LinkedList::addUnit(StormCarriers *aa) //adds StormCarriers to StormCarriers lst
 {
     anemoalien.push_front(aa);
 }
-void LinkedList::addUnit(FireBreathers *pa) //adds nest to nest lst
+void LinkedList::addUnit(FireBreathers *pa) //adds FireBreathers to FireBreathers lst
 {
     pyroalien.push_front(pa);
 }
@@ -59,13 +59,9 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
 
     int i;
     for (i = 0, itr = geoalien.begin(); i < geoalien.size() && itr != geoalien.end(); i++, itr++)
-        if (geoalien.size() == 0)
+        if (geoalien.size() != 0)
         {
-            // list too short
-            // std::cout<<0;
-        }
-        else
-        {
+            // list not too short
             // 'ptr' points to N-th element of list
             auto a = *itr;
             a->setstate(s);
@@ -76,7 +72,6 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
             {
                 Laser *alaser = new Laser(asst);
                 SDL_Rect mof = a->getmover();
-                //std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
                 alaser->setPos(mof);
                 alaser->setType("alien");
                 std::cout << a->getStrength() << std::endl;
@@ -84,16 +79,11 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
                 addUnit(alaser, "alien");
             }
         }
-    std::list<ThunderBearers *>::iterator jtr;
 
+    std::list<ThunderBearers *>::iterator jtr;
     int j;
     for (j = 0, jtr = electroalien.begin(); j < electroalien.size() && jtr != electroalien.end(); j++, jtr++)
-        if (electroalien.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (electroalien.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
@@ -113,16 +103,11 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
                 addUnit(alaser, "alien");
             }
         }
-    std::list<StormCarriers *>::iterator ktr;
 
+    std::list<StormCarriers *>::iterator ktr;
     int k;
     for (k = 0, ktr = anemoalien.begin(); k < anemoalien.size() && ktr != anemoalien.end(); k++, ktr++)
-        if (anemoalien.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (anemoalien.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *ktr;
@@ -142,16 +127,11 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
                 addUnit(alaser, "alien");
             }
         }
-    std::list<FireBreathers *>::iterator ltr;
 
+    std::list<FireBreathers *>::iterator ltr;
     int l;
     for (l = 0, ltr = pyroalien.begin(); l < pyroalien.size() && ltr != pyroalien.end(); l++, ltr++)
-        if (pyroalien.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (pyroalien.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *ltr;
@@ -178,44 +158,28 @@ void LinkedList::drawAllobstacles(SDL_Renderer *renderer, bool s)
 
     int i;
     for (i = 0, itr = meteors.begin(); i < meteors.size() && itr != meteors.end(); i++, itr++)
-        if (meteors.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
-        {
-            // 'ptr' points to N-th element of list
+        if (meteors.size() != 0)
+        {// 'ptr' points to N-th element of list
             auto a = *itr;
             a->setstate(s);
             a->drawSprite(renderer); //calls the object's draw function
         }
-    std::list<Thunderbolt *>::iterator jtr;
 
+    std::list<Thunderbolt *>::iterator jtr;
     int j;
     for (j = 0, jtr = thunderbolts.begin(); j < thunderbolts.size() && jtr != thunderbolts.end(); j++, jtr++)
-        if (thunderbolts.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (thunderbolts.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
             a->setstate(s);
-            a->drawBolt(renderer); //calls the object's draw function
+            a->drawSprite(renderer); //calls the object's draw function
         }
-    std::list<Fireball *>::iterator ktr;
 
+    std::list<Fireball *>::iterator ktr;
     int k;
     for (k = 0, ktr = fireballs.begin(); k < fireballs.size() && ktr != fireballs.end(); k++, ktr++)
-        if (fireballs.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (fireballs.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *ktr;
@@ -230,12 +194,7 @@ void LinkedList::drawAlllasers(SDL_Renderer *renderer, bool s)
     int i;
     for (i = 0, itr = herolasers.begin(); i < herolasers.size() && itr != herolasers.end(); i++, itr++)
 
-        if (herolasers.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (herolasers.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
@@ -246,12 +205,7 @@ void LinkedList::drawAlllasers(SDL_Renderer *renderer, bool s)
 
     int j;
     for (j = 0, jtr = alienlasers.begin(); j < alienlasers.size() && jtr != alienlasers.end(); j++, jtr++)
-        if (alienlasers.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (alienlasers.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
@@ -263,15 +217,9 @@ void LinkedList::drawAlllasers(SDL_Renderer *renderer, bool s)
 void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
 {
     std::list<GeoYielders *>::iterator itr;
-
     int i;
     for (i = 0, itr = geoalien.begin(); i < geoalien.size() && itr != geoalien.end(); i++, itr++)
-        if (geoalien.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (geoalien.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
@@ -284,16 +232,11 @@ void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
             }
             //calls the object's draw function
         }
-    std::list<ThunderBearers *>::iterator jtr;
 
+    std::list<ThunderBearers *>::iterator jtr;
     int j;
     for (j = 0, jtr = electroalien.begin(); j < electroalien.size() && jtr != electroalien.end(); j++, jtr++)
-        if (electroalien.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (electroalien.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
@@ -305,20 +248,14 @@ void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
                 electroalien.erase(jtr);
             }
         }
-    std::list<StormCarriers *>::iterator ktr;
 
+    std::list<StormCarriers *>::iterator ktr;
     int k;
     for (k = 0, ktr = anemoalien.begin(); k < anemoalien.size() && ktr != anemoalien.end(); k++, ktr++)
-        if (anemoalien.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (anemoalien.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *ktr;
-
             if (a->getdestroyed() == true)
             {
                 std::cout << "points " << a->getPoints() << std::endl;
@@ -327,20 +264,14 @@ void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
                 anemoalien.erase(ktr);
             }
         }
-    std::list<FireBreathers *>::iterator ltr;
 
+    std::list<FireBreathers *>::iterator ltr;
     int l;
     for (l = 0, ltr = pyroalien.begin(); l < pyroalien.size() && ltr != pyroalien.end(); l++, ltr++)
-        if (pyroalien.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (pyroalien.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *ltr;
-
             if (a->getdestroyed() == true)
             {
                 std::cout << "points " << a->getPoints() << std::endl;
@@ -350,79 +281,56 @@ void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
             }
         }
 }
+
 void LinkedList::deleteobstacle(SDL_Texture *)
 {
     std::list<Meteor *>::iterator itr;
-
     int i;
     for (i = 0, itr = meteors.begin(); i < meteors.size() && itr != meteors.end(); i++, itr++)
-        if (meteors.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (meteors.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
-
             if (a->getdestroyed() == true || a->getcontact() == true)
             {
                 meteors.erase(itr);
             }
         }
-    std::list<Thunderbolt *>::iterator jtr;
 
+    std::list<Thunderbolt *>::iterator jtr;
     int j;
     for (j = 0, jtr = thunderbolts.begin(); j < thunderbolts.size() && jtr != thunderbolts.end(); j++, jtr++)
-        if (thunderbolts.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (thunderbolts.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
-
             if (a->getdestroyed() == true || a->getcontact() == true)
             {
                 thunderbolts.erase(jtr);
             }
         }
-    std::list<Fireball *>::iterator ktr;
 
+    std::list<Fireball *>::iterator ktr;
     int k;
     for (k = 0, ktr = fireballs.begin(); k < fireballs.size() && ktr != fireballs.end(); k++, ktr++)
-        if (fireballs.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (fireballs.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *ktr;
-
             if (a->getdestroyed() == true || a->getcontact() == true)
             {
                 fireballs.erase(ktr);
             }
         }
 }
+
 void LinkedList::deletelaser(SDL_Texture *)
 {
     std::list<Laser *>::iterator itr;
-
     int i;
     for (i = 0, itr = herolasers.begin(); i < herolasers.size() && itr != herolasers.end(); i++, itr++)
 
-        if (herolasers.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (herolasers.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
@@ -432,16 +340,11 @@ void LinkedList::deletelaser(SDL_Texture *)
             }
             //calls the object's draw function
         }
-    std::list<Laser *>::iterator jtr;
 
+    std::list<Laser *>::iterator jtr;
     int j;
     for (j = 0, jtr = alienlasers.begin(); j < alienlasers.size() && jtr != alienlasers.end(); j++, jtr++)
-        if (alienlasers.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (alienlasers.size() != 0)
         {
             // 'ptr' points to N-th element of list
             auto a = *jtr;
@@ -452,33 +355,23 @@ void LinkedList::deletelaser(SDL_Texture *)
             //calls the object's draw function
         }
 }
+
 void LinkedList::check_collision_with_shooter(PlayerSpaceship *pl)
 {
     std::list<Laser *>::iterator itr;
 
     int i;
     for (i = 0, itr = herolasers.begin(); i < herolasers.size() && itr != herolasers.end(); i++, itr++)
-
-        if (herolasers.size() == 0)
+        if (herolasers.size() != 0)
         {
-            // list too short
-            // std::cout<<0;
-        }
-        else
-        {
+            // list not too short
             // 'ptr' points to N-th element of list
             auto a = *itr;
             std::list<FireBreathers *>::iterator ltr;
-
             int l;
             for (l = 0, ltr = pyroalien.begin(); l < pyroalien.size() && ltr != pyroalien.end(); l++, ltr++)
-                if (pyroalien.size() == 0)
-                {
-                    // list too short
-                    // std::cout<<0;
-                }
-                else
-                {
+                if (pyroalien.size() != 0)
+                {//list isn't too short
                     // 'ptr' points to N-th element of list
                     auto b = *ltr;
                     SDL_Rect ma = a->getmover();
@@ -490,17 +383,13 @@ void LinkedList::check_collision_with_shooter(PlayerSpaceship *pl)
                     }
                     //calls the object's draw function
                 }
-            std::list<ThunderBearers *>::iterator jtr;
 
+            std::list<ThunderBearers *>::iterator jtr;
             int j;
             for (j = 0, jtr = electroalien.begin(); j < electroalien.size() && jtr != electroalien.end(); j++, jtr++)
                 if (electroalien.size() == 0)
                 {
-                    // list too short
-                    // std::cout<<0;
-                }
-                else
-                {
+                    // list not too short
                     // 'ptr' points to N-th element of list
                     auto b = *jtr;
                     SDL_Rect ma = a->getmover();
@@ -511,17 +400,13 @@ void LinkedList::check_collision_with_shooter(PlayerSpaceship *pl)
                         a->setcontact();
                     }
                 }
-            std::list<StormCarriers *>::iterator ktr;
 
+            std::list<StormCarriers *>::iterator ktr;
             int k;
             for (k = 0, ktr = anemoalien.begin(); k < anemoalien.size() && ktr != anemoalien.end(); k++, ktr++)
                 if (anemoalien.size() == 0)
                 {
-                    // list too short
-                    // std::cout<<0;
-                }
-                else
-                {
+                    // list not too short
                     // 'ptr' points to N-th element of list
                     auto b = *ktr;
                     SDL_Rect ma = a->getmover();
@@ -532,17 +417,13 @@ void LinkedList::check_collision_with_shooter(PlayerSpaceship *pl)
                         a->setcontact();
                     }
                 }
-            std::list<GeoYielders *>::iterator mtr;
 
+            std::list<GeoYielders *>::iterator mtr;
             int m;
             for (m = 0, mtr = geoalien.begin(); m < geoalien.size() && mtr != geoalien.end(); m++, mtr++)
                 if (geoalien.size() == 0)
                 {
-                    // list too short
-                    // std::cout<<0;
-                }
-                else
-                {
+                    // list not too short
                     // 'ptr' points to N-th element of list
                     auto b = *mtr;
                     SDL_Rect ma = a->getmover();
@@ -556,6 +437,7 @@ void LinkedList::check_collision_with_shooter(PlayerSpaceship *pl)
                 }
         }
 }
+
 void LinkedList::check_collisions_with_obstacles(PlayerSpaceship *pl)
 {
     std::list<Laser *>::iterator itr;
@@ -563,12 +445,7 @@ void LinkedList::check_collisions_with_obstacles(PlayerSpaceship *pl)
     int i;
     for (i = 0, itr = herolasers.begin(); i < herolasers.size() && itr != herolasers.end(); i++, itr++)
 
-        if (herolasers.size() == 0)
-        {
-            // list too short
-            // std::cout<<0;
-        }
-        else
+        if (herolasers.size() != 0)
         {
             auto a = *itr;
             std::list<Thunderbolt *>::iterator jtr;
@@ -645,19 +522,8 @@ void LinkedList::check_collisions_with_obstacles(PlayerSpaceship *pl)
                     std::cout << "im here" << std::endl;
                     if (SDL_HasIntersection(&ma, &mb) == true)
                     {
-
-                        //int fueLeft = pl->getFuel() - a->getstrength();
-                        //std::cout<<"fuel we giving "<<fueLeft<<std::endl;
-                        //std::cout<<"fuel it got "<<std::endl;
-                        //pl->setFuel(fueLeft);
                         b->hasdestroyed();
                         a->setcontact();
-                        // if (pl->getFuel() <= 0)
-                        // {
-                        //     int clife = pl->getLives() - 1;
-                        //     pl->setLives(clife);
-                        //     pl->setFuel();
-                        // }
                     }
                 }
         }

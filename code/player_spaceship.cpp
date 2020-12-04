@@ -27,7 +27,7 @@ PlayerSpaceship::PlayerSpaceship(SDL_Texture *img) : Sprite(img)
     mover.y = pos_y;
     mover.w = 70;
     mover.h = 100;
-    // all these stats will be update:
+    // all these stats will be updated:
     score = 0;//default score 
     lives = 3;//default lives
     fuel = 140;//default fuel
@@ -38,9 +38,9 @@ PlayerSpaceship::PlayerSpaceship(SDL_Texture *img) : Sprite(img)
     pos_x = (800 - mover.w) / 2;
     pos_y = 600 - mover.h; //ship is at center of screen by default.
 }
-int PlayerSpaceship::operator - (int laserStrength)
-{
-    return fuel - laserStrength; 
+int PlayerSpaceship::operator - (int strength)
+{//operator overloaded to subtract player fuel lost upon collision with laser/obstacle, depending on their "strength"
+    return fuel - strength; 
 }
 void PlayerSpaceship::EventHandler(SDL_Event event)
 {
@@ -105,13 +105,11 @@ void PlayerSpaceship::moveShip(bool state)
 
 void PlayerSpaceship::drawSprite(SDL_Renderer *gRenderer)
 {
- 
     general_render(pos_x, pos_y, asset, gRenderer, 0.0, SDL_FLIP_NONE);
 }
 
 SDL_Rect PlayerSpaceship::getmover()
-{
-    // return mover;
+{// return mover;
     SDL_Rect sre = {pos_x, pos_y, mover.w, mover.h};
     return sre;
 }
@@ -125,7 +123,7 @@ void PlayerSpaceship::updateFuel(Uint32 ct)
         fuel = fuel - 5;
     }
 }
-//getfunctions
+//get functions
 int PlayerSpaceship::getScore()
 {
     return score;
@@ -138,7 +136,7 @@ int PlayerSpaceship::getFuel()
 {
     return fuel;
 }
-//setfunctions
+//set functions
 void PlayerSpaceship::setScore(int s)
 {
     score = s;
@@ -155,8 +153,8 @@ void PlayerSpaceship::setFuel()
 {
     fuel = defaultFuel;
 }
-//Lives class Functions
 
+//Lives class Functions
 Lives::Lives(SDL_Texture *img) : Sprite(img)
 {
     src.x = 390;
@@ -185,8 +183,8 @@ void Lives::drawSprite(SDL_Renderer *gRenderer)
         general_render(0, y[x], asset, gRenderer, 0.0, SDL_FLIP_NONE);
     }
 }
-// Score Class Functions
 
+// Score Class Functions
 Score::Score()
 {
     scored = 0;
@@ -199,6 +197,8 @@ int Score::getScore()
 {
     return scored;
 }
+
+
 void Score::display(TTF_Font *f, SDL_Texture *t, SDL_Renderer *renderer)
 {//this brings the score in text form.
     stringstream ss;
@@ -222,8 +222,8 @@ void Score::display(TTF_Font *f, SDL_Texture *t, SDL_Renderer *renderer)
     SDL_RenderCopy(renderer, t, NULL, &Message_rect);//texture is brought on screen 
     SDL_FreeSurface(sc); //frees the surface
 }
-//Fuel ClassFunction
 
+//Fuel ClassFunction
 Fuel::Fuel(SDL_Texture *img) : Sprite(img)
 {
     src.x = 860;

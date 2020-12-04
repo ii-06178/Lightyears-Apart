@@ -48,5 +48,5 @@ public:
     int getStrength();
     SDL_Rect getmover();
     void destroy(); //function to destroy the obstacle based on the number/type of hits by player
-    void drawBolt(SDL_Renderer *);
+    // void drawBolt(SDL_Renderer *);
 };
