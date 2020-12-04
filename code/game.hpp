@@ -16,7 +16,11 @@
 #include "player_spaceship.hpp"
 #include "alien.hpp"
 #include "alienTypes.hpp"
+#include "alienFactory.hpp"
+#include "obstacle.hpp"
 #include "obstacleTypes.hpp"
+#include "obstacleFactory.hpp"
+#include "abstractSpriteFactory.hpp"
 #include "LinkedList.hpp"
 #include "BGTexture.hpp"
 #include "gameSave.hpp"
@@ -45,7 +49,7 @@ class Game
     SDL_Texture *glScreen = NULL;
     SDL_Texture *score_display = NULL;
     bool menu = true;
-    bool game = false;
+    bool gamecond = false;
     bool ins = false;
     bool state = true;
     bool game_is_won = false;
@@ -66,6 +70,7 @@ class Game
     gameSave gS;
     //list<Lives*> lives;
     Uint32 start = 0;
+    gameSave *OBJ;
 
 public:
     bool init();

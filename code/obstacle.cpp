@@ -3,25 +3,35 @@
 Obstacle::Obstacle(SDL_Texture *img) : Sprite(img)
 {
 }
-void Obstacle::drawSprite(SDL_Renderer *gRenderer)
-{
-    general_render(mover.x, mover.y, asset, gRenderer, 0.0, turn_h);
-    //mover.x += 15;
-    if (cstate == true)
-    {
-        if (mover.x < 800 - mover.w && turn_h == SDL_FLIP_NONE)
-        {
-            mover.x += 15;
-        }
-        else if (mover.x >= 800 - mover.w)
-            turn_h = SDL_FLIP_HORIZONTAL;
 
-        if (mover.x > 0 && turn_h == SDL_FLIP_HORIZONTAL)
-        {
-            mover.x -= 15;
+int Obstacle::frame = 0;
+void Obstacle::drawSprite(SDL_Renderer* gRenderer){
+    if (cstate==true)
+    {
+        if(thunder == true){
+            printf("thunder == true, thunder condition is working\n");
+            SDL_Rect* currentframe = &T_src[frame/3];
+            SDL_RenderCopy(gRenderer, asset, currentframe, &mover);
+            SDL_RenderPresent(gRenderer);
+            ++frame;
+            if (frame/3 >= 3) frame = 0;
+            mover.h++;
         }
-        else if (mover.x <= 0)
-            turn_h = SDL_FLIP_NONE;
+        else
+        {
+            general_render(mover.x, mover.y, asset, gRenderer, 0.0, turn_h);
+            if (mover.x < 800 - mover.w && turn_h == SDL_FLIP_NONE)
+            {
+            mover.x += 15;
+            }
+            else if (mover.x >= 800 - mover.w) turn_h = SDL_FLIP_HORIZONTAL;
+
+            if (mover.x > 0 && turn_h == SDL_FLIP_HORIZONTAL)
+            {
+                mover.x -= 15;
+            }
+            else if (mover.x <= 0) turn_h = SDL_FLIP_NONE;
+        }
     }
     mover.y += 10;
 }

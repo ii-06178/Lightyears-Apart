@@ -1,6 +1,7 @@
 #include "sprite.hpp"
 #include <SDL.h>
 #include <SDL_ttf.h>
+using namespace std;
 #pragma once
 
 class PlayerSpaceship : public Sprite
@@ -8,22 +9,20 @@ class PlayerSpaceship : public Sprite
     SDL_Rect l_src, l_mover;
     static PlayerSpaceship *obj;
     PlayerSpaceship(SDL_Texture *);
-    //int speed;
     int score ;
     int lives;  //stores number of player lives left
     int fuel; //stores amount of fuel left
    const int defaultFuel=140;
-    const int S_VELOCITY = 15; //setting it as constant right now, will change this with conditions as we progress and calculate the milestones of the player
+    const int S_VELOCITY = 15; 
     int pos_x, pos_y;
     bool alive;
 
 public:
     static PlayerSpaceship *getinstance(SDL_Texture *);
-    //~PlayerSpaceship();
     void updateScore(int s);
     void updateLives(int l);
     void updateFuel(int f);
-    int operator - (int); 
+    int operator - (int);  //operator overloading
     int getScore();
     int getLives();
     int getFuel();
@@ -38,7 +37,6 @@ public:
     void EventHandler(SDL_Event);
     void moveShip(bool s);
     void drawSprite(SDL_Renderer *);
-
     void shoot();
 };
 class Lives : public Sprite
@@ -66,7 +64,6 @@ class Fuel : public Sprite
 {
     int fuelLeft = 190;
     SDL_Rect rect;
-    //   SDL_Surface *fuel;
 public:
     int getFuel();
     void setFuel(int f);
@@ -74,8 +71,3 @@ public:
     Fuel(SDL_Texture *);
     void drawSprite(SDL_Renderer *) override;
 };
-// class P_Laser:public Laser{
-//     public:
-//     P_Laser(SDL_Texture*);
-//     void shoot(SDL_Renderer*);
-// };
