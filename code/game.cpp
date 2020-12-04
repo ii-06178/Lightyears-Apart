@@ -223,7 +223,7 @@ void Game::run()
 	// Fireball fb = {assets};
 	Lives l = {assets};
 	Fuel f = {assets};
-	OBJ->setVals(state, l,scoring);
+//	OBJ->setVals(state, l,scoring);
 	while (!quit)
 	{
 		//Handle events on queue
@@ -232,7 +232,7 @@ void Game::run()
 			//User requests quit
 			if (e.type == SDL_QUIT)
 			{	
-				OBJ->saveGame();
+				//OBJ->saveGame();
 				// gS.gameUnload(p,count_aliens,count_fb,gamecond);
 				quit = true;
 			}
@@ -377,22 +377,23 @@ void Game::run()
 					count_aliens++;
 					//cout<<"count_fb "<<count_fb<<endl;
 				}
-				if (m_time <= 100)
+				if (m_time <= 200)
 				{
 					// Meteor *m = new Meteor(assets);
 					Obstacle* ob1=obfact->getObstacle("meteor",assets);
 					listofobjects.addUnit(ob1);
 				}
-				if (f_time <= 100)
+				if (f_time <= 200)
 				{
 					//Fireball *fi = new Fireball(assets);
 					Obstacle* ob2=obfact->getObstacle("fireball",assets);
 					listofobjects.addUnit(ob2);
 				}
-				if (t_time <= 100)
-				{
-					Thunderbolt *t = new Thunderbolt(assets);
-					listofobjects.addUnit(t);
+				if (t_time <= 200)
+				{	Obstacle* ob3=obfact->getObstacle("thunderbolt",assets);
+					listofobjects.addUnit(ob3);
+					// Thunderbolt *t = new Thunderbolt(assets);
+					// listofobjects.addUnit(t);
 				}
 				// }
 

@@ -15,7 +15,8 @@ Meteor::Meteor(SDL_Texture *img) : Obstacle(img)
     mover.h = 130;
     mover.x = rand() % 800;
     mover.y = 0 - mover.h;
-
+    destroyed = false;
+    strength = 20;
     turn_h = SDL_FLIP_NONE;
 }
 Fireball::Fireball(SDL_Texture *img) : Obstacle(img)
@@ -29,7 +30,8 @@ Fireball::Fireball(SDL_Texture *img) : Obstacle(img)
     mover.h = 140;
     mover.x = rand() % 800;
     mover.y = 0 - mover.h;
-
+    bool destroyed = false;
+    int strength = 40;
     turn_h = SDL_FLIP_HORIZONTAL;
 }
 Thunderbolt::Thunderbolt(SDL_Texture* img):Obstacle(img){
@@ -52,10 +54,11 @@ Thunderbolt::Thunderbolt(SDL_Texture* img):Obstacle(img){
     mover.h = 500;
     mover.x = rand() % 800;
     mover.y = -10;
-
+    destroyed = false;
+    strength = 60;
     //turn_h = SDL_FLIP_NONE;
     thunder = true;
-    std::cout << "Thunderbolt has been drawn " << mover.x << mover.y << mover.w << mover.h << '\n';
+   // std::cout << "Thunderbolt has been drawn " << mover.x << mover.y << mover.w << mover.h << '\n';
 }
 
 // void Thunderbolt::drawBolt(SDL_Renderer *gRenderer)
