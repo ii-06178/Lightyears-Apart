@@ -70,6 +70,7 @@ class Game
     gameSave gS;
     //list<Lives*> lives;
     Uint32 start = 0;
+    gameSave *OBJ;
 
 public:
     bool init();

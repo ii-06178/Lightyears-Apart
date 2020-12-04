@@ -18,16 +18,16 @@ class Obstacle : public Sprite
 public:
     Obstacle(SDL_Texture *);
     ~Obstacle();
-    void setStrength(int s);
-    int getStrength();
+    virtual void setStrength(int s)=0;
+    virtual int getStrength();
 
-    void drawSprite(SDL_Renderer *);
     void setstate(bool s);
-    SDL_Rect getmover();
-    void hasdestroyed();
+    virtual SDL_Rect getmover();
+    virtual void hasdestroyed();
     void setcontact();
-    bool getdestroyed();
+    virtual bool getdestroyed();
     bool getcontact();
     void drawM();
     void drawF();
+    void drawSprite(SDL_Renderer *);
 };

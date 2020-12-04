@@ -223,6 +223,7 @@ void Game::run()
 	// Fireball fb = {assets};
 	Lives l = {assets};
 	Fuel f = {assets};
+	OBJ->setVals(state, l,scoring);
 	while (!quit)
 	{
 		//Handle events on queue
@@ -230,7 +231,9 @@ void Game::run()
 		{
 			//User requests quit
 			if (e.type == SDL_QUIT)
-			{	gS.gameUnload(p,count_aliens,count_fb,gamecond);
+			{	
+				OBJ->saveGame();
+				// gS.gameUnload(p,count_aliens,count_fb,gamecond);
 				quit = true;
 			}
 			p->EventHandler(e); //handles ship events
