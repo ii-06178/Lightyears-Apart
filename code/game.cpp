@@ -1,8 +1,8 @@
-#include <iostream>
 #include "game.hpp"
-#include "LinkedList.hpp"
 // #include "gameSave.hpp"
+
 using namespace std;
+
 bool Game::init()
 {
 	//Initialization flag
@@ -182,7 +182,7 @@ SDL_Texture *Game::loadTexture(std::string path)
 	//texture.assets = newTexture;
 	return newTexture;
 }
-//list<Alien *>::iterator A;//list for aliens
+
 void Game::updatealien(PlayerSpaceship *pl)
 {
 	listofobjects.deletealien(assets, pl);
@@ -209,21 +209,22 @@ void Game::updateLives()
 }
 void Game::run()
 {
+	game.gameLoad();
 	bool quit = false;
-	int count_aliens = 0;
 	SDL_Event e;
-	//PlayerSpaceship *p = new PlayerSpaceship(assets);
+
+	int count_aliens = 0;
 	PlayerSpaceship *p = PlayerSpaceship::getinstance(assets);
 	Score scoring;
-	//ThunderBearers th = {assets};
 	abstractFactoryProducer* abfactprod= new abstractFactoryProducer;
 	abstractSpriteFactory* alfact= abfactprod->getFactory("alien");
 	abstractSpriteFactory* obfact= abfactprod->getFactory("obstacle");
-	// Meteor m = {assets};
-	// Fireball fb = {assets};
 	Lives l = {assets};
 	Fuel f = {assets};
-//	OBJ->setVals(state, l,scoring);
+	
+	count_aliens = game.aliens;
+	l.setLives(game.lives);
+	scoring.setScore(game.score);
 	while (!quit)
 	{
 		//Handle events on queue
@@ -231,16 +232,14 @@ void Game::run()
 		{
 			//User requests quit
 			if (e.type == SDL_QUIT)
-			{	
-				//OBJ->saveGame();
-				// gS.gameUnload(p,count_aliens,count_fb,gamecond);
+			{	game.setVals(state, l, scoring);	//storing the values in their variables
+				game.saveGame();	//saving the game
 				quit = true;
 			}
 			p->EventHandler(e); //handles ship events
 
-			//texture.drawBG(gRenderer);	//moving background
 			if (e.type == SDL_KEYDOWN) //when it is pressed once
-			{
+			{//For pause functionality
 				if (e.key.keysym.sym == SDLK_p && gamecond == true) //if it is the key k
 				{
 					if (state == false) //resume the game if it is already paused
@@ -254,17 +253,17 @@ void Game::run()
 				}
 			}
 			if (e.type == SDL_MOUSEBUTTONDOWN && e.button.button == SDL_BUTTON_LEFT)
-			{
+			{//For screen buttons
+
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
 				//cout << xMouse << ", " << yMouse << endl;
 
 				if (menu == true)
 				{
-
 					if (ins == false)
 					{
-						if (xMouse >= 330 and xMouse <= 470 and yMouse >= 370 and yMouse <= 400)
+						if (xMouse >= 330 and xMouse <= 470 and yMouse >= 370 and yMouse <= 400)//when start is pressed
 						{
 							menu = false;
 							ins = false;
@@ -272,13 +271,13 @@ void Game::run()
 							Mix_HaltMusic();
 							start = SDL_GetTicks();
 						}
-						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 420 and yMouse <= 450)
+						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 420 and yMouse <= 450)//when instructions is pressed
 						{
 							menu = true;
 							ins = true;
 							gamecond = false;
 						}
-						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 475 and yMouse <= 505)
+						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 475 and yMouse <= 505)//when quite is pressed
 						{
 							menu = false;
 							ins = false;
@@ -286,10 +285,10 @@ void Game::run()
 							quit = true;
 						}
 					}
-					else if (ins = true)
+					else if (ins = true)//if the instructions screen is displayed
 					{
-						if (xMouse >= 605 and xMouse <= 706 and yMouse >= 490 and yMouse <= 520) //going back from instructions back to menu
-						{
+						if (xMouse >= 605 and xMouse <= 706 and yMouse >= 490 and yMouse <= 520)
+						{//going back from instructions to menu
 							menu = true;
 							ins = false;
 							gamecond = false;
@@ -297,7 +296,7 @@ void Game::run()
 					}
 				}
 			}
-			if (gamecond == true)
+			if (gamecond == true)//when game is true/running
 			{
 				if (Mix_PlayingMusic() == 0)
 				{
@@ -307,11 +306,10 @@ void Game::run()
 				p->moveShip(state);
 				if (e.type == SDL_KEYDOWN)
 				{
-					if (e.key.keysym.sym == SDLK_SPACE)
+					if (e.key.keysym.sym == SDLK_SPACE)//creating lasers when space key is pressed
 					{
 						Laser *hlaser = new Laser(assets);
 						SDL_Rect mo = p->getmover();
-						//std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
 						hlaser->setPos(mo);
 						listofobjects.addUnit(hlaser, "hero");
 
@@ -322,7 +320,9 @@ void Game::run()
 		}
 
 		SDL_RenderClear(gRenderer); //removes everything from renderer
+
 		//for screens
+		texture.drawBG(gRenderer);//drawing scrolling background for all the screens
 		if (menu == true)
 		{
 			if (Mix_PlayingMusic() == 0)
@@ -330,14 +330,8 @@ void Game::run()
 				//Play the music
 				Mix_PlayMusic(bgMusic, -1);
 			}
-			// else
-			// {
-			// 	Mix_PauseMusic();
-			// }
-			texture.drawBG(gRenderer);
 			if (ins == false)
 			{
-
 				SDL_RenderCopy(gRenderer, wScreen, NULL, NULL);
 			}
 			if (ins == true)
@@ -353,109 +347,73 @@ void Game::run()
 			Uint32 m_time = ((SDL_GetTicks() - start) % 10000);
 			Uint32 f_time = ((SDL_GetTicks() - start) % 30000);
 			Uint32 t_time=((SDL_GetTicks() - start) % 5000);
-			//cout << "m_time " << m_time << endl;
-			texture.drawBG(gRenderer);
 
 			p->drawSprite(gRenderer);
 			listofobjects.check_collision_with_enemyshooter(p, hit);
 			listofobjects.check_hit_with_obstacle(p, hit);
-			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
+
 			if (count_aliens < 100 && state == true)
 			{
-
-				// int prob;
-				// prob = rand() % 10000000;
-				// if (prob <= 1)
-				// {
-				if ((current_time > (4000 * count_fb)) && count_fb < 25)
-				{	
-					// FireBreathers *f = new FireBreathers(assets);
-					count_fb++;
-					Alien* al1=alfact->getAlien("alien1",assets);
-					
-					listofobjects.addUnit(al1);
-					count_aliens++;
-					//cout<<"count_fb "<<count_fb<<endl;
-				}
-				if (m_time <= 200)
+				//if ((current_time > (4000 * count_fb)) && count_fb < 25)//drawing all the aliens
+				if ((current_time > (4000 * count_aliens)))
 				{
-					// Meteor *m = new Meteor(assets);
+					if(count_aliens < 25) {
+						Alien* al1=alfact->getAlien("alien1",assets);
+						
+						listofobjects.addUnit(al1);//appending in the linked list
+						count_aliens++;
+					}
+					else if(count_aliens < 50){
+						Alien* al1=alfact->getAlien("alien2",assets);
+						
+						listofobjects.addUnit(al1);//appending in the linked list
+						count_aliens++;
+					}
+					else if (count_aliens < 75){
+						Alien* al1=alfact->getAlien("alien3",assets);
+						
+						listofobjects.addUnit(al1);//appending in the linked list
+						count_aliens++;
+					}	
+					else if (count_aliens < 100){
+						Alien* al1=alfact->getAlien("alien4",assets);
+						
+						listofobjects.addUnit(al1);//appending in the linked list
+						count_aliens++;
+					}
+				}
+				if (m_time <= 200)	//Drawing Meteors
+				{
 					Obstacle* ob1=obfact->getObstacle("meteor",assets);
 					listofobjects.addUnit(ob1);
 				}
-				if (f_time <= 200)
+				if (f_time <= 200)	//Drawing Fireballs
 				{
-					//Fireball *fi = new Fireball(assets);
 					Obstacle* ob2=obfact->getObstacle("fireball",assets);
 					listofobjects.addUnit(ob2);
 				}
-				if (t_time <= 200)
+				if (t_time <= 200)	//Drawing Thunderbolts
 				{	Obstacle* ob3=obfact->getObstacle("thunderbolt",assets);
 					listofobjects.addUnit(ob3);
-					// Thunderbolt *t = new Thunderbolt(assets);
-					// listofobjects.addUnit(t);
 				}
-				// }
-
-				if (count_fb > 24)
-				{
-					//cout<<"current_time should be 100000, but it is "<<current_time<<endl;
-					//cout<<"count_tb"<<count_tb<<endl;
-					if ((current_time > ((4000 * 25) + (3500 * (count_tb)))) && count_tb < 25)
-					{
-						ThunderBearers *t = new ThunderBearers(assets);
-						count_tb++;
-						listofobjects.addUnit(t);
-						count_aliens++;
-					}
-				}
-				if (count_tb > 24)
-				{
-					if ((current_time > ((4000 * 24) + (3500 * 24) + (2500 * count_sc))) && count_sc < 25)
-					{
-						StormCarriers *s = new StormCarriers(assets);
-						count_sc++;
-						listofobjects.addUnit(s);
-						count_aliens++;
-					}
-				}
-				if (count_sc > 24)
-				{
-					if ((current_time > ((4000 * 24) + (3500 * 24) + (2500 * 24) + (1000 * count_gy))) && count_gy < 25)
-					{
-						GeoYielders *g = new GeoYielders(assets);
-						count_gy++;
-						listofobjects.addUnit(g);
-						count_aliens++;
-					}
-				}
-				//count_aliens=count_tb+count_fb+count_sc+count_gy;
 			}
 
-			if (count_aliens >= 100 && p->getLives() != 0)
+			else if (count_aliens >= 100 && p->getLives() != 0)
 			{
-				//cout << listofobjects.check_empty_aliens() << endl;
 				if (listofobjects.check_empty_aliens() == true)
 				{
 					game_is_won = true;
 				}
 			}
-			if (p->getLives() == 0)
+			else if (p->getLives() == 0)
 			{
 				game_is_lost = true;
 			}
-			if (game_is_won == true or game_is_lost == true)
+			else if (game_is_won == true or game_is_lost == true)
 			{
 				gamecond = false;
 				Mix_HaltMusic();
 			}
-			//tb.drawSprite(gRenderer);
-
-			//th.drawSprite(gRenderer);
-			// t.drawSprite(gRenderer);
-			// g.drawSprite(gRenderer);
-			// f.drawSprite(gRenderer);
-			// s.drawSprite(gRenderer);
 			drawObj();
 			l.setLives(p->getLives());
 			l.drawSprite(gRenderer);
@@ -464,9 +422,9 @@ void Game::run()
 			f.setFuel(p->getFuel());
 			scoring.setScore(p->getScore());
 			scoring.display(font, score_display, gRenderer);
-			//gS.gameUnload();
 		}
-		if (game_is_won == true)
+		//For different music and screen on different states of the game
+		if (game_is_won == true) //screen and music when game is won
 		{
 			if (Mix_PlayingMusic() == 0)
 			{
@@ -475,7 +433,7 @@ void Game::run()
 			texture.drawBG(gRenderer);
 			SDL_RenderCopy(gRenderer, gwScreen, NULL, NULL);
 		}
-		if (game_is_lost == true)
+		else if (game_is_lost == true) //screen and music when game is lost
 		{
 			if (Mix_PlayingMusic() == 0)
 			{
@@ -484,7 +442,7 @@ void Game::run()
 			texture.drawBG(gRenderer);
 			SDL_RenderCopy(gRenderer, glScreen, NULL, NULL);
 		}
-		if (state == true)
+		else if (state == true) //functions for the running game
 		{
 			updateplayer(p);
 			updatealien(p);

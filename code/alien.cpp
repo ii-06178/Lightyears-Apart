@@ -3,48 +3,31 @@
 Alien::Alien(SDL_Texture *img) : Sprite(img)
 { //constructor for all aliens
     turn_h = SDL_FLIP_NONE;
-    up = false;
     cstate = true;
 }
+
 void Alien::drawSprite(SDL_Renderer *gRenderer)
 { //the draw function
-
-    general_render(mover.x, mover.y, asset, gRenderer, 0.0, turn_h); //renders the alien
     if (cstate == true)
     {
+        general_render(mover.x, mover.y, asset, gRenderer, 0.0, turn_h); //renders the alien
+        
+        mover.y += 10;
+        //movement for x axis
         if (mover.x < 800 - mover.w && turn_h == SDL_FLIP_NONE)
         { //moving towards right walls
             mover.x += 20;
         }
         else if (mover.x >= 800 - mover.w)
             turn_h = SDL_FLIP_HORIZONTAL; //turns when hit the right wall
+        
         if (mover.x > 0 && turn_h == SDL_FLIP_HORIZONTAL)
         { //moving towards left wall
             mover.x -= 20;
         }
         else if (mover.x <= 0)
             turn_h = SDL_FLIP_NONE; //turns when hit the left wall
-
-        //movement for y axis
-        if (mover.y < 600 - mover.h && up == false)
-        { //moving down
-            mover.y += 10;
-        }
-        else if (mover.y >= 600 - mover.h)
-            up = true; //strikes bottom
-
-        if (mover.y > 0 && up == true)
-        { //moving up
-            mover.y -= 10;
-        }
-        else if (mover.y <= 0)
-            up = false; //stikes roof
     }
-    //movement for x axis
-}
-
-void Alien::shoot()
-{
 }
 
 void Alien::setstate(bool s)

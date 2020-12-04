@@ -1,33 +1,33 @@
-//#include "location.hpp"
 #include "sprite.hpp"
-#include <SDL.h>
+
 #pragma once
 
 class Obstacle : public Sprite
 {
-    bool destroyed = false;
-    bool contact = false;
+    bool destroyed;
+    bool contact;
     int strength; //how much life and/or fuel is effected when the obstacle hits the player's spaceship
-    bool cstate = true;
+    bool cstate;
+    
+    //attributes for Thunderbolt
     static int frame;
-
-    protected:
+protected:
     bool thunder;
     SDL_Rect T_src[2];
 
 public:
     Obstacle(SDL_Texture *);
     ~Obstacle();
-    virtual void setStrength(int s)=0;
-    virtual int getStrength();
 
-    void setstate(bool s);
-    virtual SDL_Rect getmover();
-    virtual void hasdestroyed();
+    void setStrength(int);
+    int getStrength();
+    SDL_Rect getmover();
+    void setstate(bool);
+    void setDestroyed(bool);
+    void hasdestroyed();
+    bool getdestroyed();
     void setcontact();
-    virtual bool getdestroyed();
     bool getcontact();
-    void drawM();
-    void drawF();
-    void drawSprite(SDL_Renderer *);
+
+    void drawSprite(SDL_Renderer*) override;
 };

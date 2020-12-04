@@ -1,0 +1,10 @@
+Cleaned and Commented files:
+game.cpp
+Obstacles.hpp
+Obstacles.cpp
+ObstaclesTypes.hpp
+ObstaclesTypes.cpp
+BGTexture.hpp
+BGTexture.cpp
+AlienFactory.hpp
+AlienFactory.cpp

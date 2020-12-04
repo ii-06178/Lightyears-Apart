@@ -1,7 +1,5 @@
-#include "sprite.hpp"
-#include "obstacle.hpp"
-#include "obstacleTypes.hpp"
 #include "obstacleFactory.hpp"
+
 void obstacleFactory::emptyVirtual()
 {
     

@@ -1,8 +1,8 @@
-//#include "location.hpp"
-#include "SDL.h"
-#include <string>
+#include <SDL.h>
+
 #pragma once
 
+//Independent class for scrolling background
 class BGTexture
 {
 public:
@@ -11,6 +11,6 @@ public:
 
     BGTexture();
     ~BGTexture();
-    void render(int, int, SDL_Renderer *);
-    void drawBG(SDL_Renderer *);
+    void render(int, int, SDL_Renderer *);  //simplified renderer for the bg
+    void drawBG(SDL_Renderer *);    //draw function
 };

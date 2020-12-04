@@ -52,22 +52,6 @@ FireBreathers::FireBreathers(SDL_Texture *img) : Alien(img)
     mover.y = 0 - mover.h;
 }
 
-//using polymorphism by having the kill method work differently for each type of alien
-void GeoYielders::kill()
-{
-}
-
-void ThunderBearers::kill()
-{
-}
-
-void StormCarriers::kill()
-{
-}
-
-void FireBreathers::kill()
-{
-}
 void GeoYielders::hasdestroyed()
 {
     if (attacked == shoots)

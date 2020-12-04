@@ -54,23 +54,27 @@ class Game
     bool state = true;
     bool game_is_won = false;
     bool game_is_lost = false;
-    int count_tb = 0;
+
+    /*int count_tb = 0;
     int count_fb = 0;
     int count_sc = 0;
-    int count_gy = 0;
+    int count_gy = 0;*/
+
     Mix_Music *bgMusic = NULL;
     Mix_Music *bgMusic2 = NULL;
     Mix_Music *bgMusicW = NULL;
     Mix_Music *bgMusicL = NULL;
     Mix_Chunk *shooting = NULL;
     Mix_Chunk *hit = NULL;
+
     TTF_Font *font = NULL;
+
     BGTexture texture; //For animating the background texture
+
     LinkedList listofobjects;
-    gameSave gS;
-    //list<Lives*> lives;
+    //gameSave gS;
     Uint32 start = 0;
-    gameSave *OBJ;
+    gameSave game;
 
 public:
     bool init();
