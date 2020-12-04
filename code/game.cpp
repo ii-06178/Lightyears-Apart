@@ -1,6 +1,7 @@
 #include <iostream>
 #include "game.hpp"
 #include "LinkedList.hpp"
+// #include "gameSave.hpp"
 using namespace std;
 bool Game::init()
 {
@@ -85,6 +86,7 @@ bool Game::loadMedia()
 	shooting = Mix_LoadWAV("laser4.wav");
 	hit = Mix_LoadWAV("twoTone2.wav");
 
+	// hit=Mix_LoadWAV();
 	texture.assets = gTexture;
 	if (font == NULL)
 	{
@@ -140,6 +142,9 @@ void Game::close()
 	shooting = NULL;
 	Mix_FreeChunk(hit);
 	hit = NULL;
+	// Mix_FreeChunk(hit);
+	// hit=NULL;
+	//Quit SDL subsystems
 	TTF_CloseFont(font);
 	TTF_Quit();
 	IMG_Quit();
@@ -174,6 +179,7 @@ SDL_Texture *Game::loadTexture(std::string path)
 		//Get rid of old loaded surface
 		SDL_FreeSurface(loadedSurface);
 	}
+	//texture.assets = newTexture;
 	return newTexture;
 }
 //list<Alien *>::iterator A;//list for aliens
@@ -198,17 +204,23 @@ void Game::drawObj()
 	listofobjects.drawAlllasers(gRenderer, state);
 }
 
-// void Game::updateLives()
-// {
-// }
-
+void Game::updateLives()
+{
+}
 void Game::run()
 {
 	bool quit = false;
 	int count_aliens = 0;
 	SDL_Event e;
+	//PlayerSpaceship *p = new PlayerSpaceship(assets);
 	PlayerSpaceship *p = PlayerSpaceship::getinstance(assets);
 	Score scoring;
+	//ThunderBearers th = {assets};
+	abstractFactoryProducer* abfactprod= new abstractFactoryProducer;
+	abstractSpriteFactory* alfact= abfactprod->getFactory("alien");
+	abstractSpriteFactory* obfact= abfactprod->getFactory("obstacle");
+	// Meteor m = {assets};
+	// Fireball fb = {assets};
 	Lives l = {assets};
 	Fuel f = {assets};
 	while (!quit)
@@ -218,14 +230,15 @@ void Game::run()
 		{
 			//User requests quit
 			if (e.type == SDL_QUIT)
-			{
+			{	gS.gameUnload(p,count_aliens,count_fb,gamecond);
 				quit = true;
 			}
 			p->EventHandler(e); //handles ship events
 
+			//texture.drawBG(gRenderer);	//moving background
 			if (e.type == SDL_KEYDOWN) //when it is pressed once
 			{
-				if (e.key.keysym.sym == SDLK_p && game == true) //if it is the key k
+				if (e.key.keysym.sym == SDLK_p && gamecond == true) //if it is the key k
 				{
 					if (state == false) //resume the game if it is already paused
 					{
@@ -241,6 +254,7 @@ void Game::run()
 			{
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
+				//cout << xMouse << ", " << yMouse << endl;
 
 				if (menu == true)
 				{
@@ -251,7 +265,7 @@ void Game::run()
 						{
 							menu = false;
 							ins = false;
-							game = true;
+							gamecond = true;
 							Mix_HaltMusic();
 							start = SDL_GetTicks();
 						}
@@ -259,13 +273,13 @@ void Game::run()
 						{
 							menu = true;
 							ins = true;
-							game = false;
+							gamecond = false;
 						}
 						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 475 and yMouse <= 505)
 						{
 							menu = false;
 							ins = false;
-							game = false;
+							gamecond = false;
 							quit = true;
 						}
 					}
@@ -275,12 +289,12 @@ void Game::run()
 						{
 							menu = true;
 							ins = false;
-							game = false;
+							gamecond = false;
 						}
 					}
 				}
 			}
-			if (game == true)
+			if (gamecond == true)
 			{
 				if (Mix_PlayingMusic() == 0)
 				{
@@ -294,6 +308,7 @@ void Game::run()
 					{
 						Laser *hlaser = new Laser(assets);
 						SDL_Rect mo = p->getmover();
+						//std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
 						hlaser->setPos(mo);
 						listofobjects.addUnit(hlaser, "hero");
 
@@ -312,6 +327,10 @@ void Game::run()
 				//Play the music
 				Mix_PlayMusic(bgMusic, -1);
 			}
+			// else
+			// {
+			// 	Mix_PauseMusic();
+			// }
 			texture.drawBG(gRenderer);
 			if (ins == false)
 			{
@@ -325,44 +344,59 @@ void Game::run()
 		}
 
 		//for game
-		if (game == true)
+		if (gamecond == true)
 		{
-			Uint32 t_time=((SDL_GetTicks() - start) % 5000);
 			Uint32 current_time = SDL_GetTicks() - start;
 			Uint32 m_time = ((SDL_GetTicks() - start) % 10000);
 			Uint32 f_time = ((SDL_GetTicks() - start) % 30000);
+			Uint32 t_time=((SDL_GetTicks() - start) % 5000);
+			//cout << "m_time " << m_time << endl;
 			texture.drawBG(gRenderer);
 
 			p->drawSprite(gRenderer);
 			listofobjects.check_collision_with_enemyshooter(p, hit);
 			listofobjects.check_hit_with_obstacle(p, hit);
+			//ThunderBearers t = {assets}; FireBreathers f = {assets}; StormCarriers s = {assets}; GeoYielders g = {assets};
 			if (count_aliens < 100 && state == true)
 			{
+
+				// int prob;
+				// prob = rand() % 10000000;
+				// if (prob <= 1)
+				// {
 				if ((current_time > (4000 * count_fb)) && count_fb < 25)
-				{
-					FireBreathers *f = new FireBreathers(assets);
+				{	
+					// FireBreathers *f = new FireBreathers(assets);
 					count_fb++;
-					listofobjects.addUnit(f);
+					Alien* al1=alfact->getAlien("alien1",assets);
+					
+					listofobjects.addUnit(al1);
 					count_aliens++;
+					//cout<<"count_fb "<<count_fb<<endl;
 				}
 				if (m_time <= 100)
 				{
-					Meteor *m = new Meteor(assets);
-					listofobjects.addUnit(m);
+					// Meteor *m = new Meteor(assets);
+					Obstacle* ob1=obfact->getObstacle("meteor",assets);
+					listofobjects.addUnit(ob1);
 				}
 				if (f_time <= 100)
 				{
-					Fireball *fi = new Fireball(assets);
-					listofobjects.addUnit(fi);
+					//Fireball *fi = new Fireball(assets);
+					Obstacle* ob2=obfact->getObstacle("fireball",assets);
+					listofobjects.addUnit(ob2);
 				}
 				if (t_time <= 100)
 				{
 					Thunderbolt *t = new Thunderbolt(assets);
 					listofobjects.addUnit(t);
 				}
+				// }
 
 				if (count_fb > 24)
 				{
+					//cout<<"current_time should be 100000, but it is "<<current_time<<endl;
+					//cout<<"count_tb"<<count_tb<<endl;
 					if ((current_time > ((4000 * 25) + (3500 * (count_tb)))) && count_tb < 25)
 					{
 						ThunderBearers *t = new ThunderBearers(assets);
@@ -391,10 +425,12 @@ void Game::run()
 						count_aliens++;
 					}
 				}
+				//count_aliens=count_tb+count_fb+count_sc+count_gy;
 			}
 
 			if (count_aliens >= 100 && p->getLives() != 0)
 			{
+				//cout << listofobjects.check_empty_aliens() << endl;
 				if (listofobjects.check_empty_aliens() == true)
 				{
 					game_is_won = true;
@@ -406,10 +442,16 @@ void Game::run()
 			}
 			if (game_is_won == true or game_is_lost == true)
 			{
-				game = false;
+				gamecond = false;
 				Mix_HaltMusic();
 			}
-			
+			//tb.drawSprite(gRenderer);
+
+			//th.drawSprite(gRenderer);
+			// t.drawSprite(gRenderer);
+			// g.drawSprite(gRenderer);
+			// f.drawSprite(gRenderer);
+			// s.drawSprite(gRenderer);
 			drawObj();
 			l.setLives(p->getLives());
 			l.drawSprite(gRenderer);
@@ -418,7 +460,7 @@ void Game::run()
 			f.setFuel(p->getFuel());
 			scoring.setScore(p->getScore());
 			scoring.display(font, score_display, gRenderer);
-			gS.gameUnload();
+			//gS.gameUnload();
 		}
 		if (game_is_won == true)
 		{
