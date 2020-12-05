@@ -1,5 +1,4 @@
 #include "game.hpp"
-// #include "gameSave.hpp"
 
 using namespace std;
 
@@ -127,11 +126,14 @@ void Game::close()
 	gwScreen = NULL;
 	SDL_DestroyTexture(glScreen);
 	glScreen = NULL;
+
 	//Destroy window
 	SDL_DestroyRenderer(gRenderer);
 	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
 	gRenderer = NULL;
+
+	//Free Loaded Music
 	Mix_FreeMusic(bgMusic);
 	bgMusic = NULL;
 	Mix_FreeMusic(bgMusic2);
@@ -145,6 +147,9 @@ void Game::close()
 	Mix_FreeChunk(hit);
 	hit = NULL;
 	TTF_CloseFont(font);
+
+	//deleting the list
+	listofobjects.deleteAllLists();
 	TTF_Quit();
 	IMG_Quit();
 	Mix_Quit();
@@ -188,6 +193,7 @@ void Game::updatealien(PlayerSpaceship *pl)
 }
 void Game::updateplayer(PlayerSpaceship *pl)
 {
+	//updating player's attributes like lives, fuels, lasers etc
 	listofobjects.check_collision_with_shooter(pl);
 	listofobjects.check_collisions_with_obstacles(pl);
 	listofobjects.deletelaser(assets);
@@ -198,20 +204,18 @@ void Game::updateobstacles(PlayerSpaceship *pl)
 }
 void Game::drawObj()
 {
+	//drawing all the objects in the list
 	listofobjects.drawAllaliens(gRenderer, assets, state);
 	listofobjects.drawAllobstacles(gRenderer, state);
 	listofobjects.drawAlllasers(gRenderer, state);
 }
 
-void Game::updateLives()
-{
-}
 void Game::run()
 {
-	game.gameLoad();
 	bool quit = false;
 	SDL_Event e;
 
+	//creating game objects
 	int count_aliens = 0;
 	PlayerSpaceship *p = PlayerSpaceship::getinstance(assets);
 	Score scoring;
@@ -228,7 +232,7 @@ void Game::run()
 		{
 			//User requests quit
 			if (e.type == SDL_QUIT)
-			{	game.setVals(gamecond, l, scoring, current_time);	//storing the values in their variables
+			{	game.setVals(gamecond, l, scoring, current_time, count_aliens, listofobjects.getkilledaliens());	//storing the values in their variables
 				game.saveGame();	//saving the game
 				quit = true;
 			}
@@ -253,28 +257,26 @@ void Game::run()
 
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse, &yMouse);
-				//cout << xMouse << ", " << yMouse << endl;
 
-				if (menu == true)
+				if (menu == true)	//The welcome screen
 				{
-					if (ins == false)
+					if (ins == false)	//not in instructions screen
 					{
 						if (xMouse >= 225 and xMouse <= 383 and yMouse >= 345 and yMouse <= 390)//when start is pressed
 						{
 							menu = false;
 							ins = false;
 							gamecond = true;
-							load = false;
+							load = false;	//load game = false so the new game starts
 							Mix_HaltMusic();
 							start = SDL_GetTicks();
 						}
-						if (xMouse >= 415 and xMouse <= 573 and yMouse >= 345 and yMouse <= 390){
+						if (xMouse >= 415 and xMouse <= 573 and yMouse >= 345 and yMouse <= 390){	//when load game is pressed
 							menu = false;
 							ins = false;
 							gamecond = true;
-							load = true;
+							load = true;	//load game = true so the previous game is laoded
 							Mix_HaltMusic();
-							start = SDL_GetTicks();
 						}
 						if (xMouse >= 325 and xMouse <= 470 and yMouse >= 420 and yMouse <= 450)//when instructions is pressed
 						{
@@ -308,7 +310,8 @@ void Game::run()
 					Mix_PlayMusic(bgMusic2, -1);
 					Mix_VolumeMusic(128 / 8);
 				}
-				p->moveShip(state);
+				p->moveShip(state);	//handles ship's movements
+
 				if (e.type == SDL_KEYDOWN)
 				{
 					if (e.key.keysym.sym == SDLK_SPACE)//creating lasers when space key is pressed
@@ -328,7 +331,7 @@ void Game::run()
 
 		//for screens
 		texture.drawBG(gRenderer);//drawing scrolling background for all the screens
-		if (menu == true)
+		if (menu == true)	//for menu screen
 		{
 			if (Mix_PlayingMusic() == 0)
 			{
@@ -344,13 +347,16 @@ void Game::run()
 				SDL_RenderCopy(gRenderer, iScreen, NULL, NULL);
 			}
 		}
-		if(load == true){
-			game.gameLoad();
+		if(load == true){	//when previous game is loaded
+			game.gameLoad();	//loading the game
+
+			//setting the ship's attributes
 			p->setLives(game.lives);
 			p->setScore(game.score);
-			count_aliens = game.aliens;
+			listofobjects.setkilledaliens(game.k_aliens);	//setting it to get the killed aliens of the previous game
+			count_aliens = game.c_aliens;	//for getting the alien count to get the aliens level in the previous game
 			start = game.time;
-			load = false;
+			load = false;	//setting load as falls so it isn't loaded everytime the window renders
 			
 		}
 		//for game
@@ -361,33 +367,49 @@ void Game::run()
 			Uint32 f_time = ((SDL_GetTicks() - start) % 30000);
 			Uint32 t_time=((SDL_GetTicks() - start) % 5000);
 
-			p->drawSprite(gRenderer);
+			p->drawSprite(gRenderer);	//drawing the ship
 			listofobjects.check_collision_with_enemyshooter(p, hit);
 			listofobjects.check_hit_with_obstacle(p, hit);
 
-			if (count_aliens < 100 && state == true)
+			//First checking if the game is won or lost
+			if (listofobjects.getkilledaliens() >= 100 && p->getLives() != 0)	//when game is won
+			{
+				if (listofobjects.check_empty_aliens() == true)
+				{
+					game_is_won = true;
+					gamecond = false;
+					Mix_HaltMusic();
+				}
+			}
+			else if (p->getLives() <= 0)	//when game is lost
+			{
+				game_is_lost = true;
+				gamecond = false;
+				Mix_HaltMusic();
+			}
+			else if (state == true)
 			{
 				if ((current_time > (4000 * count_aliens)))
 				{
-					if(count_aliens < 25) {
+					if(count_aliens < 20) {
 						Alien* al1=alfact->getAlien("alien1",assets);
 						
 						listofobjects.addUnit(al1);//appending in the linked list
 						count_aliens++;
 					}
-					else if(count_aliens < 50){
+					else if(count_aliens < 45){
 						Alien* al1=alfact->getAlien("alien2",assets);
 						
 						listofobjects.addUnit(al1);//appending in the linked list
 						count_aliens++;
 					}
-					else if (count_aliens < 75){
+					else if (count_aliens < 80){
 						Alien* al1=alfact->getAlien("alien3",assets);
 						
 						listofobjects.addUnit(al1);//appending in the linked list
 						count_aliens++;
 					}	
-					else if (count_aliens < 100){
+					else if (count_aliens > 80){
 						Alien* al1=alfact->getAlien("alien4",assets);
 						
 						listofobjects.addUnit(al1);//appending in the linked list
@@ -408,30 +430,15 @@ void Game::run()
 				{	Obstacle* ob3=obfact->getObstacle("thunderbolt",assets);
 					listofobjects.addUnit(ob3);
 				}
+				p->updateFuel(current_time);	//decreasing fuel every 5 second
+				drawObj();
 			}
-
-			else if (count_aliens >= 100 && p->getLives() != 0)
-			{
-				if (listofobjects.check_empty_aliens() == true)
-				{
-					game_is_won = true;
-				}
-			}
-			else if (p->getLives() == 0)
-			{
-				game_is_lost = true;
-			}
-			else if (game_is_won == true or game_is_lost == true)
-			{
-				gamecond = false;
-				Mix_HaltMusic();
-			}
-
-			drawObj();
+			
+			//functions for lives, fuel and drawing etc.
+			//drawObj();
 			l.setLives(p->getLives());
 			l.drawSprite(gRenderer);
 			f.drawSprite(gRenderer);
-			p->updateFuel(current_time);
 			f.setFuel(p->getFuel());
 			scoring.setScore(p->getScore());
 			scoring.display(font, score_display, gRenderer);

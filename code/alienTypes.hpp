@@ -4,19 +4,19 @@
 class GeoYielders : public Alien
 {
     bool destroyed = false;
-    int shoots = 4;
-    int strength = 25;
+    int shoots = 4; //required to kill the alien
+    int strength = 25;  //the amount of fuel its laser reduces
     int attacked = 1;
-    int points = 40;
+    int points = 40;    //points the player gets after killing them
 
 public:
+
+    GeoYielders(SDL_Texture *);
     void hasdestroyed();
     bool getdestroyed(); //check
     void setStrength(int s);
     int getStrength();
     int getPoints();
-    void kill(); //function to kill the alien based on how many times it is hit by player
-    GeoYielders(SDL_Texture *);
     SDL_Rect getmover();
 };
 

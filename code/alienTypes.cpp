@@ -24,7 +24,6 @@ ThunderBearers::ThunderBearers(SDL_Texture *img) : Alien(img)
     mover.w = 70;
     mover.h = 85;
     mover.y = 0 - mover.h;
-    //printf("First Constructor Functional");
 }
 
 StormCarriers::StormCarriers(SDL_Texture *img) : Alien(img)
@@ -52,53 +51,55 @@ FireBreathers::FireBreathers(SDL_Texture *img) : Alien(img)
     mover.y = 0 - mover.h;
 }
 
+//has destroyed functions of the aliens
 void GeoYielders::hasdestroyed()
 {
-    if (attacked == shoots)
-    {
+    if (attacked == shoots){
+
         destroyed = true;
     }
-    else
-    {
+    else{
+
         attacked++;
     }
 }
-
 void ThunderBearers::hasdestroyed()
 {
-    if (attacked == shoots)
-    {
+    if (attacked == shoots){
+
         destroyed = true;
     }
-    else
-    {
+    else{
+
         attacked++;
     }
 }
 
 void StormCarriers::hasdestroyed()
 {
-    if (attacked == shoots)
-    {
+    if (attacked == shoots){
+
         destroyed = true;
     }
-    else
-    {
+    else{
+
         attacked++;
     }
 }
 
 void FireBreathers::hasdestroyed()
 {
-    if (attacked == shoots)
-    {
+    if (attacked == shoots){
+
         destroyed = true;
     }
-    else
-    {
+    else{
+
         attacked++;
     }
 }
+
+//get destroyed functions for the the aliens
 bool GeoYielders::getdestroyed()
 {
     return destroyed;
@@ -118,6 +119,8 @@ bool FireBreathers::getdestroyed()
 {
     return destroyed;
 }
+
+//get mover function for the aliens
 SDL_Rect GeoYielders::getmover()
 {
     return mover;
@@ -134,6 +137,8 @@ SDL_Rect FireBreathers::getmover()
 {
     return mover;
 }
+
+//get points for the for the aliens
 int GeoYielders::getPoints()
 {
     return points;
@@ -150,6 +155,8 @@ int FireBreathers::getPoints()
 {
     return points;
 }
+
+//set and get strength for the aliens
 void GeoYielders::setStrength(int s)
 {
     strength = s;

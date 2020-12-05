@@ -11,8 +11,6 @@ class Alien : public Sprite
 
 public:
     Alien(SDL_Texture *);
-    //~Alien();
-    void shoot();
     virtual void hasdestroyed()=0;
     virtual bool getdestroyed()=0; //check
     virtual void setStrength(int s)=0;
@@ -20,5 +18,5 @@ public:
     virtual int getPoints()=0;
     virtual SDL_Rect getmover()=0;
     void setstate(bool s); 
-    void drawSprite(SDL_Renderer *);
+    void drawSprite(SDL_Renderer *) override;
 };

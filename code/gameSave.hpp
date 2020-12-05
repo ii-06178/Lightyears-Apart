@@ -6,26 +6,19 @@
 #include "player_spaceship.hpp"
 class gameSave
 {
+    //string variables to store the input from the file in load game
     std::string line;
-    std::string g, l, s, a, t;
+    std::string g, l, s, ka, t, ca;
 
 protected:
     
 public:
     bool gamestate;
-    int score;
-    int lives;
-    int aliens;
-    int time;
+    int score, lives, k_aliens, c_aliens, time; //integers for storing score, lives, aliens and time
 
-    gameSave();
-    //gameSave(bool, Lives, Score);
-    void setVals(bool, Lives, Score, Uint32);
-    void saveGame();
-    std::string getLastLine(ifstream&);
-    friend std::istream& getline(std::istream&, gameSave);
-
-    void gameLoad();
-    void gameUnload();
-    void gameResume();
+    gameSave(); //default constructor to build gameSave object
+    void setVals(bool, Lives, Score, Uint32, int, int);   //set value function for storing the values from the game
+    void saveGame();    //save game function to write the variables in the save file
+    std::string getLastLine(ifstream&); //function to get the last line of the file, so the last played game can be loaded
+    void gameLoad();    //load game function to load the saved game
 };

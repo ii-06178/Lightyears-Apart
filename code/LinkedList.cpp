@@ -1,6 +1,8 @@
 #include "linkedlist.hpp"
 
-LinkedList::LinkedList(){}//default constructor
+LinkedList::LinkedList(){
+    killedaliens = 0;
+}//default constructor
 
 //add unit overloaded thrice for aliens, obstacles and lasers
 
@@ -134,11 +136,18 @@ void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
                 int scoreinc = pl->getScore() + a->getPoints();
                 pl->setScore(scoreinc);
                 allaliens.erase(itr);
+                killedaliens++; //incrementing killed aliens
             }
             else if(a->getmover().y >= 600){    //removing if the aliens moves out of the screen on y axis
                 allaliens.erase(itr);
             }
         }
+}
+int LinkedList::getkilledaliens(){
+    return killedaliens;
+}
+void LinkedList::setkilledaliens(int k){
+    killedaliens = k;
 }
 
 void LinkedList::deleteobstacle(SDL_Texture *)
@@ -206,6 +215,26 @@ void LinkedList::deletelaser(SDL_Texture *){
         }
 }
 
+void LinkedList::deleteAllLists(){
+    //iterators for the lists
+    std::list<Laser *>::iterator ltr;
+    std::list<Obstacle *>::iterator otr;
+    std::list<Alien *>::iterator atr;
+
+    //deleting objects from the lists
+    for(ltr == alienlasers.begin(); ltr != alienlasers.end(); ltr++){
+        alienlasers.remove(*ltr);
+    }
+    for(ltr == herolasers.begin(); ltr != herolasers.end(); ltr++){
+        herolasers.remove(*ltr);
+    }
+    for(otr == allobstacles.begin(); otr != allobstacles.end(); otr++){
+        allobstacles.remove(*otr);
+    }
+    for(atr == allaliens.begin(); atr != allaliens.end(); atr++){
+        allaliens.remove(*atr);
+    }
+}
 //functions for checking collisions
 void LinkedList::check_collision_with_shooter(PlayerSpaceship *pl)
 {
