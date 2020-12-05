@@ -403,7 +403,7 @@ void Game::run()
 						listofobjects.addUnit(al1);//appending in the linked list
 						count_aliens++;
 					}
-					else if (count_aliens < 80){
+					else if (count_aliens <= 80){
 						Alien* al1=alfact->getAlien("alien3",assets);
 						
 						listofobjects.addUnit(al1);//appending in the linked list
