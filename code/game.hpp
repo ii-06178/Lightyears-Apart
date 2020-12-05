@@ -42,6 +42,10 @@ class Game
     //Current displayed texture
     SDL_Texture *gTexture = NULL;
     //global reference to png image sheets
+
+    //Uint32 current_time = SDL_GetTicks() + start;
+    Uint32 current_time = SDL_GetTicks() - start;
+
     SDL_Texture *assets = NULL;
     SDL_Texture *iScreen = NULL;
     SDL_Texture *wScreen = NULL;
@@ -50,15 +54,16 @@ class Game
     SDL_Texture *score_display = NULL;
     bool menu = true;
     bool gamecond = false;
+    bool load = false;
     bool ins = false;
     bool state = true;
     bool game_is_won = false;
     bool game_is_lost = false;
 
-    /*int count_tb = 0;
+    int count_tb = 0;
     int count_fb = 0;
     int count_sc = 0;
-    int count_gy = 0;*/
+    int count_gy = 0;
 
     Mix_Music *bgMusic = NULL;
     Mix_Music *bgMusic2 = NULL;
@@ -72,8 +77,7 @@ class Game
     BGTexture texture; //For animating the background texture
 
     LinkedList listofobjects;
-    //gameSave gS;
-    Uint32 start = 0;
+    int start = 0;
     gameSave game;
 
 public:

@@ -74,11 +74,13 @@ bool Game::loadMedia()
 
 	assets = loadTexture("sprite.png");
 	gTexture = loadTexture("stars.png");
-	wScreen = loadTexture("Welcome Screen.png");
+	wScreen = loadTexture("Welcome.png");
 	iScreen = loadTexture("Instructions Screen.png");
 	gwScreen = loadTexture("win screen 2.png");
 	glScreen = loadTexture("game over screen 1.png");
+
 	font = TTF_OpenFont("Westmeath.ttf", 32);
+	
 	bgMusic = Mix_LoadMUS("SkyFire (Title Screen).wav");
 	bgMusic2 = Mix_LoadMUS("Space Heroes.wav");
 	bgMusicW = Mix_LoadMUS("Victory Tune.wav");
@@ -142,9 +144,6 @@ void Game::close()
 	shooting = NULL;
 	Mix_FreeChunk(hit);
 	hit = NULL;
-	// Mix_FreeChunk(hit);
-	// hit=NULL;
-	//Quit SDL subsystems
 	TTF_CloseFont(font);
 	TTF_Quit();
 	IMG_Quit();
@@ -222,9 +221,6 @@ void Game::run()
 	Lives l = {assets};
 	Fuel f = {assets};
 	
-	count_aliens = game.aliens;
-	l.setLives(game.lives);
-	scoring.setScore(game.score);
 	while (!quit)
 	{
 		//Handle events on queue
@@ -232,7 +228,7 @@ void Game::run()
 		{
 			//User requests quit
 			if (e.type == SDL_QUIT)
-			{	game.setVals(state, l, scoring);	//storing the values in their variables
+			{	game.setVals(gamecond, l, scoring, current_time);	//storing the values in their variables
 				game.saveGame();	//saving the game
 				quit = true;
 			}
@@ -240,7 +236,7 @@ void Game::run()
 
 			if (e.type == SDL_KEYDOWN) //when it is pressed once
 			{//For pause functionality
-				if (e.key.keysym.sym == SDLK_p && gamecond == true) //if it is the key k
+				if (e.key.keysym.sym == SDLK_p && gamecond == true) //if it is the key p
 				{
 					if (state == false) //resume the game if it is already paused
 					{
@@ -263,11 +259,20 @@ void Game::run()
 				{
 					if (ins == false)
 					{
-						if (xMouse >= 330 and xMouse <= 470 and yMouse >= 370 and yMouse <= 400)//when start is pressed
+						if (xMouse >= 225 and xMouse <= 383 and yMouse >= 345 and yMouse <= 390)//when start is pressed
 						{
 							menu = false;
 							ins = false;
 							gamecond = true;
+							load = false;
+							Mix_HaltMusic();
+							start = SDL_GetTicks();
+						}
+						if (xMouse >= 415 and xMouse <= 573 and yMouse >= 345 and yMouse <= 390){
+							menu = false;
+							ins = false;
+							gamecond = true;
+							load = true;
 							Mix_HaltMusic();
 							start = SDL_GetTicks();
 						}
@@ -339,11 +344,19 @@ void Game::run()
 				SDL_RenderCopy(gRenderer, iScreen, NULL, NULL);
 			}
 		}
-
+		if(load == true){
+			game.gameLoad();
+			p->setLives(game.lives);
+			p->setScore(game.score);
+			count_aliens = game.aliens;
+			start = game.time;
+			load = false;
+			
+		}
 		//for game
 		if (gamecond == true)
 		{
-			Uint32 current_time = SDL_GetTicks() - start;
+			current_time = SDL_GetTicks() - start;
 			Uint32 m_time = ((SDL_GetTicks() - start) % 10000);
 			Uint32 f_time = ((SDL_GetTicks() - start) % 30000);
 			Uint32 t_time=((SDL_GetTicks() - start) % 5000);
@@ -354,7 +367,6 @@ void Game::run()
 
 			if (count_aliens < 100 && state == true)
 			{
-				//if ((current_time > (4000 * count_fb)) && count_fb < 25)//drawing all the aliens
 				if ((current_time > (4000 * count_aliens)))
 				{
 					if(count_aliens < 25) {
@@ -414,6 +426,7 @@ void Game::run()
 				gamecond = false;
 				Mix_HaltMusic();
 			}
+
 			drawObj();
 			l.setLives(p->getLives());
 			l.drawSprite(gRenderer);
@@ -423,6 +436,7 @@ void Game::run()
 			scoring.setScore(p->getScore());
 			scoring.display(font, score_display, gRenderer);
 		}
+
 		//For different music and screen on different states of the game
 		if (game_is_won == true) //screen and music when game is won
 		{

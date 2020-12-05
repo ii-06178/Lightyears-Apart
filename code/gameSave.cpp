@@ -4,18 +4,19 @@ using namespace std;
 
 gameSave::gameSave(){}
 
-void gameSave::setVals(bool S, Lives L, Score sc){
+void gameSave::setVals(bool S, Lives L, Score sc, Uint32 T){
     
     gamestate = S;
     lives = L.getLives();
     score = sc.getScore();
     aliens = score/10;
+    time = T;
 }
 void gameSave::saveGame(){
 
     ofstream file;
     file.open("SaveGame.txt", ios::app);    //appending the attributes in the save file
-    file << gamestate << ", " << lives << ", " << score << ", " << aliens << endl;
+    file << gamestate << ", " << lives << ", " << score << ", " << aliens << ", " << time << endl;
     file.close();   //file closed 
 
 }
@@ -31,21 +32,20 @@ void gameSave::gameLoad(){
     ifstream file;
     file.open("SaveGame.txt");
     line = getLastLine(file);
-    cout << line << endl;
     stringstream x(line);
 
     getline(x, g, ',');
     getline(x, l, ',');
     getline(x, s, ',');
     getline(x, a, ',');
+    getline(x, t, ',');
 
     gamestate = stoi(g);
     lives = stoi(l);
     score = stoi(s);
     aliens = stoi(a);
+    time = stoi(t);
+    if (time > 0) time = -time;
 
     file.close();
-    //cout << gamestate << ' ' << lives << ' ' <<  score << ' ' << aliens << endl;
 }
-//do << operator overloading
-//make the save and load functions for the game

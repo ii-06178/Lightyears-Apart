@@ -1,16 +1,18 @@
 #pragma once
 #include <iostream>
+#include <SDL.h>
+#include <SDL_mixer.h>
+#include <list>
+#include "sprite.hpp"
+#include "alien.hpp"
+#include "player_spaceship.hpp"
+#include "Laser.hpp"
+#include "obstacle.hpp"
+
 class LinkedList
 {
     std::list<Laser *> herolasers{};
     std::list<Laser *> alienlasers{};
-    std::list<Meteor *> meteors{};
-    std::list<Fireball *> fireballs{};
-    std::list<Thunderbolt *> thunderbolts{};
-    std::list<GeoYielders *> geoalien{};
-    std::list<ThunderBearers *> electroalien{};
-    std::list<StormCarriers *> anemoalien{};
-    std::list<FireBreathers *> pyroalien{};
     std::list<Alien *> allaliens{}; 
     std::list<Obstacle* > allobstacles{};
 
@@ -19,13 +21,6 @@ public:
     void addUnit(Laser *l, std::string type);
     void addUnit(Alien* a);
     void addUnit(Obstacle* o);
-    void addUnit(Meteor *m);
-    void addUnit(Fireball *f);
-    void addUnit(Thunderbolt *t);
-    void addUnit(GeoYielders *ga);
-    void addUnit(ThunderBearers *ea);
-    void addUnit(StormCarriers *aa);
-    void addUnit(FireBreathers *pa);
 
     void deleteobstacle(SDL_Texture *);
     void deletelaser(SDL_Texture *);
