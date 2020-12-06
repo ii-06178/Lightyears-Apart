@@ -72,6 +72,16 @@ class Game
     LinkedList listofobjects;
     int start = 0;  //for noting the starting point of the game
     gameSave game;  //for loading and saving the game
+    
+	//creating game objects
+	int count_aliens = 0;
+	Score scoring;
+	abstractFactoryProducer* abfactprod= new abstractFactoryProducer;
+	abstractSpriteFactory* alfact= abfactprod->getFactory("alien");
+	abstractSpriteFactory* obfact= abfactprod->getFactory("obstacle");
+    PlayerSpaceship *p = NULL;
+    Lives l = NULL;
+    Fuel f = NULL;
 
 public:
     bool init();

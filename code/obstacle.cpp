@@ -65,16 +65,6 @@ int Obstacle::getStrength()
     return strength;
 }
 
-//Destructor for the obstacles
-Obstacle::~Obstacle()
-{
-    SDL_DestroyTexture(asset);
-    asset = NULL;
-    src = {0,0,0,0};
-    mover = {0,0,0,0};
-    strength = 0;
-}
-
 //set for the state
 void Obstacle::setstate(bool s)
 {
