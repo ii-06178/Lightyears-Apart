@@ -50,7 +50,7 @@ class PlayerSpaceship : public Sprite
 class Lives : public Sprite
 {
     int y[3] = {0, 50, 100}; //position of lives
-    int life = 3;
+    int life;
 
     public:
 
