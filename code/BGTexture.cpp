@@ -16,18 +16,18 @@ BGTexture::~BGTexture()
 
 void BGTexture::render(int x, int y, SDL_Renderer *gRenderer)
 {
-    //Set rendering space and render to screen
+    //destination Rect 
     SDL_Rect renderQuad = {x, y, bgWidth, bgHeight};
 
-    //Render to screen
+    //Rendering to the screen
     SDL_RenderCopy(gRenderer, assets, NULL, &renderQuad);
 }
 void BGTexture::drawBG(SDL_Renderer *gRenderer)
 {
 
     scrollingOffSet += 5;
-    if (scrollingOffSet >= bgHeight)
-    { //condition for resetting
+    if (scrollingOffSet >= bgHeight){   //resetting scrolling off set when it is greater than the screen's height
+
         scrollingOffSet = 0;
     }
 

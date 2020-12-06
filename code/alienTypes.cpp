@@ -12,6 +12,12 @@ GeoYielders::GeoYielders(SDL_Texture *img) : Alien(img)
     mover.w = 70;
     mover.h = 60;
     mover.y = 0 - mover.h;
+
+    destroyed = false;
+    shoots = 4; 
+    strength = 25;  
+    attacked = 1;
+    points = 40;    
 }
 ThunderBearers::ThunderBearers(SDL_Texture *img) : Alien(img)
 {
@@ -24,7 +30,12 @@ ThunderBearers::ThunderBearers(SDL_Texture *img) : Alien(img)
     mover.w = 70;
     mover.h = 85;
     mover.y = 0 - mover.h;
-    //printf("First Constructor Functional");
+
+    destroyed = false;
+    shoots = 2;
+    points = 20;
+    strength = 15;
+    attacked = 1;
 }
 
 StormCarriers::StormCarriers(SDL_Texture *img) : Alien(img)
@@ -38,6 +49,12 @@ StormCarriers::StormCarriers(SDL_Texture *img) : Alien(img)
     mover.w = 70;
     mover.h = 60;
     mover.y = 0 - mover.h;
+
+    destroyed = false;
+    shoots = 3;
+    points = 30;
+    attacked = 1;
+    strength = 20;
 }
 FireBreathers::FireBreathers(SDL_Texture *img) : Alien(img)
 {
@@ -50,151 +67,11 @@ FireBreathers::FireBreathers(SDL_Texture *img) : Alien(img)
     mover.w = 70;
     mover.h = 65;
     mover.y = 0 - mover.h;
-}
 
-//using polymorphism by having the kill method work differently for each type of alien
-void GeoYielders::kill()
-{
-}
+    destroyed = false;
+    shoots = 1;
+    points = 10;
+    strength = 10;
+    attacked = 1;
 
-void ThunderBearers::kill()
-{
-}
-
-void StormCarriers::kill()
-{
-}
-
-void FireBreathers::kill()
-{
-}
-void GeoYielders::hasdestroyed()
-{
-    if (attacked == shoots)
-    {
-        destroyed = true;
-    }
-    else
-    {
-        attacked++;
-    }
-}
-
-void ThunderBearers::hasdestroyed()
-{
-    if (attacked == shoots)
-    {
-        destroyed = true;
-    }
-    else
-    {
-        attacked++;
-    }
-}
-
-void StormCarriers::hasdestroyed()
-{
-    if (attacked == shoots)
-    {
-        destroyed = true;
-    }
-    else
-    {
-        attacked++;
-    }
-}
-
-void FireBreathers::hasdestroyed()
-{
-    if (attacked == shoots)
-    {
-        destroyed = true;
-    }
-    else
-    {
-        attacked++;
-    }
-}
-bool GeoYielders::getdestroyed()
-{
-    return destroyed;
-}
-
-bool ThunderBearers::getdestroyed()
-{
-    return destroyed;
-}
-
-bool StormCarriers::getdestroyed()
-{
-    return destroyed;
-}
-
-bool FireBreathers::getdestroyed()
-{
-    return destroyed;
-}
-SDL_Rect GeoYielders::getmover()
-{
-    return mover;
-}
-SDL_Rect ThunderBearers::getmover()
-{
-    return mover;
-}
-SDL_Rect StormCarriers::getmover()
-{
-    return mover;
-}
-SDL_Rect FireBreathers::getmover()
-{
-    return mover;
-}
-int GeoYielders::getPoints()
-{
-    return points;
-}
-int ThunderBearers::getPoints()
-{
-    return points;
-}
-int StormCarriers::getPoints()
-{
-    return points;
-}
-int FireBreathers::getPoints()
-{
-    return points;
-}
-void GeoYielders::setStrength(int s)
-{
-    strength = s;
-}
-int GeoYielders::getStrength()
-{
-    return strength;
-}
-void ThunderBearers::setStrength(int s)
-{
-    strength = s;
-}
-int ThunderBearers::getStrength()
-{
-    return strength;
-}
-void StormCarriers::setStrength(int s)
-{
-    strength = s;
-}
-int StormCarriers::getStrength()
-{
-    return strength;
-}
-void FireBreathers::setStrength(int s)
-{
-    strength = s;
-}
-int FireBreathers::getStrength()
-{
-    return strength;
 }

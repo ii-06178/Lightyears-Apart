@@ -1,10 +1,7 @@
-#include <iostream>
 #include "player_spaceship.hpp"
-#include <sstream>
-#include <SDL_ttf.h>
-#include <SDL.h>
 
 using namespace std;
+
 PlayerSpaceship *PlayerSpaceship::obj = NULL;
 PlayerSpaceship *PlayerSpaceship::getinstance(SDL_Texture *img)
 {
@@ -27,10 +24,12 @@ PlayerSpaceship::PlayerSpaceship(SDL_Texture *img) : Sprite(img)
     mover.y = pos_y;
     mover.w = 70;
     mover.h = 100;
+
     // all these stats will be updated:
     score = 0;//default score 
     lives = 3;//default lives
-    fuel = 140;//default fuel
+    fuel = 170;//default fuel
+
     //speed of the ship
     x_speed = 0;
     y_speed = 0;
@@ -175,7 +174,6 @@ int Lives::getLives()
 {
     return life;
 }
-// overides the default drawSprite
 void Lives::drawSprite(SDL_Renderer *gRenderer)
 {
     for (int x = 0; x < life; x++)
@@ -197,8 +195,6 @@ int Score::getScore()
 {
     return scored;
 }
-
-
 void Score::display(TTF_Font *f, SDL_Texture *t, SDL_Renderer *renderer)
 {//this brings the score in text form.
     stringstream ss;
@@ -223,7 +219,7 @@ void Score::display(TTF_Font *f, SDL_Texture *t, SDL_Renderer *renderer)
     SDL_FreeSurface(sc); //frees the surface
 }
 
-//Fuel ClassFunction
+//Fuel Class Function
 Fuel::Fuel(SDL_Texture *img) : Sprite(img)
 {
     src.x = 860;
@@ -231,13 +227,14 @@ Fuel::Fuel(SDL_Texture *img) : Sprite(img)
     src.w = 150;
     src.h = 463;
 
-    mover.h = 200;
-    mover.w = 100;
+    mover.h = 250;
+    mover.w = 80;
     //(x,y) left corner of the screen
     mover.x = 800 - mover.w;
     mover.y = 600 - mover.h;
-    rect.h = 140;
-    rect.w = 65;
+
+    rect.h = 150;
+    rect.w = 50;
     rect.x = 800 - rect.w - 10;
     rect.y = 600 - rect.h - 10;
 
@@ -245,16 +242,18 @@ Fuel::Fuel(SDL_Texture *img) : Sprite(img)
 }
 void Fuel::drawSprite(SDL_Renderer *gRenderer)
 {   
-// this is used to set the fill color
-    SDL_SetRenderDrawColor(gRenderer, 255, 255, 255, 255);
-//this draws the rectangle behind the gauge to make an animation
+    // this is used to set the fill color
+    SDL_SetRenderDrawColor(gRenderer, 255, 255, 0, 255);
+
+    //this draws the rectangle behind the gauge to make an animation
     SDL_RenderDrawRect(gRenderer, &rect);
+
     // this fills the color in the rectangle
     SDL_RenderFillRect(gRenderer, &rect);
 
     general_render(mover.x, mover.y, asset, gRenderer, 0.0, SDL_FLIP_NONE); //drawing the fuel guage
 }
-
+//get and set function for fuel
 int Fuel::getFuel()
 {
     return rect.h;
