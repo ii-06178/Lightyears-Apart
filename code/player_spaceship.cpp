@@ -165,6 +165,8 @@ Lives::Lives(SDL_Texture *img) : Sprite(img)
     mover.y = 0;
     mover.w = 46;
     mover.h = 70;
+    
+    life = 3;
 }
 void Lives::setLives(int l)
 {
@@ -238,8 +240,8 @@ Fuel::Fuel(SDL_Texture *img) : Sprite(img)
     rect.x = 800 - rect.w - 10;
     rect.y = 600 - rect.h - 10;
 
-
 }
+
 void Fuel::drawSprite(SDL_Renderer *gRenderer)
 {   
     // this is used to set the fill color

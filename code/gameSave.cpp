@@ -4,7 +4,7 @@ using namespace std;
 
 gameSave::gameSave(){}  //default constructor
 
-void gameSave::setVals(bool S, Lives L, Score sc, Uint32 T, int CA, int KA){
+void gameSave::setVals(bool S, Lives L, Score sc, Uint32 T, int CA, int KA, int F){
     //setting values from the running game to store in the save file
     gamestate = S;
     lives = L.getLives();
@@ -12,12 +12,13 @@ void gameSave::setVals(bool S, Lives L, Score sc, Uint32 T, int CA, int KA){
     c_aliens = CA;  //alien count
     k_aliens = KA;  //killed aliens count
     time = T;
+    fuel = F;
 }
 void gameSave::saveGame(){
     //saving game
     ofstream file;
     file.open("SaveGame.txt", ios::app);    //appending the attributes in the save file
-    file << gamestate << ", " << lives << ", " << score << ", " << c_aliens << ", " << k_aliens << ", " << time << endl;
+    file << gamestate << ", " << lives << ", " << score << ", " << c_aliens << ", " << k_aliens << ", " << time << ", " << fuel << endl;
     file.close();   //file closed 
 
 }
@@ -40,6 +41,7 @@ void gameSave::gameLoad(){
     getline(x, ca, ',');
     getline(x, ka, ',');
     getline(x, t, ',');
+    getline(x, f, ',');
 
     //converting and storing the string values in int variables for the game
     gamestate = stoi(g);
@@ -49,6 +51,7 @@ void gameSave::gameLoad(){
     k_aliens = stoi(ka);
     time = stoi(t);
     if (time > 0) time = -time;
+    fuel = stoi(f);
 
     file.close();   //close file
 }

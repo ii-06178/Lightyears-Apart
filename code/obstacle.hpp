@@ -17,7 +17,6 @@ protected:
 
 public:
     Obstacle(SDL_Texture *);
-    ~Obstacle();
 
     void setStrength(int);
     int getStrength();

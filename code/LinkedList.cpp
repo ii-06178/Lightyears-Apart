@@ -61,7 +61,6 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
 
 void LinkedList::drawAllobstacles(SDL_Renderer *renderer, bool s)
 { //This function from the Drawallobjects from the game file
-
     std::list<Obstacle *>::iterator itr;
     int i;
     for (i = 0, itr = allobstacles.begin(); i < allobstacles.size() && itr != allobstacles.end(); i++, itr++)
@@ -81,7 +80,6 @@ void LinkedList::drawAllobstacles(SDL_Renderer *renderer, bool s)
 
 void LinkedList::drawAlllasers(SDL_Renderer *renderer, bool s)
 { //This function from the Drawallobjects from the game file
-    
     std::list<Laser *>::iterator itr;
     int i;
     for (i = 0, itr = herolasers.begin(); i < herolasers.size() && itr != herolasers.end(); i++, itr++)

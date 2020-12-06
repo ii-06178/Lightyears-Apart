@@ -107,7 +107,6 @@ bool Game::loadMedia()
 	}
 	return success;
 }
-
 void Game::close()
 {
 	texture.~BGTexture();
@@ -149,6 +148,12 @@ void Game::close()
 	TTF_CloseFont(font);
 
 	//deleting the list
+	p = NULL;
+	l = NULL;
+	f = NULL;
+	abfactprod = NULL;
+	alfact = NULL;
+	obfact = NULL;
 	listofobjects.deleteAllLists();
 	TTF_Quit();
 	IMG_Quit();
@@ -215,16 +220,11 @@ void Game::run()
 	bool quit = false;
 	SDL_Event e;
 
-	//creating game objects
-	int count_aliens = 0;
-	PlayerSpaceship *p = PlayerSpaceship::getinstance(assets);
-	Score scoring;
-	abstractFactoryProducer* abfactprod= new abstractFactoryProducer;
-	abstractSpriteFactory* alfact= abfactprod->getFactory("alien");
-	abstractSpriteFactory* obfact= abfactprod->getFactory("obstacle");
-	Lives l = {assets};
-	Fuel f = {assets};
-	
+	//initializing spaceship objects
+	p = PlayerSpaceship::getinstance(assets);
+	l = {assets};
+	f = {assets};
+
 	while (!quit)
 	{
 		//Handle events on queue
@@ -232,7 +232,7 @@ void Game::run()
 		{
 			//User requests quit
 			if (e.type == SDL_QUIT)
-			{	game.setVals(gamecond, l, scoring, current_time, count_aliens, listofobjects.getkilledaliens());	//storing the values in their variables
+			{	game.setVals(gamecond, l, scoring, current_time, count_aliens, listofobjects.getkilledaliens(),p->getFuel());	//storing the values in their variables
 				game.saveGame();	//saving the game
 				quit = true;
 			}
@@ -356,18 +356,20 @@ void Game::run()
 			listofobjects.setkilledaliens(game.k_aliens);	//setting it to get the killed aliens of the previous game
 			count_aliens = game.c_aliens;	//for getting the alien count to get the aliens level in the previous game
 			start = game.time;
+			p->setFuel(game.fuel);
 			load = false;	//setting load as falls so it isn't loaded everytime the window renders
 			
 		}
 		//for game
-		if (gamecond == true)
-		{
+		if (gamecond == true){
+
+			if(state == true){
+
 			current_time = SDL_GetTicks() - start;
 			Uint32 m_time = ((SDL_GetTicks() - start) % 10000);
 			Uint32 f_time = ((SDL_GetTicks() - start) % 30000);
 			Uint32 t_time=((SDL_GetTicks() - start) % 5000);
 
-			p->drawSprite(gRenderer);	//drawing the ship
 			listofobjects.check_collision_with_enemyshooter(p, hit);
 			listofobjects.check_hit_with_obstacle(p, hit);
 
@@ -431,11 +433,12 @@ void Game::run()
 					listofobjects.addUnit(ob3);
 				}
 				p->updateFuel(current_time);	//decreasing fuel every 5 second
-				drawObj();
+			}
 			}
 			
 			//functions for lives, fuel and drawing etc.
-			//drawObj();
+			drawObj();
+			p->drawSprite(gRenderer);	//drawing the ship
 			l.setLives(p->getLives());
 			l.drawSprite(gRenderer);
 			f.drawSprite(gRenderer);

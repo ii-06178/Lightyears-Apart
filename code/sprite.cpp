@@ -5,6 +5,11 @@ Sprite::Sprite(SDL_Texture *img)
 
     asset = img;
 }
+//Sprite::~Sprite(){
+    //SDL_DestroyTexture(asset);
+    //asset = NULL;
+    //src = mover = {0,0,0,0};
+//}
 
 void Sprite::general_render(int x, int y, SDL_Texture *img, SDL_Renderer *gRenderer, double angle, SDL_RendererFlip turn)
 {

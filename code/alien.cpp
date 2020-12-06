@@ -4,8 +4,7 @@ Alien::Alien(SDL_Texture *img) : Sprite(img)
 { //constructor for all aliens
     turn_h = SDL_FLIP_NONE;
     cstate = true;
-}
-
+}  
 void Alien::drawSprite(SDL_Renderer *gRenderer)
 { //the draw function
     if (cstate == true)
