@@ -9,9 +9,7 @@ class gameSave
     //string variables to store the input from the file in load game
     std::string line;
     std::string g, l, s, ka, t, ca;
-
-protected:
-    
+ 
 public:
     bool gamestate;
     int score, lives, k_aliens, c_aliens, time; //integers for storing score, lives, aliens and time

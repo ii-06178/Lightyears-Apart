@@ -7,7 +7,6 @@
 #include <list>
 
 //Our game headers
-#include "sprite.hpp"
 #include "alien.hpp"
 #include "player_spaceship.hpp"
 #include "Laser.hpp"

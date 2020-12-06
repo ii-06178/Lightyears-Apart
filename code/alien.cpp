@@ -34,3 +34,34 @@ void Alien::setstate(bool s)
 {
     cstate = s;
 }
+void Alien::hasdestroyed()
+{
+    if (attacked == shoots){
+
+        destroyed = true;
+    }
+    else{
+
+        attacked++;
+    }
+}
+bool Alien::getdestroyed()
+{
+    return destroyed;
+}
+SDL_Rect Alien::getmover()
+{
+    return mover;
+}
+int Alien::getPoints()
+{
+    return points;
+}
+void Alien::setStrength(int s)
+{
+    strength = s;
+}
+int Alien::getStrength()
+{
+    return strength;
+}

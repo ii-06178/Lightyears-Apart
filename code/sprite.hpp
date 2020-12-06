@@ -14,13 +14,6 @@ protected:
 
 public:
     Sprite(SDL_Texture *);
-    void setHitCount(int hc);
-    void setSpeed(int s);
-    SDL_Rect getLoc();
-    int getWidth();
-    int getHeight();
-    int getHitCount();
-    int getSpeed();
     virtual void drawSprite(SDL_Renderer *) = 0; //virtual void function which draws the sprites
     void general_render(int, int, SDL_Texture *, SDL_Renderer *, double, SDL_RendererFlip); //Modified render function
 };
