@@ -6,20 +6,23 @@
 
 class Alien : public Sprite
 {
-    int strength; //stores either how many hits an alien needs to die OR how much damage they do to player with their hit. We need to choose one
-    bool up;      //flag for vertical movement
+protected:
+    int strength; //the amount of fuel its laser reduces
     bool cstate;//current state
+    bool destroyed;
+    int shoots; //required to kill the alien
+    int attacked;   //to check how many lasers they were attacked with
+    int points; //points the player gets after killing them
 
 public:
     Alien(SDL_Texture *);
-    //~Alien();
-    void shoot();
-virtual void hasdestroyed()=0;
-virtual bool getdestroyed()=0; //check
-virtual void setStrength(int s)=0;
-   virtual int getStrength()=0;
- virtual   int getPoints()=0;
- virtual   SDL_Rect getmover()=0;
-    void setstate(bool s);
-    void drawSprite(SDL_Renderer *);
+
+    void hasdestroyed();    //set destroyed
+    bool getdestroyed(); //check if destroyed
+    void setStrength(int s);
+    int getStrength();
+    int getPoints();
+    SDL_Rect getmover();
+    void setstate(bool s); 
+    void drawSprite(SDL_Renderer *) override;
 };

@@ -1,70 +1,36 @@
-#include <iostream>
-#include <SDL.h>
-#include <SDL_mixer.h>
-#include <list>
-#include "sprite.hpp"
-#include "alien.hpp"
-#include "player_spaceship.hpp"
-#include "alienTypes.hpp"
-#include "Laser.hpp"
-#include "obstacle.hpp"
-#include "obstacleTypes.hpp"
 #include "linkedlist.hpp"
 
-LinkedList::LinkedList()
-{
-}
-void LinkedList::addUnit(Alien* a)
+LinkedList::LinkedList(){
+    killedaliens = 0;
+}//default constructor
+
+//add unit overloaded thrice for aliens, obstacles and lasers
+
+void LinkedList::addUnit(Alien* a)  //adding aliens in the aliens' list
 {
         allaliens.push_front(a);
 }
-void LinkedList::addUnit(Obstacle* o)
+void LinkedList::addUnit(Obstacle* o) //adding obstacles in the obstacle list
 {
         allobstacles.push_front(o);
 }
-void LinkedList::addUnit(Meteor *m) //adds pigeon to pigeon lst
+void LinkedList::addUnit(Laser *l, std::string type)
 {
-    meteors.push_front(m);
-}
-void LinkedList::addUnit(Fireball *f) //adds nest to nest lst
-{
-    fireballs.push_front(f);
-}
-void LinkedList::addUnit(Laser *l, std::string type) //adds pigeon to pigeon lst
-{
-    if (type == "hero")
+    if (type == "hero") //adding into hero laser's list if the laser is shot by the ship
     {
         herolasers.push_front(l);
     }
-    if (type == "alien")
+    if (type == "alien") //adding into alien laser's list if the laser is shot by the aliens
     {
         alienlasers.push_front(l);
     }
 }
-void LinkedList::addUnit(Thunderbolt *t) //adds nest to nest lst
-{
-    thunderbolts.push_front(t);
-}
-void LinkedList::addUnit(GeoYielders *g) //adds pigeon to pigeon lst
-{
-    geoalien.push_front(g);
-}
-void LinkedList::addUnit(ThunderBearers *ea) //adds nest to nest lst
-{
-    electroalien.push_front(ea);
-}
-void LinkedList::addUnit(StormCarriers *aa) //adds pigeon to pigeon lst
-{
-    anemoalien.push_front(aa);
-}
-void LinkedList::addUnit(FireBreathers *pa) //adds nest to nest lst
-{
-    pyroalien.push_front(pa);
-}
+
+//draw Functions for the objects; to be used in drawallobjects function
 void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s)
 { //This function from the Drawallobjects from the game file
- std::list<Alien *>::iterator itr;
- int i;
+    std::list<Alien *>::iterator itr;
+    int i;
     for (i = 0, itr = allaliens.begin(); i < allaliens.size() && itr != allaliens.end(); i++, itr++)
         if (allaliens.size() == 0)
         {
@@ -79,16 +45,16 @@ void LinkedList::drawAllaliens(SDL_Renderer *renderer, SDL_Texture *asst, bool s
             a->drawSprite(renderer); //calls the object's draw function
             int prob;
             prob = rand() % 100;
-            if (prob <= 2)
+            if (prob <= 2)  //drawing lasers with the probability of 2%
             {
                 Laser *alaser = new Laser(asst);
-                SDL_Rect mof = a->getmover();
-                //std::cout<<"what we are passing"<<mo.x<<","<<mo.y<<std::endl;
+                SDL_Rect mof = a->getmover();   //getting position of the alien shooting the laser
+
                 alaser->setPos(mof);
                 alaser->setType("alien");
-                std::cout << a->getStrength() << std::endl;
                 alaser->setstrength(a->getStrength());
-                addUnit(alaser, "alien");
+
+                addUnit(alaser, "alien");   //adding in the alien laser list
             }
         }
 }
@@ -115,7 +81,6 @@ void LinkedList::drawAllobstacles(SDL_Renderer *renderer, bool s)
 void LinkedList::drawAlllasers(SDL_Renderer *renderer, bool s)
 { //This function from the Drawallobjects from the game file
     std::list<Laser *>::iterator itr;
-
     int i;
     for (i = 0, itr = herolasers.begin(); i < herolasers.size() && itr != herolasers.end(); i++, itr++)
 
@@ -149,9 +114,11 @@ void LinkedList::drawAlllasers(SDL_Renderer *renderer, bool s)
         }
 }
 
+//delete functions for the objects
 void LinkedList::deletealien(SDL_Texture *, PlayerSpaceship *pl)
-{ std::list<Alien *>::iterator itr;
-int i;
+{ 
+    std::list<Alien *>::iterator itr;
+    int i;
     for (i = 0, itr = allaliens.begin(); i < allaliens.size() && itr != allaliens.end(); i++, itr++)
         if (allaliens.size() == 0)
         {
@@ -162,15 +129,23 @@ int i;
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
-            if (a->getdestroyed() == true)
+            if (a->getdestroyed() == true)  //checking if the alien is destroyd
             {
-                std::cout << "points " << a->getPoints() << std::endl;
                 int scoreinc = pl->getScore() + a->getPoints();
                 pl->setScore(scoreinc);
                 allaliens.erase(itr);
+                killedaliens++; //incrementing killed aliens
             }
-            //calls the object's draw function
+            else if(a->getmover().y >= 600){    //removing if the aliens moves out of the screen on y axis
+                allaliens.erase(itr);
+            }
         }
+}
+int LinkedList::getkilledaliens(){
+    return killedaliens;
+}
+void LinkedList::setkilledaliens(int k){
+    killedaliens = k;
 }
 
 void LinkedList::deleteobstacle(SDL_Texture *)
@@ -188,17 +163,19 @@ void LinkedList::deleteobstacle(SDL_Texture *)
             // 'ptr' points to N-th element of list
             auto a = *itr;
 
-            if (a->getdestroyed() == true || a->getcontact() == true)
+            if (a->getdestroyed() == true || a->getcontact() == true)   //checking if the obstacle has been destroyed
             {
+                allobstacles.erase(itr);
+            }
+            else if (a->getmover().y >= 600){   //removing the obstacle when it goes out of the screen
                 allobstacles.erase(itr);
             }
         }
 }
 
-void LinkedList::deletelaser(SDL_Texture *)
-{
-    std::list<Laser *>::iterator itr;
+void LinkedList::deletelaser(SDL_Texture *){
 
+    std::list<Laser *>::iterator itr;
     int i;
     for (i = 0, itr = herolasers.begin(); i < herolasers.size() && itr != herolasers.end(); i++, itr++)
 
@@ -211,11 +188,10 @@ void LinkedList::deletelaser(SDL_Texture *)
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
-            if (a->getcontact() == true)
+            if (a->getcontact() == true)    //removing laser if it collides with any object
             {
                 herolasers.erase(itr);
             }
-            //calls the object's draw function
         }
 
     std::list<Laser *>::iterator jtr;
@@ -232,12 +208,32 @@ void LinkedList::deletelaser(SDL_Texture *)
             auto a = *jtr;
             if (a->getcontact() == true)
             {
-                herolasers.erase(jtr);
+                alienlasers.erase(jtr);
             }
-            //calls the object's draw function
         }
 }
 
+void LinkedList::deleteAllLists(){
+    //iterators for the lists
+    std::list<Laser *>::iterator ltr;
+    std::list<Obstacle *>::iterator otr;
+    std::list<Alien *>::iterator atr;
+
+    //deleting objects from the lists
+    for(ltr == alienlasers.begin(); ltr != alienlasers.end(); ltr++){
+        alienlasers.remove(*ltr);
+    }
+    for(ltr == herolasers.begin(); ltr != herolasers.end(); ltr++){
+        herolasers.remove(*ltr);
+    }
+    for(otr == allobstacles.begin(); otr != allobstacles.end(); otr++){
+        allobstacles.remove(*otr);
+    }
+    for(atr == allaliens.begin(); atr != allaliens.end(); atr++){
+        allaliens.remove(*atr);
+    }
+}
+//functions for checking collisions
 void LinkedList::check_collision_with_shooter(PlayerSpaceship *pl)
 {
     std::list<Laser *>::iterator itr;
@@ -337,7 +333,6 @@ void LinkedList::check_collision_with_enemyshooter(PlayerSpaceship *pl, Mix_Chun
         {
             // 'ptr' points to N-th element of list
             auto a = *itr;
-            std::cout << "im here" << std::endl;
             SDL_Rect ma = a->getmover();
             SDL_Rect mb = pl->getmover();
             if (SDL_HasIntersection(&ma, &mb) == true)

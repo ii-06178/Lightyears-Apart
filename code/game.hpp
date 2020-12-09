@@ -10,16 +10,10 @@
 #include <time.h>
 #include <list>
 #include <fstream>
-//New included files
-#include "sprite.hpp"
+
+//Game Header files
 #include "Laser.hpp"
 #include "player_spaceship.hpp"
-#include "alien.hpp"
-#include "alienTypes.hpp"
-#include "alienFactory.hpp"
-#include "obstacle.hpp"
-#include "obstacleTypes.hpp"
-#include "obstacleFactory.hpp"
 #include "abstractSpriteFactory.hpp"
 #include "LinkedList.hpp"
 #include "BGTexture.hpp"
@@ -42,35 +36,52 @@ class Game
     //Current displayed texture
     SDL_Texture *gTexture = NULL;
     //global reference to png image sheets
+
+    //Uint32 current_time = SDL_GetTicks() + start;
+    Uint32 current_time = SDL_GetTicks() - start;
+
+    //Textures for the screens
     SDL_Texture *assets = NULL;
     SDL_Texture *iScreen = NULL;
     SDL_Texture *wScreen = NULL;
     SDL_Texture *gwScreen = NULL;
     SDL_Texture *glScreen = NULL;
     SDL_Texture *score_display = NULL;
+
+    //boolean flags for the screens
     bool menu = true;
     bool gamecond = false;
+    bool load = false;
     bool ins = false;
     bool state = true;
     bool game_is_won = false;
     bool game_is_lost = false;
-    int count_tb = 0;
-    int count_fb = 0;
-    int count_sc = 0;
-    int count_gy = 0;
+
+    //Music objects
     Mix_Music *bgMusic = NULL;
     Mix_Music *bgMusic2 = NULL;
     Mix_Music *bgMusicW = NULL;
     Mix_Music *bgMusicL = NULL;
     Mix_Chunk *shooting = NULL;
     Mix_Chunk *hit = NULL;
+
     TTF_Font *font = NULL;
+
     BGTexture texture; //For animating the background texture
+
     LinkedList listofobjects;
-    gameSave gS;
-    //list<Lives*> lives;
-    Uint32 start = 0;
-    gameSave *OBJ;
+    int start = 0;  //for noting the starting point of the game
+    gameSave game;  //for loading and saving the game
+    
+	//creating game objects
+	int count_aliens = 0;
+	Score scoring;
+	abstractFactoryProducer* abfactprod= new abstractFactoryProducer;
+	abstractSpriteFactory* alfact= abfactprod->getFactory("alien");
+	abstractSpriteFactory* obfact= abfactprod->getFactory("obstacle");
+    PlayerSpaceship *p = NULL;
+    Lives l = NULL;
+    Fuel f = NULL;
 
 public:
     bool init();
@@ -82,6 +93,4 @@ public:
     void updatealien(PlayerSpaceship *);
     void updateplayer(PlayerSpaceship *);
     void updateobstacles(PlayerSpaceship *);
-
-    void updateLives();
 };

@@ -1,9 +1,13 @@
 #include "sprite.hpp"
 #include <SDL.h>
+#include <sstream>
+#include <iostream>
 #include <SDL_ttf.h>
-using namespace std;
-#pragma once
 
+using namespace std;
+
+#pragma once
+//applying singleton design pattern on PlayerSpaceship
 class PlayerSpaceship : public Sprite
 {
     SDL_Rect l_src, l_mover;
@@ -12,49 +16,55 @@ class PlayerSpaceship : public Sprite
     int score ;
     int lives;  //stores number of player lives left
     int fuel; //stores amount of fuel left
-   const int defaultFuel=140;
+
+    const int defaultFuel=140;
     const int S_VELOCITY = 15; 
-    int pos_x, pos_y;
+
+    int pos_x, pos_y;   //x and y position of the ship
+    int x_speed, y_speed; //speed of the sprite
     bool alive;
 
-public:
+    public:
+
     static PlayerSpaceship *getinstance(SDL_Texture *);
-    void updateScore(int s);
-    void updateLives(int l);
-    void updateFuel(int f);
     int operator - (int);  //operator overloading
+
+    //get functions
     int getScore();
     int getLives();
     int getFuel();
     SDL_Rect getmover();
+
+    //set functions
     void setScore(int s);
     void setLives(int l);
     void setFuel(int f);
     void setFuel();
-    void updateFuel(Uint32);
-    void setMover(SDL_Rect m);
-    int getPos();
+
+    void updateFuel(Uint32);    //update fuel
+    //ship movement and draw functions
     void EventHandler(SDL_Event);
     void moveShip(bool s);
     void drawSprite(SDL_Renderer *);
-    void shoot();
 };
 class Lives : public Sprite
 {
-    int y[3] = {0, 50, 100}; //position of lives, might have to change when the game logic is set
-    int life = 3;
+    int y[3] = {0, 50, 100}; //position of lives
+    int life;
 
-public:
+    public:
+
+    Lives(SDL_Texture *);
     int getLives();
     void setLives(int l);
-    Lives(SDL_Texture *);
     void drawSprite(SDL_Renderer *);
 };
 class Score
 {
     int scored;
 
-public:
+    public:
+
     Score();
     int getScore();
     void setScore(int s);
@@ -64,10 +74,11 @@ class Fuel : public Sprite
 {
     int fuelLeft = 190;
     SDL_Rect rect;
-public:
-    int getFuel();
-    void setFuel(int f);
+
+    public:
 
     Fuel(SDL_Texture *);
+    int getFuel();
+    void setFuel(int f);
     void drawSprite(SDL_Renderer *) override;
 };
